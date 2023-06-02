@@ -27,20 +27,20 @@ import { MoonIcon, SunIcon, HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 const Links = [
 	{
 		id: "Home",
-		url: "/",
+		url: "#home",
 	},
 	
 	{
 		id: "About Us",
-		url: "/?query=about-us",
+		url: "#about",
 	},
 	{
 		id: "Our Services",
-		url: "/?query=services",
+		url: "#service",
 	},
 	{
 		id: "Our Features",
-		url: "/?query=features",
+		url: "#features",
 	},
 	{
 		id: "FAQ",

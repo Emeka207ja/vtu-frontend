@@ -14,7 +14,9 @@ body.chakra-ui-light {
 body.chakra-ui-dark {
   background: #0d0d0d;
 }
-
+html{
+  scroll-behavior: smooth;
+}
 p {
   margin: 0px !important;
 }

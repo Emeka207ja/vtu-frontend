@@ -7,7 +7,7 @@ import { Featured } from "./Featured/Featured"
 
 export const Hero = () => {
     return (
-        <Box >
+        <Box id="home">
             <Grid templateColumns={{base:"repeat(1fr)", md:"repeat(2, 1fr)"}} margin={"0 2rem"}>
                 <GridItem  >
                     <Box marginTop={{md:"5rem"}}>

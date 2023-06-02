@@ -4,7 +4,7 @@ import { MdCheckCircle } from "react-icons/md"
 
 export const Features = () => {
     return (
-        <Box marginTop={"0.8rem"}>
+        <Box marginTop={"0.8rem"} id="features">
             <Grid templateColumns={{base:"repeat(1fr)", md:"repeat(2, 1fr)"}} margin={"0 2rem"}>
                 <GridItem>
                     <Box width={{base:"20rem",md:"23rem"}}>

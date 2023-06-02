@@ -5,7 +5,7 @@ import { gridItem } from "./Featured/Featured"
 export const Services = () => {
 
     return (
-     <Box>
+     <Box id="service">
             <Box mb={"0.7rem"}>
                 <Heading textAlign={"center"} fontSize={"1rem"} mb={"0.7rem"}>
                     Our Services

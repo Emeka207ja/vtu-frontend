@@ -2,7 +2,7 @@ import {Box,Grid,GridItem,Image,Heading,Text} from "@chakra-ui/react"
 
 export const About = ()=>{
     return(
-        <Box margin={"0.6rem"} >
+        <Box margin={"0.6rem"} id={"about"}>
             <Grid templateColumns={{base:"repeat(1fr)", md:"repeat(2, 1fr)"}} justifyItems={"center"} gap={"1rem"} display={{base:"grid",md:"flex"}}>
                 <GridItem>
                     <Box width={{base:"20rem",md:"24rem"}}>
