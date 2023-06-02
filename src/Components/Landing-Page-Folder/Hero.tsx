@@ -1,5 +1,5 @@
 
-import { Box, Grid, GridItem, Heading, Text, Image, Button, Flex, HStack } from "@chakra-ui/react"
+import { Box, Grid, GridItem, Heading, Text, Image, Button, Flex, HStack,Center } from "@chakra-ui/react"
 import { AiOutlineUserAdd } from "react-icons/ai"
 import { BiUserCheck } from "react-icons/bi"
 import { Featured } from "./Featured/Featured"
@@ -12,7 +12,7 @@ export const Hero = () => {
                 <GridItem  >
                     <Box marginTop={{md:"5rem"}}>
                          <Heading marginBottom={"1rem"} fontSize={"1rem"} textAlign={"center"}>Welcome to Easy Buy</Heading>
-                        <Text  fontSize={"0.9rem"}>
+                        <Text  fontSize={"0.9rem"} textAlign={"center"}>
                             Here at Easy Buy, we offer you the most affordable and most cheapest data, airtime, Dstv, Gotv and Startimes subscription. Here is the right place for your Electricity subscription..
                         </Text>
                         <Box marginTop={"0.7rem"} marginLeft={"1rem"}>
@@ -20,16 +20,18 @@ export const Hero = () => {
                                 <Button>Siginup</Button>
                                 <Button>Login</Button>
                             </Flex> */}
-                            <HStack spacing={50}>
-                                <Button colorScheme='red' color={"white"}>
-                                  signup
-                                    <AiOutlineUserAdd/>
-                                </Button>
-                                <Button colorScheme='red' color={"white"}>
-                                    Login
-                                    <BiUserCheck/>
-                                </Button>
-                            </HStack>
+                            <Center>
+                                <HStack spacing={5}>
+                                    <Button colorScheme='red' color={"white"}>
+                                    signup
+                                        <AiOutlineUserAdd/>
+                                    </Button>
+                                    <Button colorScheme='red' color={"white"}>
+                                        Login
+                                        <BiUserCheck/>
+                                    </Button>
+                              </HStack>
+                            </Center>
                        </Box>
                     </Box>
                 </GridItem>
