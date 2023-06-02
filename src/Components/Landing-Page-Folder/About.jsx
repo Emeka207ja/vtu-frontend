@@ -5,7 +5,7 @@ export const About = ()=>{
         <Box margin={"0.6rem"} >
             <Grid templateColumns={{base:"repeat(1fr)", md:"repeat(2, 1fr)"}} justifyItems={"center"} gap={"1rem"} display={{base:"grid",md:"flex"}}>
                 <GridItem>
-                    <Box width={{base:"23rem",md:"24rem"}}>
+                    <Box width={{base:"20rem",md:"24rem"}}>
                         <Image src="/assets/images/about.jpg" alt="" width={"100%"} borderRadius={"md"}/>
                     </Box>
                 </GridItem>
