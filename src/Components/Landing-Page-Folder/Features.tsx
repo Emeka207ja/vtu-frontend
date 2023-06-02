@@ -15,7 +15,7 @@ export const Features = () => {
                     <Box mt={{md:"2rem"}}>
                         <Heading textAlign={"center"}  fontSize={"1rem"} mb={"0.9rem"}>Our Features</Heading>
                         <Text textAlign={"center"} fontSize={"0.8rem"}>
-                            Certain things are hard; making payments shouldn't be one of them. EASY BUY helps you make payments for services you enjoy right from the comfort of your home or office. The experience of total convenience,fast service delivery and easy payment is just at your fingertips Our major aim is to provide affordable and legit services(Data, Cable subscription, Airtime e.t.c) for our partners at large In assurance to give you the best treat, all our services and transactions are running on an automated system. Without any delay in delivery
+                            Certain things are hard; making payments shouldn't be one of them. EASY BUY helps you make payments for services you enjoy right from the comfort of your home or office. The experience of total convenience,fast service delivery and easy payment is just at your fingertips Our major aim is to provide affordable and legit services Data, Cable subscription, Airtime e.t.c for our partners at large In assurance to give you the best treat, all our services and transactions are running on an automated system. Without any delay in delivery
                         </Text>
 
                         
