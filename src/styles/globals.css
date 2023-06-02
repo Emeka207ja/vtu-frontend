@@ -5,12 +5,14 @@
 }
 
 /* Chakra UI dark mode override */
-body.chakra-ui-dark {
-  background: #0d0d0d;
-}
+
 
 body.chakra-ui-light {
   background: #f5f5f5;
+}
+
+body.chakra-ui-dark {
+  background: #0d0d0d;
 }
 
 p {

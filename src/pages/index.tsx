@@ -3,6 +3,9 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import { Layout } from "../Components/Layout/Layout"
+import { Hero } from '@/Components/Landing-Page-Folder/Hero'
+import { Featured } from '@/Components/Landing-Page-Folder/Featured/Featured'
+import {About} from "@/Components/Landing-Page-Folder/About"
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -16,7 +19,11 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="" />
       </Head>
-      <Layout></Layout>
+      <Layout>
+        <Hero />
+        <Featured />
+        <About/>
+      </Layout>
     </>
   )
 }
