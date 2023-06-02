@@ -11,7 +11,7 @@ export const Hero = () => {
             <Grid templateColumns={{base:"repeat(1fr)", md:"repeat(2, 1fr)"}} margin={"0 2rem"}>
                 <GridItem  >
                     <Box marginTop={{md:"5rem"}}>
-                         <Heading marginBottom={"1rem"} fontSize={"1rem"}>Welcome to Easy Buy</Heading>
+                         <Heading marginBottom={"1rem"} fontSize={"1rem"} textAlign={"center"}>Welcome to Easy Buy</Heading>
                         <Text  fontSize={"0.9rem"}>
                             Here at Easy Buy, we offer you the most affordable and most cheapest data, airtime, Dstv, Gotv and Startimes subscription. Here is the right place for your Electricity subscription..
                         </Text>

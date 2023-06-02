@@ -6,7 +6,7 @@ import { data } from "./FeaturedData"
 export const Featured = () => {
     const gridItem = (value:data) => {
         return (
-            <Card key={value.head} borderRadius={"md"} width={{ base: "22rem", md: "24rem" }}>
+            <Card key={value.head} borderRadius={"md"} width={{ base: "20rem", md: "24rem" }}>
                 <Center marginBottom={"1rem"} marginTop={"0.7rem" }>
                         <Image src={value?.icon} alt="" width={ "2rem"} />
                     </Center>
