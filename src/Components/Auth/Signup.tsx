@@ -2,8 +2,10 @@ import { Box, Image, Text, Grid, GridItem, FormControl, FormLabel, Input, Button
 import { useState,useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { signupAction } from "@/redux/actions/signup-action";
+import { reset } from "@/redux/slices/signup-slice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { setTimeout } from "timers/promises";
 
 
 interface signupDetails{
@@ -16,7 +18,7 @@ interface signupDetails{
 
 export const SignupComponent: React.FC = () => {
     const dispatch = useAppDispatch()
-    const {userId,pending,error,success,isError } = useAppSelector(state=>state.signupAuth)
+    const {userId,pending,success,isError } = useAppSelector(state=>state.signupAuth)
 
     const [value, setValue] = useState<signupDetails>({
         email: "",
@@ -50,11 +52,12 @@ export const SignupComponent: React.FC = () => {
     }
     useEffect(() => {
         if (isError) {
-            toast.error("check username or email")
+            toast.error("check username or email may already exit, please login or use different credentials")
         }
         if (success) {
             toast.success("registered succesfully!")
         }
+        dispatch(reset())
    },[isError,success])
     return (
         

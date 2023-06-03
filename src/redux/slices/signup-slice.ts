@@ -23,10 +23,12 @@ export const userSlice = createSlice({
   initialState,
   name: 'signupSlice',
   reducers: {
-    reset: (state, action: PayloadAction<iSignup>) => {
+    reset: (state) => {
         state.pending = false;
         state.success = false;
-        state.error = null;
+          state.error = null;
+          state.isError=  false
+          
     },
     },
    extraReducers: builder => {
