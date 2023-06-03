@@ -47,8 +47,8 @@ const Links = [
 		url: "/?query=faq",
 	},
 	{
-		id: "Register",
-		url: "/?query=register",
+		id: "Signup",
+		url: "/signup",
 	},
 	{
 		id: "Login",

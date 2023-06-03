@@ -1,14 +1,21 @@
 
-import { Box, Grid, GridItem, Heading, Text, Image, Button, Flex, HStack,Center } from "@chakra-ui/react"
+import { Box, Grid, GridItem, Heading, Text, Image, Button, Flex, HStack, Center } from "@chakra-ui/react"
+import {NextRouter, useRouter} from "next/router"
 import { AiOutlineUserAdd } from "react-icons/ai"
 import { BiUserCheck } from "react-icons/bi"
 import { Featured } from "./Featured/Featured"
 
 
 export const Hero = () => {
+    const router: NextRouter = useRouter();
+    
+    function push(route:string) {
+        router.push(route)
+    }
+
     return (
         <Box id="home">
-            <Grid templateColumns={{base:"repeat(1fr)", md:"repeat(2, 1fr)"}} margin={"0 2rem"}>
+            <Grid templateColumns={{base:"repeat(1fr)", md:"repeat(2, 1fr)"}} margin={"0 0.7rem"}>
                 <GridItem  >
                     <Box marginTop={{md:"5rem"}}>
                          <Heading marginBottom={"1rem"} fontSize={"1rem"} textAlign={"center"}>Welcome to Easy Buy</Heading>
@@ -22,7 +29,7 @@ export const Hero = () => {
                             </Flex> */}
                             <Center>
                                 <HStack spacing={5}>
-                                    <Button colorScheme='red' color={"white"}>
+                                    <Button colorScheme='red' color={"white"} onClick={()=>push("/signup")}>
                                     signup
                                         <AiOutlineUserAdd/>
                                     </Button>
