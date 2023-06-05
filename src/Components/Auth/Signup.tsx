@@ -5,8 +5,7 @@ import { signupAction } from "@/redux/actions/signup-action";
 import { reset } from "@/redux/slices/signup-slice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { setTimeout } from "timers/promises";
-
+import { NextRouter, useRouter } from "next/router"
 
 interface signupDetails{
     email: string;
@@ -15,10 +14,10 @@ interface signupDetails{
     confirm_password:string
 }
 
-
 export const SignupComponent: React.FC = () => {
+    const router: NextRouter = useRouter();
     const dispatch = useAppDispatch()
-    const {userId,pending,success,isError } = useAppSelector(state=>state.signupAuth)
+    const {userId,success,isError,pending } = useAppSelector(state=>state.signupAuth)
 
     const [value, setValue] = useState<signupDetails>({
         email: "",
@@ -33,13 +32,8 @@ export const SignupComponent: React.FC = () => {
         setValue(prevState => ({ ...prevState, [target.name!]: target.value }))
     }
 
-    function validate(password: string): boolean {
-        let temp: boolean = true;
-        if (password.length < 6) temp = false;
-        else{
-            temp = true
-        }
-        return temp;
+    function push(route:string) {
+        router.push(route)
     }
 
     function handleSubmit(e: React.SyntheticEvent): void{
@@ -58,6 +52,11 @@ export const SignupComponent: React.FC = () => {
             toast.success("registered succesfully!")
         }
         dispatch(reset())
+
+        if (success) {
+            setTimeout(()=>{push("/login")},2000)
+        }
+       
    },[isError,success])
     return (
         
@@ -71,20 +70,7 @@ export const SignupComponent: React.FC = () => {
                 </GridItem>
                 <GridItem>
                     <Box>
-                        {
-                            pending&& (
-                                <Center margin={"0.7rem 0"}>
-                                     <Spinner
-                                        thickness='4px'
-                                        speed='0.65s'
-                                        emptyColor='gray.200'
-                                        color='blue.500'
-                                        size='xl'
-                                    
-                                    />
-                               </Center>
-                            )
-                         }
+                       
                         <Box mt={{base:"0.4rem", md:"0"}}>
                              <form onSubmit={handleSubmit} >
                             <Flex flexDirection={"column"} width={{base:"20rem",md:"35rem"}}>
@@ -104,7 +90,17 @@ export const SignupComponent: React.FC = () => {
                                     <FormLabel fontSize={"0.8rem"}>confirm password</FormLabel>
                                     <Input type="password" value={value.confirm_password} name="confirm_password" onChange={handleInputChange} required />
                                 </FormControl>
-                                <Button type="submit" mt={{ base: "0.6rem", md: "1rem" }} fontSize={"0.7rem"} colorScheme="red" isDisabled={value.password!==value.confirm_password }>sign up</Button>
+                                    {!pending ? (<Button type="submit" mt={{ base: "0.6rem", md: "1rem" }} fontSize={"0.7rem"} colorScheme="red" isDisabled={value.password !== value.confirm_password}>sign up</Button>) : (
+                                         <Button
+                                            isLoading
+                                            loadingText='Submitting'
+                                            colorScheme='teal'
+                                            variant='outline'
+                                        >
+                                            sending request....
+                                        </Button>
+                                    )
+                               }
                             </Flex>
                              <ToastContainer limit={1} />
                         </form>

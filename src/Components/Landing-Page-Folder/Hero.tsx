@@ -33,7 +33,7 @@ export const Hero = () => {
                                     signup
                                         <AiOutlineUserAdd/>
                                     </Button>
-                                    <Button colorScheme='red' color={"white"}>
+                                    <Button colorScheme='red' color={"white"} onClick={()=>push("/login")}>
                                         Login
                                         <BiUserCheck/>
                                     </Button>

@@ -52,7 +52,7 @@ const Links = [
 	},
 	{
 		id: "Login",
-		url: "/?query=login",
+		url: "/login",
 	},
 	
 ];
