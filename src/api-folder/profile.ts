@@ -1,0 +1,1 @@
+ export const getProfileApi = "https://easybuyapi.adaptable.app/api/v1/profile"

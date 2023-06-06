@@ -27,7 +27,10 @@ export const Login: React.FC = () => {
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
         dispatch(loginAction(data))
-        setData({username:"", password:""})
+        if (success) {
+            setData({ username: "", password: "" })
+
+       }
     }
 
      function push(route:string) {
@@ -36,15 +39,20 @@ export const Login: React.FC = () => {
 
      useEffect(() => {
         if (isError) {
-            toast.error("check your credentials")
+            toast.error(error.message)
+             
         }
         if (success) {
             toast.success("login succes")
-         }
-           dispatch(reset())
-          if (success) {
-            setTimeout(()=>{push("/dashboard")},2000)
+           router.push("/dashboard")
         }
+        dispatch(reset())
+    
+        // if (success) {
+        //     setTimeout(() => { push("/dashboard") }, 2000);
+        //     dispatch(reset())
+        //  }
+         
       
    },[isError,success])
     

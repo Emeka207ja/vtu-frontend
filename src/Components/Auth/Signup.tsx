@@ -17,7 +17,7 @@ interface signupDetails{
 export const SignupComponent: React.FC = () => {
     const router: NextRouter = useRouter();
     const dispatch = useAppDispatch()
-    const {userId,success,isError,pending } = useAppSelector(state=>state.signupAuth)
+    const {userId,success,isError,pending,error } = useAppSelector(state=>state.signupAuth)
 
     const [value, setValue] = useState<signupDetails>({
         email: "",
@@ -42,20 +42,18 @@ export const SignupComponent: React.FC = () => {
         const { email, username, password, confirm_password } = value;
         dispatch(signupAction({email,username,password}))
         console.log(email, username, password, confirm_password);
-        setValue({ email: "", password: "", username: "", confirm_password: "" });
+        
     }
     useEffect(() => {
         if (isError) {
-            toast.error("check username or email may already exit, please login or use different credentials")
+            toast.error(error)
         }
         if (success) {
             toast.success("registered succesfully!")
-        }
-        dispatch(reset())
-
-        if (success) {
+            setValue({ email: "", password: "", username: "", confirm_password: "" });
             setTimeout(()=>{push("/login")},2000)
         }
+        dispatch(reset())
        
    },[isError,success])
     return (

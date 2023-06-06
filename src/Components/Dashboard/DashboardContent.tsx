@@ -3,11 +3,13 @@ import {FaWallet} from "react-icons/fa"
 import {ImConnection} from "react-icons/im"
 import {BiPhoneCall} from "react-icons/bi"
 import {BsLightbulb} from "react-icons/bs"
-import {FiMonitor} from "react-icons/fi"
+import { FiMonitor } from "react-icons/fi"
+import { useRouter,NextRouter } from "next/router"
 
 
 
 export const DashboardContent = () => {
+    const router:NextRouter = useRouter()
      const { colorMode, toggleColorMode } = useColorMode()
     return (
         <Box>
@@ -31,7 +33,12 @@ export const DashboardContent = () => {
 
             <Grid mt={"1rem"} templateColumns={{base:"repeat(2,1fr)", md:"repeat(3, 1fr)"}} gap={"0.7rem"}>
                 <GridItem>
-                    <Box bg={colorMode==="light"?"blackAlpha.200":"whiteAlpha.200"} borderRadius={"md"} padding={"2rem"}>
+                    <Box
+                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                        borderRadius={"md"}
+                        padding={"2rem"}
+                        onClick={()=>router.push("/airtime")}
+                    >
                         <HStack>
                             <BiPhoneCall/>
                             <Box>Airtime</Box>
@@ -39,7 +46,12 @@ export const DashboardContent = () => {
                     </Box>
                 </GridItem>
                 <GridItem>
-                    <Box bg={colorMode==="light"?"blackAlpha.200":"whiteAlpha.200"} borderRadius={"md"} padding={"2rem"}>
+                    <Box
+                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                        borderRadius={"md"}
+                        padding={"2rem"}
+                         onClick={()=>router.push("/data")}
+                    >
                         <HStack>
                             <ImConnection />
                             <Box>Data</Box>
@@ -47,7 +59,12 @@ export const DashboardContent = () => {
                     </Box>
                 </GridItem>
                 <GridItem>
-                    <Box bg={colorMode==="light"?"blackAlpha.200":"whiteAlpha.200"} borderRadius={"md"} padding={"2rem"}>
+                    <Box
+                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                        borderRadius={"md"}
+                        padding={"2rem"}
+                         onClick={()=>router.push("/wallet")}
+                    >
                         <HStack>
                             <FaWallet />
                             <Box>Wallet</Box>
@@ -55,7 +72,12 @@ export const DashboardContent = () => {
                     </Box>
                 </GridItem>
                 <GridItem>
-                    <Box bg={colorMode==="light"?"blackAlpha.200":"whiteAlpha.200"} borderRadius={"md"}  padding={"2rem"}>
+                    <Box
+                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                        borderRadius={"md"}
+                        padding={"2rem"}
+                         onClick={()=>router.push("/electricity")}
+                    >
                         <HStack>
                             <BsLightbulb />
                             <Box> Electricity</Box>
@@ -63,7 +85,12 @@ export const DashboardContent = () => {
                     </Box>
                 </GridItem>
                 <GridItem>
-                    <Box bg={colorMode==="light"?"blackAlpha.200":"whiteAlpha.200"} borderRadius={"md"} padding={"2rem"}>
+                    <Box
+                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                        borderRadius={"md"}
+                        padding={"2rem"}
+                         onClick={()=>router.push("/cable")}
+                    >
                         <HStack>
                             <FiMonitor/>
                             <Box>Cable sub</Box>
