@@ -39,7 +39,7 @@ export const Login: React.FC = () => {
 
      useEffect(() => {
         if (isError) {
-            toast.error(error.message)
+            toast.error(error)
              
         }
         if (success) {
@@ -54,7 +54,7 @@ export const Login: React.FC = () => {
         //  }
          
       
-   },[isError,success,dispatch,error.message])
+   },[isError,success,dispatch,error])
     
     return (
         <Box mt={"2rem"} height={"100vh"}>
