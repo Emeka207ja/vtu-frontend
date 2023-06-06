@@ -55,7 +55,7 @@ export const SignupComponent: React.FC = () => {
         }
         dispatch(reset())
        
-   },[isError,success])
+   },[isError,success, dispatch])
     return (
         
         <Box mt={"2rem"} height={"100vh"}>
