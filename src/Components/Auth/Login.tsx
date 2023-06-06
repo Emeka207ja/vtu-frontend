@@ -54,7 +54,7 @@ export const Login: React.FC = () => {
         //  }
          
       
-   },[isError,success,dispatch])
+   },[isError,success,dispatch,error.message,router])
     
     return (
         <Box mt={"2rem"} height={"100vh"}>
