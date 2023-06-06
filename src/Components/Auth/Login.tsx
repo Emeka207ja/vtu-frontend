@@ -1,6 +1,7 @@
 import { Box, Grid, GridItem, FormControl, FormLabel, Button, Image, Input,Flex } from "@chakra-ui/react";
 import { useState,useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+
 import { loginAction } from "@/redux/actions/login-action";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -40,10 +41,11 @@ export const Login: React.FC = () => {
         if (success) {
             toast.success("login succes")
          }
+           dispatch(reset())
           if (success) {
             setTimeout(()=>{push("/dashboard")},2000)
         }
-        dispatch(reset())
+      
    },[isError,success])
     
     return (
