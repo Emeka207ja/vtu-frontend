@@ -39,12 +39,12 @@ export const Login: React.FC = () => {
 
      useEffect(() => {
         if (isError) {
-            toast.error(error.message)
+            toast.error(error)
              
         }
         if (success) {
             toast.success("login succes")
-           router.push("/dashboard")
+           push("/dashboard")
         }
         dispatch(reset())
     
@@ -54,7 +54,7 @@ export const Login: React.FC = () => {
         //  }
          
       
-   },[isError,success])
+   },[isError,success,dispatch,error])
     
     return (
         <Box mt={"2rem"} height={"100vh"}>
