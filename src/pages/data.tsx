@@ -1,12 +1,11 @@
 import SidebarWithHeader from "@/Components/Dashboard/DashboardWrapper";
-import {Box} from "@chakra-ui/react"
+import { Box } from "@chakra-ui/react"
+import { Data } from "@/Components/Data";
 
 export default function data(){
     return (
         <SidebarWithHeader>
-            <Box>
-                Data
-            </Box>
+            <Data/>
         </SidebarWithHeader>
     )
 }
