@@ -149,15 +149,15 @@ export const Data = () => {
                     </Select>
                 </FormControl>
                 <FormControl  mb={"0.9rem"}>
-                    <FormLabel fontSize={"0.8rem"}>select plan</FormLabel>
+                    <FormLabel fontSize={"0.8rem"}>Phone number</FormLabel>
                    <Input value={phone} onChange={(e)=>handleSelect(e,setPhone)}  fontSize={"0.8rem"}/>
                 </FormControl>
                 <FormControl>
-                    <FormLabel fontSize={"0.8rem"}>Price</FormLabel>
+                    <FormLabel fontSize={"0.8rem"}>Plan Price</FormLabel>
                    <Input value={price + ` naira`}  fontSize={"0.8rem"} readOnly/>
                 </FormControl>
 
-                <Button type="submit" width={"100%"} mt={"0.4rem"} isDisabled={price<=0} colorScheme="red">Purchase</Button>
+                <Button type="submit" width={"100%"} mt={"0.4rem"} isDisabled={price<=0||phone.length>11||phone.length<11} colorScheme="red">Purchase</Button>
             </form>
             <ToastContainer limit={1}/>
         </Box>
