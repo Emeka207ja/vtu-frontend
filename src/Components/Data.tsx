@@ -129,7 +129,7 @@ export const Data = () => {
         <Box>
             <Heading fontSize={"1rem"} textAlign={"center"}>Cheap Data</Heading>
             <form onSubmit={handleSubmit}>
-                <FormControl>
+                <FormControl mb={"0.9rem"} mt={"0.3rem"}>
                     <FormLabel fontSize={"0.8rem"}>select network</FormLabel>
                     <Select onChange={handleProviderSelect}  fontSize={"0.8rem"}>
                         {
@@ -140,7 +140,7 @@ export const Data = () => {
                         }
                     </Select>
                 </FormControl>
-                <FormControl>
+                <FormControl  mb={"0.9rem"}>
                     <FormLabel fontSize={"0.8rem"}>select plan</FormLabel>
                     <Select fontSize={"0.8rem"} onChange={handleSelect2}   onClick={handleSelect2}>
                         {
@@ -148,7 +148,7 @@ export const Data = () => {
                         }
                     </Select>
                 </FormControl>
-                <FormControl>
+                <FormControl  mb={"0.9rem"}>
                     <FormLabel fontSize={"0.8rem"}>select plan</FormLabel>
                    <Input value={phone} onChange={(e)=>handleSelect(e,setPhone)}  fontSize={"0.8rem"}/>
                 </FormControl>
