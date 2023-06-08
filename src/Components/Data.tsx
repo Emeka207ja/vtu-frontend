@@ -113,7 +113,15 @@ export const Data = () => {
                 setPrice(0)
                 break;
         }
-    },[selectedPlan,selected,plan])
+    }, [selectedPlan, selected, plan])
+    
+    useEffect(() => {
+        window.onload = function() {
+            document.getElementById("fontType")!.onchange = function(event) {
+            alert("Changed!");
+     };
+   }
+    },[])
     // console.log(selected)
     // console.log(phone)
     console.log(selectedPlan)
@@ -134,7 +142,7 @@ export const Data = () => {
                 </FormControl>
                 <FormControl>
                     <FormLabel fontSize={"0.8rem"}>select plan</FormLabel>
-                    <Select fontSize={"0.8rem"} onChange={handleSelect2}>
+                    <Select fontSize={"0.8rem"} onChange={handleSelect2}   onClick={handleSelect2}>
                         {
                             plan?.map(item => (<option value={item.variation_id} key={item.plan}>{ item.plan}</option>))
                         }
@@ -142,7 +150,7 @@ export const Data = () => {
                 </FormControl>
                 <FormControl>
                     <FormLabel fontSize={"0.8rem"}>select plan</FormLabel>
-                   <Input value={phone} onChange={(e)=>handleSelect(e,setPhone)}   fontSize={"0.8rem"}/>
+                   <Input value={phone} onChange={(e)=>handleSelect(e,setPhone)}  fontSize={"0.8rem"}/>
                 </FormControl>
                 <FormControl>
                     <FormLabel fontSize={"0.8rem"}>Price</FormLabel>
