@@ -134,7 +134,7 @@ export const Data = () => {
                 </FormControl>
                 <FormControl>
                     <FormLabel fontSize={"0.8rem"}>select plan</FormLabel>
-                    <Select fontSize={"0.8rem"} onClick={handleSelect2}>
+                    <Select fontSize={"0.8rem"} onChange={handleSelect2}>
                         {
                             plan?.map(item => (<option value={item.variation_id} key={item.plan}>{ item.plan}</option>))
                         }
