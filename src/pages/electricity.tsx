@@ -1,12 +1,11 @@
 import SidebarWithHeader from "@/Components/Dashboard/DashboardWrapper";
-import {Box} from "@chakra-ui/react"
+
+import { Electricity } from "@/Components/Electricity";
 
 export default function electricity(){
     return (
         <SidebarWithHeader>
-            <Box>
-                Electricity
-            </Box>
+           <Electricity/>
         </SidebarWithHeader>
     )
 }
