@@ -8,7 +8,7 @@ interface provider{
     id: number;
     provider:string
 }
-interface serviceType{
+export interface serviceType{
     id: number;
     type:string
 }
@@ -125,7 +125,7 @@ export const Electricity = () => {
                     <Input value={values.amount}  name="amount" onChange={handleChange}/>
                 </FormControl>
 
-                <Button type="submit" w={"100%"} colorScheme="red"  fontSize={"0.8rem"}>Submit</Button>
+                <Button type="submit" w={"100%"} colorScheme="red"  fontSize={"0.8rem"} isDisabled={values.amount.length === 0}>Submit</Button>
             </form>
             <ToastContainer limit={1}/>
         </Box>

@@ -1,12 +1,11 @@
 import SidebarWithHeader from "@/Components/Dashboard/DashboardWrapper";
-import {Box} from "@chakra-ui/react"
+import { Cable } from "@/Components/Cable";
+
 
 export default function cable(){
     return (
         <SidebarWithHeader>
-            <Box>
-                Cable
-            </Box>
+          <Cable/>
         </SidebarWithHeader>
     )
 }

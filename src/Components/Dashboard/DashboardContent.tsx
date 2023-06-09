@@ -21,8 +21,8 @@ export const DashboardContent = () => {
                             <Box>
                                 <Box paddingLeft={"0.5rem"} fontSize={"0.9rem"}>Balance</Box>
                                 <HStack>
-                                    <Box paddingLeft={"0.5rem"}>&#8358;</Box>
-                                    <Box>0</Box>
+                                    <Box paddingLeft={"0.5rem"} cursor={"pointer"}>&#8358;</Box>
+                                    <Box cursor={"pointer"}>0</Box>
                                 </HStack>
                             </Box>
                            
@@ -41,7 +41,7 @@ export const DashboardContent = () => {
                     >
                         <HStack>
                             <BiPhoneCall/>
-                            <Box>Airtime</Box>
+                            <Box cursor={"pointer"}>Airtime</Box>
                         </HStack>
                     </Box>
                 </GridItem>
@@ -54,7 +54,7 @@ export const DashboardContent = () => {
                     >
                         <HStack>
                             <ImConnection />
-                            <Box>Data</Box>
+                            <Box cursor={"pointer"}>Data</Box>
                         </HStack>
                     </Box>
                 </GridItem>
@@ -67,7 +67,7 @@ export const DashboardContent = () => {
                     >
                         <HStack>
                             <FaWallet />
-                            <Box>Wallet</Box>
+                            <Box cursor={"pointer"}>Wallet</Box>
                         </HStack>
                     </Box>
                 </GridItem>
@@ -80,7 +80,7 @@ export const DashboardContent = () => {
                     >
                         <HStack>
                             <BsLightbulb />
-                            <Box> Electricity</Box>
+                            <Box cursor={"pointer"}> Electricity</Box>
                         </HStack>
                     </Box>
                 </GridItem>
@@ -93,7 +93,7 @@ export const DashboardContent = () => {
                     >
                         <HStack>
                             <FiMonitor/>
-                            <Box>Cable sub</Box>
+                            <Box cursor={"pointer"}>Cable sub</Box>
                         </HStack>
                     </Box>
                 </GridItem>
