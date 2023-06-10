@@ -15,7 +15,7 @@ export interface iLogin{
 
 export const Login: React.FC = () => {
      const router: NextRouter = useRouter();
-    const { success, isError, error, pending } = useAppSelector(state => state.loginAuth)
+    const { success, isError, error, pending,accessToken } = useAppSelector(state => state.loginAuth)
     const dispatch = useAppDispatch()
     const [data, setData] = useState<iLogin>({ username: "", password: "" })
     
@@ -36,6 +36,12 @@ export const Login: React.FC = () => {
      function push(route:string) {
         router.push(route)
     }
+
+    useEffect(() => {
+        if (accessToken) {
+            push("/dashboard")
+        }
+    },[accessToken])
 
      useEffect(() => {
         if (isError) {

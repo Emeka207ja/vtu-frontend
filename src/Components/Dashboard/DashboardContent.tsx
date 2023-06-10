@@ -1,4 +1,6 @@
-import { Box, Grid, GridItem, HStack, VStack, Flex, Heading,useColorMode} from "@chakra-ui/react"
+import { Box, Grid, GridItem, HStack, VStack, Flex, Heading, useColorMode } from "@chakra-ui/react"
+import { useState,useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {FaWallet} from "react-icons/fa"
 import {ImConnection} from "react-icons/im"
 import {BiPhoneCall} from "react-icons/bi"
@@ -9,8 +11,14 @@ import { useRouter,NextRouter } from "next/router"
 
 
 export const DashboardContent = () => {
-    const router:NextRouter = useRouter()
-     const { colorMode, toggleColorMode } = useColorMode()
+    const router: NextRouter = useRouter()
+      const {accessToken } = useAppSelector(state => state.loginAuth)
+    const { colorMode, toggleColorMode } = useColorMode()
+    useEffect(() => {
+        if(!accessToken){
+            router.push("/login")
+        }
+    },[accessToken])
     return (
         <Box>
             <Heading fontSize={"1.4rem"} mb={"1rem"} textAlign={"center"}>Dashboard</Heading>

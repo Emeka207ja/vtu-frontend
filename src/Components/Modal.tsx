@@ -13,7 +13,7 @@ import { useRef } from "react"
 
 
 
-function InitialFocus() {
+export function Payment() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const initialRef = useRef(null)
@@ -21,7 +21,7 @@ function InitialFocus() {
 
   return (
     <>
-      <Button onClick={onOpen}>Open Modal</Button>
+     
       <Button ml={4} ref={finalRef}>
         I will receive focus on close
       </Button>
