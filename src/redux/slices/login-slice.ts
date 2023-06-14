@@ -31,6 +31,12 @@ export const loginSlice = createSlice({
             state.pending = false
             state.isError = false;
             state.error = null
+        },
+        logout: (state) => {
+            if (typeof window !== undefined) {
+               localStorage.removeItem("token")
+           }
+            state.accessToken = null
         }
     },
     extraReducers: builder => {
@@ -59,4 +65,4 @@ export const loginSlice = createSlice({
 })
 
 export default loginSlice.reducer;
-export const {reset}  = loginSlice.actions
+export const {reset,logout}  = loginSlice.actions

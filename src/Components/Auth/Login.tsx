@@ -49,8 +49,9 @@ export const Login: React.FC = () => {
              
         }
         if (success) {
-            toast.success("login succes")
-           push("/dashboard")
+           
+            push("/dashboard")
+            //  toast.success("login succes")
         }
         dispatch(reset())
     

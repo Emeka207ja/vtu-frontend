@@ -35,6 +35,12 @@ import {
 } from 'react-icons/fi';
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
+import { logout } from '@/redux/slices/login-slice';
+import { useAppDispatch } from '@/redux/hooks';
+import { NextRouter, useRouter } from 'next/router';
+import { signout } from '@/redux/actions/login-action';
+
+
 
 interface LinkItemProps {
   name: string;
@@ -55,7 +61,13 @@ export default function SidebarWithHeader({
 }: {
   children: ReactNode;
 }) {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  
+  const  dispatch = useAppDispatch()
+
+  const Logout = () => {
+    dispatch(logout)
+  }
     // const { colorMode, toggleColorMode } = useColorMode()
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
@@ -155,6 +167,13 @@ interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+  const router:NextRouter = useRouter()
+  const  dispatch = useAppDispatch()
+
+  const Logout = () => {
+    dispatch(logout())
+    // router.push("/")
+  }
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -224,7 +243,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <MenuItem>
+                <Box onClick={()=>Logout()} w="100%">Sign out</Box>
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>

@@ -8,22 +8,28 @@ import {BsLightbulb} from "react-icons/bs"
 import { FiMonitor } from "react-icons/fi"
 import { useRouter, NextRouter } from "next/router"
 import { useFetchProfile } from "@/hooks/useFetchProfile";
+import { getProfileAction } from "@/redux/actions/getProfile.action";
 
 
 
 export const DashboardContent = () => {
     const router: NextRouter = useRouter()
+    const dispatch = useAppDispatch()
       const {accessToken } = useAppSelector(state => state.loginAuth)
+      const {Profile:profile,pending } = useAppSelector(state => state.fetchProfile)
     const { colorMode, toggleColorMode } = useColorMode()
-    const {Profile,pending,success} = useFetchProfile()
+    
     useEffect(() => {
         if(!accessToken){
             router.push("/login")
         }
+        if (accessToken) {
+            dispatch(getProfileAction(accessToken))
+        }
     },[accessToken])
     return (
         <Box>
-            <Heading fontSize={"1.4rem"} mb={"1rem"} textAlign={"center"}>{pending?"fetching profile":success&&Profile?  Profile?.username:"Dashboard"}</Heading>
+            <Heading fontSize={"1.4rem"} mb={"1rem"} textAlign={"center"}>{pending?"fetching profile": profile? profile.username:"Dashboard"}</Heading>
             <Grid>
                 <GridItem>
                     <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"} padding={"1rem"} borderLeft={"3px solid red"}>
@@ -32,7 +38,7 @@ export const DashboardContent = () => {
                                 <Box paddingLeft={"0.5rem"} fontSize={"0.9rem"}>Balance</Box>
                                 <HStack>
                                     <Box paddingLeft={"0.5rem"} cursor={"pointer"}>&#8358;</Box>
-                                    <Box cursor={"pointer"}>{ Profile?Profile.balance: 0}</Box>
+                                    <Box cursor={"pointer"}>{ profile?profile.balance: 0}</Box>
                                 </HStack>
                             </Box>
 
@@ -40,7 +46,7 @@ export const DashboardContent = () => {
                                 <Box paddingLeft={"0.5rem"} fontSize={"0.9rem"}>Point</Box>
                                 <HStack>
                                     <Box paddingLeft={"0.5rem"} cursor={"pointer"}>pt</Box>
-                                    <Box cursor={"pointer"}>{ Profile?Profile.point: 0}</Box>
+                                    <Box cursor={"pointer"}>{ profile?profile.point: 0}</Box>
                                 </HStack>
                             </Box>
                            

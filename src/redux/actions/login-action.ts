@@ -15,3 +15,12 @@ export const loginAction = createAsyncThunk(
             }
         }
 )
+
+
+
+export const signout = createAsyncThunk(
+    "logout",
+    async (_, thunkApi) => {
+        localStorage.removeItem("token");
+    }
+)
