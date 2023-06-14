@@ -15,7 +15,7 @@ export const DashboardContent = () => {
     const router: NextRouter = useRouter()
       const {accessToken } = useAppSelector(state => state.loginAuth)
     const { colorMode, toggleColorMode } = useColorMode()
-    const {Profile} = useFetchProfile()
+    const {Profile,pending,success} = useFetchProfile()
     useEffect(() => {
         if(!accessToken){
             router.push("/login")
@@ -23,7 +23,7 @@ export const DashboardContent = () => {
     },[accessToken])
     return (
         <Box>
-            <Heading fontSize={"1.4rem"} mb={"1rem"} textAlign={"center"}>{Profile?  Profile?.username:"Dashboard"}</Heading>
+            <Heading fontSize={"1.4rem"} mb={"1rem"} textAlign={"center"}>{pending?"fetching profile":success&&Profile?  Profile?.username:"Dashboard"}</Heading>
             <Grid>
                 <GridItem>
                     <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"} padding={"1rem"} borderLeft={"3px solid red"}>

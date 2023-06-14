@@ -55,7 +55,7 @@ export const Airtime = () => {
      const { username, password,fail } = useVtuAuth()
     console.log(username, password)
 
-    const {Profile} = useAppSelector(state=>state.fetchProfile)
+    const { Profile } = useAppSelector(state => state.fetchProfile);
 
     async function airtimeUpdate(details: airtime) {
   
