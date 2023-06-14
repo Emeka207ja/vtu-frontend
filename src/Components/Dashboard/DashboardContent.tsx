@@ -6,7 +6,8 @@ import {ImConnection} from "react-icons/im"
 import {BiPhoneCall} from "react-icons/bi"
 import {BsLightbulb} from "react-icons/bs"
 import { FiMonitor } from "react-icons/fi"
-import { useRouter,NextRouter } from "next/router"
+import { useRouter, NextRouter } from "next/router"
+import { useFetchProfile } from "@/hooks/useFetchProfile";
 
 
 
@@ -14,6 +15,7 @@ export const DashboardContent = () => {
     const router: NextRouter = useRouter()
       const {accessToken } = useAppSelector(state => state.loginAuth)
     const { colorMode, toggleColorMode } = useColorMode()
+    const {Profile} = useFetchProfile()
     useEffect(() => {
         if(!accessToken){
             router.push("/login")
@@ -21,16 +23,24 @@ export const DashboardContent = () => {
     },[accessToken])
     return (
         <Box>
-            <Heading fontSize={"1.4rem"} mb={"1rem"} textAlign={"center"}>Dashboard</Heading>
+            <Heading fontSize={"1.4rem"} mb={"1rem"} textAlign={"center"}>{Profile?  Profile?.username:"Dashboard"}</Heading>
             <Grid>
                 <GridItem>
                     <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"} padding={"1rem"} borderLeft={"3px solid red"}>
-                         <HStack >
+                         <HStack spacing={100} >
                             <Box>
                                 <Box paddingLeft={"0.5rem"} fontSize={"0.9rem"}>Balance</Box>
                                 <HStack>
                                     <Box paddingLeft={"0.5rem"} cursor={"pointer"}>&#8358;</Box>
-                                    <Box cursor={"pointer"}>0</Box>
+                                    <Box cursor={"pointer"}>{ Profile?Profile.balance: 0}</Box>
+                                </HStack>
+                            </Box>
+
+                            <Box>
+                                <Box paddingLeft={"0.5rem"} fontSize={"0.9rem"}>Point</Box>
+                                <HStack>
+                                    <Box paddingLeft={"0.5rem"} cursor={"pointer"}>pt</Box>
+                                    <Box cursor={"pointer"}>{ Profile?Profile.point: 0}</Box>
                                 </HStack>
                             </Box>
                            

@@ -1,11 +1,13 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import sigupReducer from "./slices/signup-slice"
 import loginReducer from "./slices/login-slice"
+import fetchProfileReducer from "./slices/get-profile.slice"
 
 export const store = configureStore({
     reducer: {
       signupAuth: sigupReducer,
-      loginAuth :loginReducer
+    loginAuth: loginReducer,
+      fetchProfile:fetchProfileReducer
   },
     devTools: process.env.NODE_ENV !== "production",
     // middleware: (getDefaultMiddleware) => getDefaultMiddleware({}).concat([]),

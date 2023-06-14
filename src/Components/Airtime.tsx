@@ -6,8 +6,10 @@ import axios from "axios"
 import { useVtuAuth } from "@/hooks/useVTuAuth"
 import { purchaseAirtime } from "@/Services/Data-fetching-service"
 import { ToastContainer, toast } from 'react-toastify';
-import { useAppSelector } from "@/redux/hooks"
+
 import 'react-toastify/dist/ReactToastify.css';
+import { getProfileAction } from "@/redux/actions/getProfile.action"
+import { useAppDispatch,useAppSelector } from "@/redux/hooks"
 
   export interface Data{
         network: string;
@@ -26,6 +28,7 @@ interface airtime{
 
 export const Airtime = () => {
     const { accessToken } = useAppSelector(state => state.loginAuth)
+    const dispatch = useAppDispatch()
     console.log(accessToken)
     
     const network: serviceType[] = [
@@ -52,7 +55,7 @@ export const Airtime = () => {
      const { username, password,fail } = useVtuAuth()
     console.log(username, password)
 
-
+    const {Profile} = useAppSelector(state=>state.fetchProfile)
 
     async function airtimeUpdate(details: airtime) {
   
@@ -82,7 +85,11 @@ export const Airtime = () => {
         e.preventDefault()
       try {
             const { amount, phone, network } = data
-            const Amount = parseFloat(amount)
+          const Amount = parseFloat(amount)
+          if (Amount > Profile?.balance) {
+              toast.error("insufficient fund");
+              return
+          }
             setLoading(true)
           const datax = await purchaseAirtime(Amount, phone, network, username, password)
           setResult(datax)
@@ -101,6 +108,10 @@ export const Airtime = () => {
             toast.error(error?.message)
         }
     }
+
+    useEffect(() => {
+        dispatch(getProfileAction())
+    },[])
     
 
     return (
@@ -139,7 +150,7 @@ export const Airtime = () => {
                             >
                                 connecting
                             </Button>
-                            ) : <Button w={"100%"} fontSize={"0.8rem"} colorScheme="red" type="submit">Submit</Button>
+                            ) : <Button w={"100%"} fontSize={"0.8rem"} colorScheme="red" type="submit" isDisabled={Profile?.balance===0}>Submit</Button>
                  }
                
             </form>
