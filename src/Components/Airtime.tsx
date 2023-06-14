@@ -110,7 +110,9 @@ export const Airtime = () => {
     }
 
     useEffect(() => {
-        dispatch(getProfileAction())
+        if (accessToken) {
+            dispatch(getProfileAction(accessToken))
+       }
     },[])
     
 

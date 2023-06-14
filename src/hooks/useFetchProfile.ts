@@ -4,9 +4,12 @@ import { useEffect } from "react"
 
 export const useFetchProfile = () => {
     const dispatch = useAppDispatch()
-    const {Profile} = useAppSelector(state=>state.fetchProfile)
+    const { Profile } = useAppSelector(state => state.fetchProfile)
+    const {accessToken} = useAppSelector(state=>state.loginAuth)
     useEffect(() => {
-        dispatch(getProfileAction())
+        if (accessToken) {
+            dispatch(getProfileAction(accessToken))
+        }
     }, [])
     return {Profile}
 }
