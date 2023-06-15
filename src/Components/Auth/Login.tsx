@@ -1,4 +1,4 @@
-import { Box, Grid, GridItem, FormControl, FormLabel, Button, Image, Input,Flex } from "@chakra-ui/react";
+import { Box, Grid, GridItem, FormControl, FormLabel, Button, Image, Input,Flex ,Link} from "@chakra-ui/react";
 import { useState,useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
@@ -87,7 +87,8 @@ export const Login: React.FC = () => {
                                }
                             
                             </Flex>
-                            <ToastContainer limit={1}/>
+                            <ToastContainer limit={1} />
+                            <Link href="/" mt={"0.7rem"}>Go Back</Link>
                         </form>
                     </Box>
                 </GridItem>
