@@ -1,11 +1,14 @@
 import { Box, FormControl, FormLabel, Input, Button } from "@chakra-ui/react"
 import { useState,useEffect } from "react"
 import { useFlutterwave, closePaymentModal} from 'flutterwave-react-v3';
-
+import { useAppSelector } from "@/redux/hooks";
+ import axios from "axios"
+ import { fundingApi } from "@/api-folder/funding";
 
 
 
 export const Payment = () => {
+    const {accessToken} = useAppSelector(state=>state.loginAuth)
     const [values, setValues] = useState({ amount: "", phone: "", email: "", name: "" })
     const [response,setResponse] = useState(null)
     
@@ -16,20 +19,21 @@ export const Payment = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        // if(response){
-        //      console.log(response)
-        //     setValues({
-        //         email:"",
-        //         amount:"",
-        //         name:"",
-        //         phone:""
-        //     })
-        // }
        
+    }
+    const handleFunding = async (status,amount,transaction_id)=>{
+        const config = {
+          headers: {
+                "Content-type": "application/json",
+                Authorization: `Bearer ${accessToken?.slice(1,-1)}`
+            }
+        }
+        const {data} = await axios.post(fundingApi,{status,amount,transaction_id},config)
     }
     useEffect(()=>{
        if(response?.status === "successful"){
-         console.log(response.status)
+        handleFunding(response?.status,response?.amount,response?.transaction_id)
+         console.log(response)
            setValues({
                 email:" ",
                 amount:" ",
@@ -40,7 +44,7 @@ export const Payment = () => {
     },[response])
 
     const config = {
-        public_key: 'FLWPUBK_TEST-2b94b8d2b711f2c3c8da9cd14c3adb21-X',
+        public_key: 'FLWPUBK-18c2444abb6d6d8eb6d2b9c8366fb859-X',
         tx_ref: Date.now(),
         amount: values.amount,
         currency: 'NGN',

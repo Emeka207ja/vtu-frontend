@@ -1,9 +1,11 @@
 import { Box, Text, Heading,Grid,GridItem ,HStack,useColorMode} from "@chakra-ui/react"
 // import { Payment } from "./Payment"
 import { Payment } from "./Payment"
+import { useAppSelector } from "@/redux/hooks"
 
 export const Wallet = () => {
     const { colorMode, toggleColorMode } = useColorMode()
+    const {Profile} = useAppSelector(state=>state.fetchProfile)
     return (
         <Box>
             <Box>
@@ -15,7 +17,7 @@ export const Wallet = () => {
                                     <Box paddingLeft={"0.5rem"} fontSize={"0.9rem"}>Wallet Balance</Box>
                                     <HStack>
                                         <Box paddingLeft={"0.5rem"} cursor={"pointer"}>&#8358;</Box>
-                                        <Box cursor={"pointer"}>0</Box>
+                                        <Box cursor={"pointer"}>{Profile?Profile.balance: 0 }</Box>
                                     </HStack>
                                 </Box>
                             

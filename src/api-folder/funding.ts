@@ -1,0 +1,1 @@
+export const fundingApi = "https://easybuyapi.adaptable.app/api/v1/fund"

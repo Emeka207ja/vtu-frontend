@@ -39,7 +39,7 @@ export const Login: React.FC = () => {
 
     useEffect(() => {
         if (accessToken) {
-            push("/dashboard")
+            push("/welcome-page")
         }
     },[accessToken])
 
@@ -48,20 +48,8 @@ export const Login: React.FC = () => {
             toast.error(error)
              
         }
-        if (success) {
-           
-            push("/dashboard")
-            //  toast.success("login succes")
-        }
         dispatch(reset())
-    
-        // if (success) {
-        //     setTimeout(() => { push("/dashboard") }, 2000);
-        //     dispatch(reset())
-        //  }
-         
-      
-   },[isError,success,dispatch,error])
+   },[isError,dispatch,error])
     
     return (
         <Box mt={"2rem"} height={"100vh"}>
