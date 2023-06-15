@@ -1,4 +1,4 @@
-import { Box, FormControl, FormLabel, Input, Button } from "@chakra-ui/react"
+import { Box, FormControl, FormLabel, Input, Button,Grid,GridItem ,HStack,useColorMode } from "@chakra-ui/react"
 import { useState,useEffect } from "react"
 import { useFlutterwave, closePaymentModal} from 'flutterwave-react-v3';
 import { useAppSelector,useAppDispatch } from "@/redux/hooks";
@@ -6,13 +6,18 @@ import { useAppSelector,useAppDispatch } from "@/redux/hooks";
  import { fundingApi } from "@/api-folder/funding";
  import { getProfileAction } from "@/redux/actions/getProfile.action";
  import { useRouter,NextRouter } from "next/router";
+ import { getProfileApi } from "@/api-folder/profile";
 
 
 
 export const Payment = () => {
+    const { colorMode, toggleColorMode } = useColorMode()
+    const {Profile} = useAppSelector(state=>state.fetchProfile)
     const {accessToken} = useAppSelector(state=>state.loginAuth)
     const [values, setValues] = useState({ amount: "", phone: "", email: "", name: "" })
     const [response,setResponse] = useState(null)
+    const [balance,setBalance] = useState(0)
+     const [loading,setLoading] = useState(false)
     const dispatch = useAppDispatch()
 
     const router = useRouter()
@@ -38,7 +43,6 @@ export const Payment = () => {
        if(response?.status === "successful"){
         handleFunding(response?.status,response?.amount,response?.transaction_id)
         dispatch(getProfileAction())
-        router.push("/dashboard")
          console.log(response)
            setValues({
                 email:" ",
@@ -69,19 +73,55 @@ export const Payment = () => {
 
      const handleFlutterPayment = useFlutterwave(config);
 
-//   const fwConfig = {
-//         ...config,
-//         text: 'Pay with Flutterwave!',
-//         callback: (response:any) => {
-//         console.log(response);
-//         closePaymentModal() // this will close the modal programmatically
-//         },
-//         onClose: () => {},
-//   };
+     const fetchProfile = async ()=>{
+         const config = {
+            headers: {
+                Authorization: `Bearer ${accessToken.slice(1,-1)}`
+            }
+        }
+        try {
+            setLoading(true)
+            const {data} = await axios.get(getProfileApi,config)
+            console.log(data)
+            setLoading(false)
+            setBalance(data?.balance)
+        } catch (error) {
+            console.log(error)
+            setLoading(false)
+        }
+     }
+
+     useEffect(()=>{
+    
+        if(response){
+      
+            fetchProfile()
+        }
+        
+        fetchProfile()
+     },[response])
 
    
     return (
         <Box>
+             <Box>
+                <Grid>
+                    <GridItem>
+                        <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"} padding={"1rem"} borderLeft={"3px solid red"}>
+                            <HStack >
+                                <Box>
+                                    <Box paddingLeft={"0.5rem"} fontSize={"0.9rem"}>Wallet Balance</Box>
+                                    <HStack>
+                                        <Box paddingLeft={"0.5rem"} cursor={"pointer"}>&#8358;</Box>
+                                        <Box cursor={"pointer"}>{balance }</Box>
+                                    </HStack>
+                                </Box>
+                            
+                            </HStack>
+                    </Box>
+                    </GridItem>
+             </Grid>
+            </Box>
             <form onSubmit={handleSubmit}>
                 <FormControl mb={"0.9rem"}>
                     <FormLabel fontSize={"0.8rem"}>Amount</FormLabel>

@@ -8,24 +8,7 @@ export const Wallet = () => {
     const {Profile} = useAppSelector(state=>state.fetchProfile)
     return (
         <Box>
-            <Box>
-                <Grid>
-                    <GridItem>
-                        <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"} padding={"1rem"} borderLeft={"3px solid red"}>
-                            <HStack >
-                                <Box>
-                                    <Box paddingLeft={"0.5rem"} fontSize={"0.9rem"}>Wallet Balance</Box>
-                                    <HStack>
-                                        <Box paddingLeft={"0.5rem"} cursor={"pointer"}>&#8358;</Box>
-                                        <Box cursor={"pointer"}>{Profile?Profile.balance: 0 }</Box>
-                                    </HStack>
-                                </Box>
-                            
-                            </HStack>
-                    </Box>
-                    </GridItem>
-             </Grid>
-            </Box>
+         
             <Box>
                 <Heading textAlign={"center"} fontSize={"1rem"} margin={"0.9rem 0"}>Fund wallet</Heading>
                 <Payment/>
