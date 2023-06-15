@@ -50,7 +50,7 @@ export const Payment = () => {
     },[response])
 
     const config = {
-        public_key: 'FLWPUBK_TEST-2b94b8d2b711f2c3c8da9cd14c3adb21-X',
+        public_key: 'FLWPUBK-18c2444abb6d6d8eb6d2b9c8366fb859-X',
         tx_ref: Date.now(),
         amount: values.amount,
         currency: 'NGN',
