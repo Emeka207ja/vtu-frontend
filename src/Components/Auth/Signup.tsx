@@ -6,6 +6,7 @@ import { reset } from "@/redux/slices/signup-slice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { NextRouter, useRouter } from "next/router"
+import useQuerryString from "@/hooks/useQueryString";
 
 interface signupDetails{
     email: string;
@@ -17,7 +18,10 @@ interface signupDetails{
 export const SignupComponent: React.FC = () => {
     const router: NextRouter = useRouter();
     const dispatch = useAppDispatch()
-    const {userId,success,isError,pending,error } = useAppSelector(state=>state.signupAuth)
+    const { userId, success, isError, pending, error } = useAppSelector(state => state.signupAuth)
+    
+    const [referral] = useQuerryString()
+    // console.log("query",referral)
 
     const [value, setValue] = useState<signupDetails>({
         email: "",
@@ -40,7 +44,11 @@ export const SignupComponent: React.FC = () => {
         
         e.preventDefault()
         const { email, username, password, confirm_password } = value;
-        dispatch(signupAction({email,username,password}))
+        if (referral) {
+            dispatch(signupAction({email,username,password,referral}))
+        } else {
+             dispatch(signupAction({email,username,password}))
+        }
         console.log(email, username, password, confirm_password);
         
     }

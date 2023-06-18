@@ -3,6 +3,7 @@ import { network, glo, mtn, airtel, mobile,Network,Plans} from "./dataInterfce"
 import { useState,useEffect } from "react"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useVtuAuth } from "@/hooks/useVTuAuth";
 
 
 
@@ -13,6 +14,8 @@ export const Data = () => {
     const [phone, setPhone] = useState<string>("0703420...")
     const [selectedPlan, setSelectedPlan] = useState<string|null>("500")
     const [price, setPrice] = useState<number>(0)
+
+    const {username,password,fail} = useVtuAuth()
     
     const handleSelect = (e: React.SyntheticEvent,setFn:Function,setFunc?:Function) => {
         const target = e.target as HTMLSelectElement
