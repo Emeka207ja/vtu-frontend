@@ -43,3 +43,21 @@ export const purchaseAirtime = async (Amount: number, phone: string, network: st
     return data
     
 }
+
+
+
+  export const buyData = async (username:string,password:string,Phone:string,network:string,selectedPlan:string) => {      
+        const {data} = await axios.get(`https://vtu.ng/wp-json/api/v1/data?username=${username}&password=${password}&phone=${Phone}&network_id=${network}&variation_id=${selectedPlan}`)    
+
+        return data
+    }
+    
+
+ export const storePurchase = async (network: string, phone: string, Amount: number, order_id: number,accessToken:string) => {
+        const config = {
+            headers: {
+                Authorization :`Bearer ${accessToken?.slice(1,-1)}`
+            }
+        }
+        const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/airtime",{network,phone,Amount,order_id},config)
+    }
