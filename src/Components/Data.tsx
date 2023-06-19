@@ -58,7 +58,7 @@ export const Data = () => {
         try {
             setLoading(true)
             const data = await buyData(username, password, Phone,network , selectedPlan)
-            setLoading(false)
+           
             console.log("data",data)
             const { phone, order_id } = data?.data
 
@@ -66,10 +66,12 @@ export const Data = () => {
                 const sub = await storePurchase(network,phone, Amount ,order_id, accessToken)
                 console.log("sub",sub)
             }
+            setLoading(false)
             toast.success(`data sub of ${Amount} to ${phone} successful!`)
         } catch (error:any) {
             setLoading(false)
             console.log(error)
+            toast.error(error?.message)
         }
         
     }

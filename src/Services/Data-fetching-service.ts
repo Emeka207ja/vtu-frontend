@@ -11,13 +11,26 @@ interface airtime{
     accessToken:string|null
 }
 
+interface cable{
+    username: string;
+    password: string;
+    smartcard: string;
+    variation_id: string;
+    phone: string;
+    service_id: string;
+}
+
+interface storesub extends cable{
+    amount:number
+}
 
 
 
 
 
 
-export async function airtimeUpdate(details: airtime) {
+
+ export async function airtimeUpdate(details: airtime) {
   
     const { Amount, network, phone, order_id, accessToken } = details
       const config = {
@@ -60,4 +73,18 @@ export const purchaseAirtime = async (Amount: number, phone: string, network: st
             }
         }
         const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/airtime",{network,phone,Amount,order_id},config)
-    }
+}
+
+export const subCable = async (val:cable) => {
+    const { data } = await axios.get(`https://vtu.ng/wp-json/api/v1/tv?username=${val.username}&password=${val.password}&phone=${val.phone}&service_id=${val.service_id}&smartcard_number=${val.smartcard}&variation_id=${val.variation_id}`)
+    return data
+}
+
+export const storeCableSub = async (val: storesub, accessToken: string) => {
+     const config = {
+            headers: {
+                Authorization :`Bearer ${accessToken?.slice(1,-1)}`
+            }
+        }
+    const {data} = await axios.post("https://easybuyapi.adaptable.app/api/v1/cable",val,config)
+}

@@ -104,7 +104,7 @@ export const Startimes: iCable[] = [
     },
      {
         id: 5,
-        service: "super ",
+        service: "super",
         desc:"Startimes Super"
     },
 ]
