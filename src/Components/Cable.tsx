@@ -206,7 +206,7 @@ export const Cable = () => {
                 position={"relative"}
                 left={{ base: "22%", md: "40%" }}
                 mt={"0.9rem"} mb={"0.8rem"}
-                onClick={()=>router.push("/verify_card")}
+                onClick={()=>router.push("/verify_card?id=dstv")}
             >
                 Click to verify smartcard
             </Button>

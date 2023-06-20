@@ -5,7 +5,8 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { authSmartcard } from "@/Services/Data-fetching-service";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useRouter,NextRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
+import useQuerryString from "@/hooks/useQueryString";
 
 
 interface iprovider{
@@ -36,7 +37,9 @@ export const CardValidation = () => {
 
     const router:NextRouter = useRouter()
     
-    const {username,password} = useVtuAuth()
+    const { username, password } = useVtuAuth()
+    const [referral] = useQuerryString("id");
+    if(referral){console.log(referral)}
     
     const handleChange = (e: React.SyntheticEvent) => {
         const target = e.target as HTMLSelectElement;
@@ -110,9 +113,13 @@ return (
         </form>
         <ToastContainer limit={1} />
         <HStack>
-            <Box>
-                <Button onClick={()=>router.push("/cable")} mt={"0.9rem"}>back to cable subscription</Button>
-            </Box>
+            {
+                referral && (
+                    <Box>
+                        <Button onClick={()=>router.push("/cable")} mt={"0.9rem"}>back to cable subscription</Button>
+                    </Box>
+                )
+            }
         </HStack>
         </Box>
     )
