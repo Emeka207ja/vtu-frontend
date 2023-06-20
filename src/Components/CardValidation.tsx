@@ -108,7 +108,7 @@ return (
                                 w="100%"
                             >
                                 connecting
-                            </Button>): <Button type="submit" w={"100%"}>verify</Button>
+                            </Button>): <Button type="submit" w={"100%"}  colorScheme="red">verify</Button>
             }
         </form>
         <ToastContainer limit={1} />
