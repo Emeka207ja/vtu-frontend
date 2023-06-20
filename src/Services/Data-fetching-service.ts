@@ -88,3 +88,9 @@ export const storeCableSub = async (val: storesub, accessToken: string) => {
         }
     const {data} = await axios.post("https://easybuyapi.adaptable.app/api/v1/cable",val,config)
 }
+
+
+export const authSmartcard = async (username:string,password:string,smartcard:string,service_id:string) => {
+    const { data } = await axios.get(`https://vtu.ng/wp-json/api/v1/verify-customer?username=${username}&password=${password}&customer_id=${smartcard}&service_id=${service_id}`)
+    return data
+}

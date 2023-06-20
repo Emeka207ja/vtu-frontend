@@ -7,6 +7,7 @@ import { getProfileAction } from "@/redux/actions/getProfile.action";
 import { useVtuAuth } from "@/hooks/useVTuAuth";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter,NextRouter } from "next/router";
 
 
 
@@ -39,6 +40,8 @@ export const Cable = () => {
     const [variation_id, setVar] = useState<string>("")
     const [amount, setAmount] = useState<number>(0)
     const [loading,setLoading] = useState<boolean>(false)
+
+    const router:NextRouter = useRouter()
     
     const {accessToken } = useAppSelector(state => state.loginAuth)
     const {Profile} = useAppSelector(state=>state.fetchProfile)
@@ -197,7 +200,16 @@ export const Cable = () => {
     },[accessToken])
     return (
         <Box>
-             <Heading textAlign={"center"} fontSize={"1rem"}>Cable Subscription</Heading>
+            <Heading textAlign={"center"} fontSize={"1rem"}>Cable Subscription</Heading>
+            <Button
+                colorScheme={"red"}
+                position={"relative"}
+                left={{ base: "22%", md: "40%" }}
+                mt={"0.9rem"} mb={"0.8rem"}
+                onClick={()=>router.push("/verify_card")}
+            >
+                Click to verify smartcard
+            </Button>
             <form onSubmit={handleSubmit}>
                 <FormControl mb={"0.9rem"}>
                     <FormLabel fontSize={"0.9rem"}>Phone Number</FormLabel>
