@@ -112,15 +112,11 @@ export const Cable = () => {
                 break;
             
             case "dstv-yanga":
+                setAmount(3500 + sf)
+                break;
+            
+            case "dstv-confam":
                 setAmount(6200 + sf)
-                break;
-            
-            case "dstv-confam":
-                setAmount(3500 + sf)
-                break;
-            
-            case "dstv-confam":
-                setAmount(3500 + sf)
                 break;
             
             case "dstv6":
