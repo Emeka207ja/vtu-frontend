@@ -73,10 +73,11 @@ export const Cable = () => {
             setLoading(true)
             const { data } = await subCable({ username, password, smartcard, service_id, variation_id, phone })
             const { order_id } = data?.data
-            if (!order_id) {
-                toast.error("error occured, please check network or try again")
-                return 0
-            }
+            console.log(order_id)
+            // if (!order_id) {
+            //     toast.error("error occured, please check network or try again")
+            //     return 0
+            // }
             if (order_id) {
                 await storeCableSub({ username, password, smartcard, service_id, variation_id, phone,amount },accessToken)
             }
