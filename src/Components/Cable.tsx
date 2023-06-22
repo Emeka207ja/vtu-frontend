@@ -144,7 +144,7 @@ export const Cable = () => {
                 break;
             
             case "gotv-smallie":
-                setAmount(1100 + sf)
+                setAmount(1500 + sf)
                 break;
             
             case "gotv-jinja":
