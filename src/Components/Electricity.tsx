@@ -100,9 +100,11 @@ export const Electricity = () => {
         const { meter_number, service_id, variation_id, amount } = values
         if (Profile && Profile.balance < parseFloat(amount)) {
             toast.error("insufficient funds")
+            return 0;
         }
         if ( parseFloat(amount)<=0) {
             toast.error(`${amount} naira not accepted`)
+            return 0;
         }
         try { 
             setLoading(true)  
