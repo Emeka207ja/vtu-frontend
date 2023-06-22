@@ -94,3 +94,15 @@ export const authSmartcard = async (username:string,password:string,smartcard:st
     const { data } = await axios.get(`https://vtu.ng/wp-json/api/v1/verify-customer?username=${username}&password=${password}&customer_id=${smartcard}&service_id=${service_id}`)
     return data
 }
+
+export const authMetre = async (username: string, password: string, prov: string, id: string, metre: string) => {
+    const { data } = await axios.get(`https://vtu.ng/wp-json/api/v1/verify-customer?username=${username}&password=${password}&customer_id=${metre}&service_id=${prov}&variation_id=${id}`)
+    return data
+}
+
+
+export const subElectricity = async (username: string, password: string, meter_number: string, service_id: string, variation_id: string,amount:string) => {
+    const { data } = await axios.get(`https://vtu.ng/wp-json/api/v1/electricity?username=${username}&password=${password}&phone=07045461790&meter_number=${meter_number}&service_id=${service_id}&variation_id=${variation_id}&amount=${amount}`)
+    return data
+}
+ 

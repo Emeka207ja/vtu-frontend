@@ -2,6 +2,7 @@ import {Box,Select,FormLabel,FormControl} from "@chakra-ui/react"
 import { useState, useEffect } from "react"
 import { ElectricityValidation } from "./ElectricityValidation"
 import { CardValidation } from "./CardValidation"
+import useQuerryString from "@/hooks/useQueryString";
 
 interface iOptions{
     name: string
@@ -23,7 +24,11 @@ export const VerifyCard = () => {
 
     const [selected, setSelected] = useState<string>("dstv")
     const [dstv,setDstv] = useState<boolean>(false)
-    const [electric,setElectric] = useState<boolean>(false)
+    const [electric, setElectric] = useState<boolean>(false)
+    const [referral] = useQuerryString("id");
+    
+
+    
 
 
     useEffect(() => {
@@ -42,7 +47,10 @@ export const VerifyCard = () => {
                 
                 break;
         }
-    },[selected])
+        if (referral && referral === "electric") {
+            setSelected("electricity")
+        }
+    },[selected,referral])
     return (
         <Box>
             <FormControl>

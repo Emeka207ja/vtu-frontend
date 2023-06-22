@@ -114,7 +114,7 @@ return (
         <ToastContainer limit={1} />
         <HStack>
             {
-                referral && (
+                referral ==="dstv" && (
                     <Box>
                         <Button onClick={()=>router.push("/cable")} mt={"0.9rem"}>back to cable subscription</Button>
                     </Box>
