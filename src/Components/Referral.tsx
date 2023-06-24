@@ -28,7 +28,9 @@ export const Referral = () => {
     },[])
 
     const generateReferral = async () => {
-        const { username } = Profile
+        const { username: User } = Profile
+        const username = User?.toLocaleLowerCase()
+        console.log(username)
         if (!username) {
             toast.error("auth error")
             return
