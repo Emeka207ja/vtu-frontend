@@ -71,9 +71,9 @@ export const Cable = () => {
         }
         try {
             setLoading(true)
-            const { data } = await subCable({ username, password, smartcard, service_id, variation_id, phone })
-            const { order_id } = data?.data
-            if (order_id) {
+            const data  = await subCable({ username, password, smartcard, service_id, variation_id, phone })
+            if (data) {
+                
                 await storeCableSub({ username, password, smartcard, service_id, variation_id, phone,amount },accessToken)
             }
             setLoading(false)
