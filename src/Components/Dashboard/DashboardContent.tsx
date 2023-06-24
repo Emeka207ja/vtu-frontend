@@ -9,6 +9,7 @@ import { FiMonitor } from "react-icons/fi"
 import { useRouter, NextRouter } from "next/router"
 import { useFetchProfile } from "@/hooks/useFetchProfile";
 import { getProfileAction } from "@/redux/actions/getProfile.action";
+import { Spin } from "../Spinner";
 
 
 
@@ -29,7 +30,7 @@ export const DashboardContent = () => {
     },[accessToken])
     return (
         <Box>
-            <Heading fontSize={"1.4rem"} mb={"1rem"} textAlign={"center"}>{pending?"fetching profile": profile? profile.username:"Dashboard"}</Heading>
+            <Heading fontSize={"1.4rem"} mb={"1rem"} textAlign={"center"}>{pending?(<Spin/>): profile? profile.username:"Dashboard"}</Heading>
             <Grid>
                 <GridItem>
                     <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"} padding={"1rem"} borderLeft={"3px solid red"}>
