@@ -29,6 +29,10 @@ export const Referral = () => {
 
     const generateReferral = async () => {
         const { username } = Profile
+        if (!username) {
+            toast.error("auth error")
+            return
+        }
         const config = {
             headers: {
                 Authorization: `Bearer ${accessToken?.slice(1,-1)}`
