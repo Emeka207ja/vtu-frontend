@@ -1,7 +1,7 @@
 import { Box, Grid, GridItem, HStack, VStack, Flex, Heading, useColorMode } from "@chakra-ui/react"
 import { useState,useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import {FaWallet} from "react-icons/fa"
+import {FaWallet,FaUserFriends} from "react-icons/fa"
 import {ImConnection} from "react-icons/im"
 import {BiPhoneCall} from "react-icons/bi"
 import {BsLightbulb} from "react-icons/bs"
@@ -108,6 +108,7 @@ export const DashboardContent = () => {
                         </HStack>
                     </Box>
                 </GridItem>
+
                 <GridItem>
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
@@ -118,6 +119,20 @@ export const DashboardContent = () => {
                         <HStack>
                             <FiMonitor/>
                             <Box cursor={"pointer"}>Cable sub</Box>
+                        </HStack>
+                    </Box>
+                </GridItem>
+               
+                <GridItem>
+                    <Box
+                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                        borderRadius={"md"}
+                        padding={"2rem"}
+                         onClick={()=>router.push("/peer")}
+                    >
+                        <HStack>
+                            <FaUserFriends/>
+                            <Box cursor={"pointer"}>P2P</Box>
                         </HStack>
                     </Box>
                 </GridItem>

@@ -1,12 +1,10 @@
  
- /* tslint:disable-next-line */
 
-//  /* eslint-disable */
 
 import { Box, FormControl, FormLabel, Input, Select, Button, Heading } from "@chakra-ui/react"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { subElectricity } from "@/Services/Data-fetching-service";
+import { subElectricity,updateElectricity } from "@/Services/Data-fetching-service";
 import { useVtuAuth } from "@/hooks/useVTuAuth";
 import { useRouter,NextRouter } from "next/router";
 import { useAppSelector,useAppDispatch } from "@/redux/hooks";
@@ -72,11 +70,11 @@ export const Electricity = () => {
         phone: string;
         meter_number: string;
         service_id: string;
-        amount: string;
+        Amount: string;
         variation_id:string
     }
 
-    const [values, setValues] = useState<Data>({ phone: "", meter_number: "", service_id: "", amount: "", variation_id: "" })
+    const [values, setValues] = useState<Data>({ phone: "", meter_number: "", service_id: "abuja-electric", Amount: "", variation_id: "prepaid" })
     const [loading,setLoading] = useState<boolean>(false)
     const router: NextRouter = useRouter()
     const { password, username } = useVtuAuth()
@@ -97,23 +95,38 @@ export const Electricity = () => {
 
     const handleSubmit = async(e: React.SyntheticEvent) => {
         e.preventDefault();
-        const { meter_number, service_id, variation_id, amount } = values
-        if (Profile && Profile.balance < parseFloat(amount)) {
+
+        if (!accessToken) {
+            toast.error("validation error")
+            return
+        }
+        const { meter_number, service_id, variation_id, Amount, phone } = values
+        const amount = parseFloat(Amount)
+        if (Profile && Profile.balance < parseFloat(Amount)) {
             toast.error("insufficient funds")
             return 0;
         }
-        if ( parseFloat(amount)<=0) {
+        if ( parseFloat(Amount)<=0) {
             toast.error(`${amount} naira not accepted`)
             return 0;
         }
+        console.log(values)
         try { 
             setLoading(true)  
-            const data = await subElectricity(username, password, meter_number, service_id, variation_id, amount)
+            const data = await subElectricity(username, password, meter_number, service_id, variation_id, Amount)
+            if (data) {
+                const { order_id: order } = data?.data
+                const order_id = parseFloat(order)
+                const details = { amount, order_id, phone, meter_number }
+                const res = await updateElectricity(details,accessToken)
+                console.log(res)
+            }
             setLoading(false)
       } catch (error:any) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message;
             setLoading(false);
             toast.error(message);
+           
       }
     }
 
@@ -170,10 +183,21 @@ export const Electricity = () => {
 
                  <FormControl mb={"0.9rem"}>
                     <FormLabel  fontSize={"0.8rem"}>Amount</FormLabel>
-                    <Input value={values.amount}  name="amount" onChange={handleChange}/>
+                    <Input value={values.Amount}  name="Amount" onChange={handleChange}/>
                 </FormControl>
+                {
+                    loading?(<Button
+                                isLoading
+                                loadingText='Loading'
+                                colorScheme='red'
+                                variant='outline'
+                                spinnerPlacement='start'
+                                w="100%"
+                            >
+                                connecting
+                    </Button>):(<Button type="submit" w={"100%"} colorScheme="red"  fontSize={"0.8rem"} isDisabled={parseFloat(values.Amount)>Profile?.balance}>Submit</Button>)
+                }
 
-                <Button type="submit" w={"100%"} colorScheme="red"  fontSize={"0.8rem"} isDisabled={values.amount.length === 0}>Submit</Button>
             </form>
             <ToastContainer limit={1}/>
         </Box>

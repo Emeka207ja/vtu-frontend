@@ -1,3 +1,7 @@
+ /* tslint:disable-next-line */
+ /* eslint-disable */
+
+
 import axios from "axios"
 import { useCallback } from "react"
 import { useAppSelector } from "@/redux/hooks"
@@ -22,6 +26,13 @@ interface cable{
 
 interface storesub extends cable{
     amount:number
+}
+
+interface iElectric{
+    amount: number;
+    order_id: number;
+    phone: string;
+    meter_number: string;
 }
 
 
@@ -105,4 +116,13 @@ export const subElectricity = async (username: string, password: string, meter_n
     const { data } = await axios.get(`https://vtu.ng/wp-json/api/v1/electricity?username=${username}&password=${password}&phone=07045461790&meter_number=${meter_number}&service_id=${service_id}&variation_id=${variation_id}&amount=${amount}`)
     return data
 }
- 
+
+export const updateElectricity = async (details: iElectric, accessToken: string) => {
+        const config = {
+            headers: {
+                Authorization :`Bearer ${accessToken?.slice(1,-1)}`
+            }
+        }
+    const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/electricity", details, config)
+    return data
+}
