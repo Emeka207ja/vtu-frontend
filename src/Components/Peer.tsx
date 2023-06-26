@@ -91,7 +91,7 @@ export const Peer = ()=>{
     },[debounce])
     return(
         <Box>
-            <Heading textAlign={"center"} fontSize={"1rem"}>
+            <Heading textAlign={"center"} fontSize={"1rem"} mb={"1rem"}>
                 {
                     loading?(<Spin/>):sending?(<Spinner color='red.500' />):"Peer to Peer transfer"
                 }
@@ -99,16 +99,16 @@ export const Peer = ()=>{
 
             <form onSubmit={handleSubmit}>
                 
-                <FormControl mb={"0.6rem"}>
-                    <FormLabel>Username of user to receice the funds</FormLabel>
+                <FormControl mb={"1rem"}>
+                    <FormLabel fontSize={"0.8rem"}> Receiver's username</FormLabel>
                     <Input value={data.username} name="username" onChange={handleInputChange} isRequired/>
                     {
                         confirmed&&<FormHelperText>{confirmed}</FormHelperText>
                     }
                 </FormControl>
 
-                <FormControl mb={"0.6rem"}>
-                    <FormLabel>Amount</FormLabel>
+                <FormControl mb={"0.8rem"}>
+                    <FormLabel fontSize={"0.8rem"}>Amount</FormLabel>
                     <Input value={data.Amount} name="Amount" onChange={handleInputChange} isRequired/>
                 </FormControl>
 

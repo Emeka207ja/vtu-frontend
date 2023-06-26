@@ -39,7 +39,9 @@ import { logout } from '@/redux/slices/login-slice';
 import { useAppDispatch } from '@/redux/hooks';
 import { NextRouter, useRouter } from 'next/router';
 import { signout } from '@/redux/actions/login-action';
-
+import {FaHistory} from "react-icons/fa"
+import {SiAuthy} from "react-icons/si"
+import {BsFillPeopleFill} from "react-icons/bs"
 
 
 interface LinkItemProps {
@@ -50,9 +52,10 @@ interface LinkItemProps {
 const LinkItems: LinkItemProps[] = [
   { name: 'Home', icon: FiHome, url:"/dashboard" },
   { name: 'Trending', icon: FiTrendingUp,url:"/dashboard" },
-  { name: 'Referral', icon: FiCompass,url:"/referral" },
-  { name: 'Verify card & metre', icon: FiStar, url:"/verify_card" },
+  { name: 'Referral', icon: BsFillPeopleFill,url:"/referral" },
+  { name: 'Verify card & metre', icon: SiAuthy, url:"/verify_card" },
   { name: 'Settings', icon: FiSettings, url:"/dashboard" },
+  { name: 'History', icon: FaHistory , url:"/history" },
 ];
 
 export default function SidebarWithHeader({

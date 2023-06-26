@@ -1,4 +1,4 @@
-import { Box, Card, CardBody, Button, Grid, GridItem, HStack, useColorMode, Text, CardFooter } from "@chakra-ui/react"
+import { Box, Card, CardBody, Button, Grid, GridItem, HStack, useColorMode, Text, CardFooter,Spinner,Heading } from "@chakra-ui/react"
 import {useState,useEffect} from "react"
 import axios from "axios"
 import { useAppSelector,useAppDispatch } from "@/redux/hooks"
@@ -101,7 +101,9 @@ export const Referral = () => {
                     <Card>
                         <CardBody>
                            {
-                            checkingValidity? (<Text>Checking validity...please wait</Text>):valid&&(<Text>Ref bonus converted to cash congrats!</Text>)
+                            checkingValidity? (<Heading textAlign={"center"}>
+                                <Spinner color='red.500' size='md' />
+                                </Heading>):valid&&(<Text>Ref bonus converted to cash congrats!</Text>)
                            }
                         </CardBody>
                         <CardFooter>
@@ -114,7 +116,9 @@ export const Referral = () => {
                         <CardBody>
 
                             {
-                                loading ? "generating link.... plz wait" : success && (<Text wordBreak={"break-all"} >{ refLink}</Text>)
+                                loading ? (<Heading textAlign={"center"}>
+                                    <Spinner color='red.500'size='md' />
+                                    </Heading>) : success && (<Text wordBreak={"break-all"} >{ refLink}</Text>)
                            }
                         </CardBody>
                         <CardFooter>
