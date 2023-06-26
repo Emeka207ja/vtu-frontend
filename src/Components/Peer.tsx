@@ -1,15 +1,18 @@
 import { useAppDispatch,useAppSelector } from "@/redux/hooks"
 import axios from "axios"
-import { Box,Heading,FormControl,FormLabel,Button,Input,FormHelperText } from "@chakra-ui/react"
+import { Box,Heading,FormControl,FormLabel,Button,Input,FormHelperText,Spinner } from "@chakra-ui/react"
 import { useState,useEffect } from "react"
 import { Spin } from "./Spinner"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {peerTransfer} from "@/Services/Data-fetching-service"
+
 
 export const Peer = ()=>{
     const [data,setData] = useState<{username:string,Amount:string}>({username:"",Amount:""})
     const [debounce,setDeBounce] = useState<string>("")
     const [loading,setLoading] = useState<boolean>(false)
+    const [sending,setSending] = useState<boolean>(false)
     const [confirmed,setConfirmed] = useState<null|string>(null)
 
     const {accessToken} = useAppSelector(state=>state.loginAuth)
@@ -21,9 +24,26 @@ export const Peer = ()=>{
         }))
     }
 
-    const handleSubmit  = (e:React.SyntheticEvent)=>{
+    const handleSubmit  = async(e:React.SyntheticEvent)=>{
         e.preventDefault()
-        console.log(data)
+        if(!accessToken){
+            toast.error("auth error");
+            return;
+        }
+       const {Amount,username:recieverName} = data
+       const amount = parseFloat(Amount)
+        try {
+            setSending(true)
+            const datax = await peerTransfer(amount,recieverName,accessToken)
+            setSending(false)
+            toast.success("transfer successfull")
+        } catch (error:any) {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message;
+           
+            toast.error(message)
+             setSending(false)
+            console.log(error)
+        }
     }
 
     const confirmName = async()=>{
@@ -42,12 +62,13 @@ export const Peer = ()=>{
                 setConfirmed(data.email)
             }
             setLoading(false)
-            toast.success("user confirmed")
+            // toast.success("user confirmed")
             console.log(data)
         } catch (error:any) {
-            setLoading(false)
+           
             const message = (error.response && error.response.data && error.response.data.message) || error.message;
             toast.error(message)
+             setLoading(false)
             console.log(message)
         }
     }
@@ -70,15 +91,17 @@ export const Peer = ()=>{
     },[debounce])
     return(
         <Box>
-            <Heading textAlign={"center"} fontSize={"1rem"}>Peer to Peer transfer</Heading>
+            <Heading textAlign={"center"} fontSize={"1rem"}>
+                {
+                    loading?(<Spin/>):sending?(<Spinner color='red.500' />):"Peer to Peer transfer"
+                }
+            </Heading>
 
             <form onSubmit={handleSubmit}>
-                {
-                    loading&&(<Spin/>)
-                }
+                
                 <FormControl mb={"0.6rem"}>
                     <FormLabel>Username of user to receice the funds</FormLabel>
-                    <Input value={data.username} name="username" onChange={handleInputChange}/>
+                    <Input value={data.username} name="username" onChange={handleInputChange} isRequired/>
                     {
                         confirmed&&<FormHelperText>{confirmed}</FormHelperText>
                     }
@@ -86,7 +109,7 @@ export const Peer = ()=>{
 
                 <FormControl mb={"0.6rem"}>
                     <FormLabel>Amount</FormLabel>
-                    <Input value={data.Amount} name="Amount" onChange={handleInputChange}/>
+                    <Input value={data.Amount} name="Amount" onChange={handleInputChange} isRequired/>
                 </FormControl>
 
                 <Button type={"submit"} w={"100%"} colorScheme="blue">Transfer</Button>

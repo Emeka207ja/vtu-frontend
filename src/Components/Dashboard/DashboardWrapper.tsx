@@ -172,7 +172,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
 
   const Logout = () => {
     dispatch(logout())
-    // router.push("/")
+    router.push("/login")
   }
   return (
     <Flex

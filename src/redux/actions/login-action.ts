@@ -11,7 +11,9 @@ export const loginAction = createAsyncThunk(
                 typeof window !== 'undefined' ? localStorage.setItem('token',JSON.stringify(data)) : null
                 return data;
             } catch (error:any) {
-                return thunkApi.rejectWithValue(error.message)
+                 const message = (error.response && error.response.data && error.response.data.message) || error.message;
+                console.log(error)
+                return thunkApi.rejectWithValue(message)
             }
         }
 )

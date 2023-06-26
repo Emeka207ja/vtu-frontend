@@ -9,8 +9,9 @@ export const signupAction = createAsyncThunk('auth/signup',
             const {data} = await axios.post(signupApi,Data);
             return data;
         } catch (error:any) {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message;
             
-            return thunkApi.rejectWithValue(error.message);
+            return thunkApi.rejectWithValue(message);
         }
     }
 );
