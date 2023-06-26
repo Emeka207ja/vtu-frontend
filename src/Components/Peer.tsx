@@ -100,7 +100,7 @@ export const Peer = ()=>{
             <form onSubmit={handleSubmit}>
                 
                 <FormControl mb={"1rem"}>
-                    <FormLabel fontSize={"0.8rem"}> Receiver's username</FormLabel>
+                    <FormLabel fontSize={"0.8rem"}> Receiver username</FormLabel>
                     <Input value={data.username} name="username" onChange={handleInputChange} isRequired/>
                     {
                         confirmed&&<FormHelperText>{confirmed}</FormHelperText>
