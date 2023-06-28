@@ -103,12 +103,12 @@ export const Data = ()=>{
                                 {
                                     Airhistory.length === 0? (
                                         <Tr>
-                                            <Td>Nil</Td>
-                                            <Td>Nil</Td>
-                                            <Td>Nil</Td>
-                                            <Td>Nil</Td>
-                                            <Td>Nil</Td>
-                                            <Td>Nil</Td>
+                                            <Td fontSize={"0.6rem"}>Nil</Td>
+                                            <Td fontSize={"0.6rem"}>Nil</Td>
+                                            <Td fontSize={"0.6rem"}>Nil</Td>
+                                            <Td fontSize={"0.6rem"}>Nil</Td>
+                                            <Td fontSize={"0.6rem"}>Nil</Td>
+                                            <Td fontSize={"0.6rem"}>Nil</Td>
                                         </Tr>
                                     ):(
                                             Airhistory.map(item => <Airtimetable key={item.id} item={item} />)

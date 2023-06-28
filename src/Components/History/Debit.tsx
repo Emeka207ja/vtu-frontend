@@ -64,40 +64,42 @@ export const Debit = () => {
             <Box>
                 {
                     success && (
-                        <Table>
-                            <Thead>
-                                <Tr>
-                                    <Th>ID</Th>
-                                    <Th>Amount</Th>
-                                    <Th>Reciever</Th>
-                                    <Th>Date</Th>
-                                
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {
-                                    data?.length === 0 ? (
-                                        <Tr>
-                                            <Td>Nill</Td>
-                                            <Td>Nill</Td>
-                                            <Td>Nill</Td>
-                                            <Td>Nill</Td>
-                                        </Tr>
-                                    ) : (
-                                            data?.map((item,idx) => {
-                                                return (
-                                                    <Tr key={item.id}>
-                                                        <Td>{ idx+1}</Td>
-                                                        <Td>{ item.amount}</Td>
-                                                        <Td>{ item.receiver?.email}</Td>
-                                                        <Td>{ format(item.created_at)}</Td>
-                                                    </Tr>
-                                                )
-                                            })
-                                    )
-                                }
-                            </Tbody>
-                        </Table>
+                        <TableContainer>
+                            <Table>
+                                <Thead>
+                                    <Tr>
+                                        <Th>ID</Th>
+                                        <Th>Amount</Th>
+                                        <Th>Reciever</Th>
+                                        <Th>Date</Th>
+                                    
+                                    </Tr>
+                                </Thead>
+                                <Tbody>
+                                    {
+                                        data?.length === 0 ? (
+                                            <Tr>
+                                                <Td fontSize={"0.6rem"}>Nill</Td>
+                                                <Td fontSize={"0.6rem"}>Nill</Td>
+                                                <Td fontSize={"0.6rem"}>Nill</Td>
+                                                <Td fontSize={"0.6rem"}>Nill</Td>
+                                            </Tr>
+                                        ) : (
+                                                data?.map((item,idx) => {
+                                                    return (
+                                                        <Tr key={item.id}>
+                                                            <Td>{ idx+1}</Td>
+                                                            <Td>{ item.amount}</Td>
+                                                            <Td>{ item.receiver?.email}</Td>
+                                                            <Td>{ format(item.created_at)}</Td>
+                                                        </Tr>
+                                                    )
+                                                })
+                                        )
+                                    }
+                                </Tbody>
+                            </Table>
+                        </TableContainer>
                     )
                 }
             </Box>
