@@ -113,7 +113,7 @@ export const Data = ()=>{
                                             <Td>Nil</Td>
                                         </Tr>
                                     ):(
-                                        Airhistory.map(item =><Airtimetable item={item}/>)
+                                        Airhistory.map(item =><Airtimetable item={item} key={item.network}/>)
                                     )
                                 }
                             </Tbody>
