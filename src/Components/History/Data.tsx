@@ -23,7 +23,7 @@ export interface iairtime {
     Amount:number;
     created_at:string;
     id:number;
-    order_id:numkber;
+    order_id:number;
     network:string;
     phone:string;
     updated_at:string
@@ -69,9 +69,7 @@ export const Data = ()=>{
     }
 
     useEffect(()=>{
-        if(!accessToken){
-            return 0;
-        }
+       
        Airtme()
     },[accessToken])
 
@@ -84,7 +82,7 @@ export const Data = ()=>{
              fontSize={"1.1rem"} 
              mb={{base:"2rem",md:"4rem"}}> 
                 {
-                    loading?<Spin head/>:" Data and Aitime History"
+                    loading?<Spin/>:" Data and Aitime History"
                 }
            </Heading>
            {
@@ -113,7 +111,7 @@ export const Data = ()=>{
                                             <Td>Nil</Td>
                                         </Tr>
                                     ):(
-                                        Airhistory.map(item =><Airtimetable item={item} key={item.network}/>)
+                                            Airhistory.map(item => <Airtimetable key={item.id} item={item} />)
                                     )
                                 }
                             </Tbody>

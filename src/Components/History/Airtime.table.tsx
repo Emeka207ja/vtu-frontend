@@ -1,20 +1,21 @@
 import { Tr,Td } from "@chakra-ui/react";
 import { iairtime } from "./Data";
 import { format } from 'timeago.js';
-export const Airtimetable = (item:iairtime)=>{
+export const Airtimetable = (item:any)=>{
     // if(!item.id){
     //     return 1
     // }
-    console.log(item)
+    const items = item?.item
+    console.log(items)
 
     return(
         <Tr>
-            <Td>{item.item.id}</Td>
-            <Td>{item.item.Amount}</Td>
-            <Td>{item.item.network}</Td>
-            <Td>{item.item.phone}</Td>
-            <Td>{item.item.order_id}</Td>
-            <Td>{format(item.item.created_at)}</Td>
+            <Td>{items?.id}</Td>
+            <Td>{items?.Amount}</Td>
+            <Td>{items?.network}</Td>
+            <Td>{items?.phone}</Td>
+            <Td>{items?.order_id}</Td>
+            <Td>{format(items?.created_at)}</Td>
         </Tr>
     )
 }
