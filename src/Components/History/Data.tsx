@@ -119,7 +119,8 @@ export const Data = ()=>{
                     </TableContainer>
                 )
            }
-           <ToastContainer limit={1}/>
+            <ToastContainer limit={1} />
+           
         </Box>
     )
 }

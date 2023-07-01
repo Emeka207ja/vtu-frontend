@@ -17,6 +17,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { format } from 'timeago.js';
 
+import { genReqId } from "./util.service";
+
 
 
 export const Credit = () => {
@@ -52,7 +54,11 @@ export const Credit = () => {
             return 
         }
         creditHistory()
-    },[])
+
+        
+    }, [])
+    const id = genReqId()
+        console.log("idx",id)
     return(
         <Box>
             <Heading textAlign={"center"} fontSize={"1.2rem"} mb={"2rem"}>
