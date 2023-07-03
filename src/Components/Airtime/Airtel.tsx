@@ -1,12 +1,14 @@
 import { Box, Input, FormLabel, FormControl, Button } from "@chakra-ui/react";
 import {useState,useEffect} from "react"
 import { genReqId } from "../History/util.service";
-
+import { useRouter,NextRouter } from "next/router"
 
 
 export const Airtel = () => {
     const [airtel, setAirtel] = useState<{ amount: number, phone: string, serviceID: string }>({ amount: 100, phone: "", serviceID: "airtel" })
     const [id,setId] = useState("")
+
+     const router:NextRouter = useRouter()
     
     const handleInputs = (e: React.SyntheticEvent) => {
         const target = e.target as HTMLInputElement
@@ -19,6 +21,7 @@ export const Airtel = () => {
        
         e.preventDefault()
         console.log(airtel)
+        router.push(`/confirmAirtime?network=${airtel.serviceID}&phone=${airtel.phone}&amount=${airtel.amount}`)
        
     }
    

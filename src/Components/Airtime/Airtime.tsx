@@ -6,6 +6,7 @@ import { Mtn } from "./Mtn"
 import { Glo } from "./Glo"
 import { NineMobile } from "./NineMobile"
 
+
 export const Airtime = () => {
     const [air,setAir] = useState<boolean>(false)
     const [selected,setSelected] = useState<string>("")
@@ -13,6 +14,10 @@ export const Airtime = () => {
     const [glo,setGlo] = useState<boolean>(false)
     const [nine,setNine] = useState<boolean>(false)
     // const [] = useState<>()
+
+   
+
+
 
     useEffect(() => {
         switch (selected) {
