@@ -139,3 +139,15 @@ export const peerTransfer = async(amount:number,recieverName:string,accessToken:
 
 
 }
+
+export const updatePin = async (accessToken: string, pin: number, confirm_pin: number) => {
+    const config = {
+            headers: {
+                Authorization :`Bearer ${accessToken?.slice(1,-1)}`
+            }
+    }
+
+    const {data} = await axios.patch("https://easybuyapi.adaptable.app/api/v1/profile/update_pin",{pin,confirm_pin},config)
+    return data;
+
+}

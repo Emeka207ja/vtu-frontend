@@ -1,7 +1,9 @@
 import { Box, Input, FormLabel, FormControl, Button } from "@chakra-ui/react";
 import {useState} from "react"
-
+import {useRouter,NextRouter} from "next/router"
 export const Glo = () => {
+
+    const router:NextRouter = useRouter()
     const [glo, setGlo] = useState<{ amount: number, phone: string,serviceID:string }>({ amount: 100, phone: "",serviceID:"glo" })
     
     const handleInputs = (e: React.SyntheticEvent) => {
@@ -11,7 +13,7 @@ export const Glo = () => {
 
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
-        console.log(glo)
+        router.push(`/confirmAirtime?network=${glo.serviceID}&phone=${glo.phone}&amount=${glo.amount}`)
     }
     return (
         <Box mt={"3rem"}>

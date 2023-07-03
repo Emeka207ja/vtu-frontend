@@ -20,7 +20,7 @@ export const Airtel = () => {
     const handleSubmit = (e: React.SyntheticEvent) => {
        
         e.preventDefault()
-        console.log(airtel)
+        
         router.push(`/confirmAirtime?network=${airtel.serviceID}&phone=${airtel.phone}&amount=${airtel.amount}`)
        
     }

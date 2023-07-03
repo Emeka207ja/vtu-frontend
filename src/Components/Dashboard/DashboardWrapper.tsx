@@ -56,6 +56,7 @@ const LinkItems: LinkItemProps[] = [
   { name: 'Verify card & metre', icon: SiAuthy, url:"/verify_card" },
   { name: 'Settings', icon: FiSettings, url:"/dashboard" },
   { name: 'History', icon: FaHistory , url:"/history" },
+  { name: 'Update Pin', icon: FaHistory , url:"/update_pin" },
 ];
 
 export default function SidebarWithHeader({
