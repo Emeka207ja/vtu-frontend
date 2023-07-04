@@ -13,6 +13,7 @@ export interface iProfile{
     gender: string | null;
     pin: number;
     verifiled: boolean;
+    defaultPinChanged: boolean;
     ReferralCount: number;
     TotalReferred: number;
     image:null|string
@@ -49,6 +50,7 @@ export const InitialProfile:iProfile ={
     gender: null,
     verifiled: false,
     pin: 1111,
+    defaultPinChanged: false,
     image: "",
     ReferralCount: 0,
     TotalReferred: 0,

@@ -11,7 +11,9 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { useState,useEffect } from "react"
 import { updatePin } from "@/Services/Data-fetching-service";
-import { useAppDispatch,useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+
+import { ChangePin } from "./ChangePin";
 
 export const UpdatePin = () => {
     const [Pin, setPin] = useState<string>("1111")

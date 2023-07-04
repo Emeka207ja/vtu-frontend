@@ -151,3 +151,14 @@ export const updatePin = async (accessToken: string, pin: number, confirm_pin: n
     return data;
 
 }
+export const changePin = async (accessToken: string, oldPin: number, newPin: number) => {
+    const config = {
+            headers: {
+                Authorization :`Bearer ${accessToken?.slice(1,-1)}`
+            }
+    }
+
+    const {data} = await axios.patch("https://easybuyapi.adaptable.app/api/v1/profile/change_pin",{oldPin,newPin},config)
+    return data;
+
+}
