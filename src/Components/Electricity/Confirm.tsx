@@ -50,7 +50,7 @@ export const Confirm: React.FC = () => {
         }
         try {
             setLoading(true)
-            setSuccess(FaBullseye)
+            setSuccess(false)
             const data = await subElectricity({ api_key, secret_key, amount, phone, serviceID, variation_code, billersCode, request_id })
             console.log(data)
             setLoading(false)

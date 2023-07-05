@@ -22,7 +22,7 @@ export const distributor: iDistributor[] = [
     },
     {
         key: "PHED",
-        serviceId: "ikeja-electricity",
+        serviceId: "portharcourt-electric",
         name: "Port Harcourt Electricity"
     },
     {
