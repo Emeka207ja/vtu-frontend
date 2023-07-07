@@ -137,6 +137,20 @@ export const DashboardContent = () => {
                         </HStack>
                     </Box>
                 </GridItem>
+
+                <GridItem>
+                    <Box
+                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                        borderRadius={"md"}
+                        padding={"2rem"}
+                         onClick={()=>router.push("/smile")}
+                    >
+                        <HStack>
+                             <BiPhoneCall/>
+                            <Box cursor={"pointer"}>Smile Subscription</Box>
+                        </HStack>
+                    </Box>
+                </GridItem>
                
             </Grid>
         </Box>

@@ -45,7 +45,7 @@ export const Form: React.FC = () => {
             <form onSubmit={handleSubmit}>
                 <FormControl mb={"1.6rem"}>
                     <FormLabel>Meter number</FormLabel>
-                    <Input value={data.meter_number} onChange={handleInputs} name="meter_number"/>
+                    <Input value={data.meter_number} onChange={handleInputs} name="meter_number" isRequired/>
                 </FormControl>
 
                 <FormControl mb={"1.6rem"}>
@@ -58,12 +58,12 @@ export const Form: React.FC = () => {
                 
                 <FormControl mb={"1.6rem"}>
                     <FormLabel>Amount</FormLabel>
-                    <Input value={data.Amount} onChange={handleInputs} name="Amount" />
+                    <Input value={data.Amount} onChange={handleInputs} name="Amount" isRequired/>
                 </FormControl>
 
                 <FormControl mb={"1.6rem"}>
                     <FormLabel>Phone Number</FormLabel>
-                    <Input value={data.Phone} onChange={handleInputs} name="Phone"/>
+                    <Input value={data.Phone} onChange={handleInputs} name="Phone" isRequired/>
                 </FormControl>
                 <Box>
                     <HStack spacing={50}>
