@@ -40,7 +40,7 @@ export const Smile: React.FC = () => {
 
      const handleAmount = (e:React.SyntheticEvent)=>{
         const target = e.target as HTMLInputElement;
-        setAmout(target.value)
+        setAmount(target.value)
     }
     const variationCode = async () => {
         try {
