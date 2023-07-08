@@ -4,14 +4,17 @@ import { useState, useEffect } from "react"
 import { iVar } from "./variation.interface"
 import { verifySmile } from "./service"
 import { getHeaders } from "../Airtime/service"
-
+import { SmileLogo } from "./Logo"
+import { useRouter,NextRouter } from "next/router"
 
 export const Smile: React.FC = () => {
+
+    const router:NextRouter = useRouter()
 
     const [loading,setLoading] = useState<boolean>(false)
     const [success, setSuccess] = useState<boolean>(false)
 
-    const [Amount,setAmount] = useState<string>("")
+    const [Amount,setAmount] = useState<string>("510.00")
     
     const [data, setData] = useState({  variation_code: "516", phone: "", })
     const [billersCode,setBiller] = useState("")
@@ -35,7 +38,9 @@ export const Smile: React.FC = () => {
 
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
-        console.log(data)
+        const { phone, variation_code } = data
+        router.push(`/smile/confirm?phone=${phone}&varcode=${variation_code}&amount=${Amount}&servID=smile-direct&bill=${billersCode}`)
+        
     }
 
      const handleAmount = (e:React.SyntheticEvent)=>{
@@ -49,7 +54,7 @@ export const Smile: React.FC = () => {
                 const varation = data.content?.varations
                 setVars(varation)
             }
-            // console.log(data?.content.varations)
+            console.log(data?.content.varations)
         } catch (error:any) {
             console.log(error)
         }
@@ -112,13 +117,13 @@ export const Smile: React.FC = () => {
     console.log(data.variation_code)
     return (
         <Box>
-            
+            <SmileLogo/>
             <Box mb={"3rem"}>
                 <form onSubmit={smileHandler}>
                     <Grid  templateColumns={{base:"repeat(1,1fr)", md:"repeat(2, 1fr)"}} gap={"1rem"}>
                         <Box>
                             <FormControl>
-                                <FormLabel>
+                                <FormLabel  fontSize={"0.8rem"}>
                                     {
                                         validating?(<Spinner/>):"Enter your Registered Email or Smile Account ID"
                                     }
@@ -130,7 +135,7 @@ export const Smile: React.FC = () => {
                             </FormControl>
                         </Box>
                         <Box mt={{md:"2rem"}}>
-                            <Button type="submit">Validate</Button>
+                            <Button type="submit" colorScheme="blue">Validate</Button>
                         </Box>
                     </Grid>
                 </form>
@@ -140,8 +145,8 @@ export const Smile: React.FC = () => {
                  <Grid  templateColumns={{base:"repeat(1,1fr)", md:"repeat(2, 1fr)"}} gap={"1rem"}>
                     <Box mb={"1rem"}>
                         <FormControl>
-                            <FormLabel>Type</FormLabel>
-                            <Select value={data.variation_code} onChange={handleInputs} name="variation_code">
+                            <FormLabel  fontSize={"0.8rem"}>Type</FormLabel>
+                            <Select value={data.variation_code} onChange={handleInputs} name="variation_code" fontSize={"0.9rem"}>
                                 {
                                     vars?.length > 0 && vars.map(item => (<option value={item.variation_code} key={item.name}>{item.name }</option>))
                                }
@@ -150,21 +155,21 @@ export const Smile: React.FC = () => {
                     </Box>
                     <Box mb={"1rem"}>
                         <FormControl >
-                            <FormLabel> Account ID</FormLabel>
+                            <FormLabel  fontSize={"0.8rem"}> Account ID</FormLabel>
                             <Input value={billersCode} readOnly />
                         </FormControl>
                     </Box>
                     <Box mb={"1rem"}>
                         <FormControl>
-                            <FormLabel>Phone Number</FormLabel>
+                            <FormLabel  fontSize={"0.8rem"}>Phone Number</FormLabel>
                             <Input value={data.phone} onChange={handleInputs} name="phone"/>
                         </FormControl>
                     </Box>
                     
                     <Box mb={"1rem"}>
                         <FormControl>
-                            <FormLabel>Amount</FormLabel>
-                            <Input value={Amount } isDisabled onChange={handleAmount}/>
+                            <FormLabel  fontSize={"0.8rem"}>Amount</FormLabel>
+                            <Input value={Amount } isDisabled ={data.variation_code !=="airtime"} onChange={handleAmount}/>
                         </FormControl>
                     </Box>
                     <Box mb={"1rem"} mt={{md:"2rem"}}>
