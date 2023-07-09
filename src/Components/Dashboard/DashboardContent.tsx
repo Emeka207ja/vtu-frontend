@@ -147,7 +147,21 @@ export const DashboardContent = () => {
                     >
                         <HStack>
                              <BiPhoneCall/>
-                            <Box cursor={"pointer"}>Smile Subscription</Box>
+                            <Box cursor={"pointer"}>Smile</Box>
+                        </HStack>
+                    </Box>
+                </GridItem>
+
+                <GridItem>
+                    <Box
+                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                        borderRadius={"md"}
+                        padding={"2rem"}
+                         onClick={()=>router.push("/spectranet")}
+                    >
+                        <HStack>
+                             <BiPhoneCall/>
+                            <Box cursor={"pointer"}>Spectranet</Box>
                         </HStack>
                     </Box>
                 </GridItem>
