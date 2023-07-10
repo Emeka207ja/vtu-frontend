@@ -2,6 +2,7 @@ import { Box, Text, Heading,Grid,GridItem ,HStack,useColorMode} from "@chakra-ui
 // import { Payment } from "./Payment"
 import { Payment } from "./Payment"
 import { useAppSelector } from "@/redux/hooks"
+// import VirtualAccount from "./VirtualAccount"
 
 export const Wallet = () => {
     const { colorMode, toggleColorMode } = useColorMode()
@@ -11,7 +12,8 @@ export const Wallet = () => {
          
             <Box>
                 <Heading textAlign={"center"} fontSize={"1rem"} margin={"0.9rem 0"}>Fund wallet</Heading>
-                <Payment/>
+                <Payment />
+                {/* <VirtualAccount/> */}
             </Box>
 
         </Box>

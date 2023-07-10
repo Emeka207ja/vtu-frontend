@@ -9,6 +9,7 @@ export interface iProfile{
     firstname: string | null;
     lastname:string|null
     username:string|null
+    name:string|null
     phone:string|null
     gender: string | null;
     pin: number;
@@ -26,7 +27,8 @@ interface Auth{
     created_at: string;
     updated_at: string;
     username: string;
-    email:string
+    email: string
+    name:null|string
     role:Role[]
 }
 
@@ -46,6 +48,7 @@ export const InitialProfile:iProfile ={
     firstname: null,
     lastname:null,
     username:null,
+    name:null,
     phone:null,
     gender: null,
     verifiled: false,
@@ -59,6 +62,7 @@ export const InitialProfile:iProfile ={
         created_at: "",
         updated_at: "",
         username: "",
+        name:null,
         email:"",
         role:[]
     }

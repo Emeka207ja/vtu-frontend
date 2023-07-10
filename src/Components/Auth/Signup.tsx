@@ -11,6 +11,7 @@ import useQuerryString from "@/hooks/useQueryString";
 interface signupDetails{
     email: string;
     username: string;
+    name: string;
     password: string;
     confirm_password:string
 }
@@ -26,6 +27,7 @@ export const SignupComponent: React.FC = () => {
     const [value, setValue] = useState<signupDetails>({
         email: "",
         username: "",
+        name: "",
         password: "",
         confirm_password: ""
     })
@@ -43,13 +45,13 @@ export const SignupComponent: React.FC = () => {
     function handleSubmit(e: React.SyntheticEvent): void{
         
         e.preventDefault()
-        const { email, username, password, confirm_password } = value;
+        const { email, username, password, confirm_password,name } = value;
         if (referral) {
-            dispatch(signupAction({email,username,password,referral}))
+            dispatch(signupAction({email,username,password,referral,name}))
         } else {
-             dispatch(signupAction({email,username,password}))
+             dispatch(signupAction({email,username,password,name}))
         }
-        console.log(email, username, password, confirm_password);
+        console.log(email, username, password, confirm_password,name);
         
     }
     useEffect(() => {
@@ -58,7 +60,7 @@ export const SignupComponent: React.FC = () => {
         }
         if (success) {
             toast.success("registered succesfully!")
-            setValue({ email: "", password: "", username: "", confirm_password: "" });
+            setValue({ email: "", password: "", username: "", confirm_password: "",name:"" });
             setTimeout(()=>{push("/login")},2000)
         }
         dispatch(reset())
@@ -78,24 +80,34 @@ export const SignupComponent: React.FC = () => {
                     <Box>
                        
                         <Box mt={{base:"0.4rem", md:"0"}}>
-                             <form onSubmit={handleSubmit} >
+                            <form onSubmit={handleSubmit} >
+                                
                             <Flex flexDirection={"column"} width={{base:"20rem",md:"35rem"}}>
                                 <FormControl mb={"0.6rem"}>
                                     <FormLabel fontSize={"0.8rem"} >username</FormLabel>
                                     <Input value={ value.username} name="username"  onChange={handleInputChange} required  />
-                                </FormControl>
+                                    </FormControl>
+                                    
+                                <FormControl mb={"0.6rem"}>
+                                    <FormLabel fontSize={"0.8rem"} >Full name</FormLabel>
+                                    <Input value={ value.name} name="name"  onChange={handleInputChange} required  />
+                                    </FormControl>
+                                    
                                 <FormControl mb={"0.6rem"}>
                                     <FormLabel fontSize={"0.8rem"}>email</FormLabel>
                                     <Input type="email" value={value.email} name="email" onChange={handleInputChange} required    />
-                                </FormControl>
+                                    </FormControl>
+                                    
                                 <FormControl mb={"0.6rem"}>
                                     <FormLabel fontSize={"0.8rem"}>password</FormLabel>
                                     <Input type="password" value={value.password} name="password" onChange={handleInputChange} required  />
-                                </FormControl>
+                                    </FormControl>
+                                    
                                 <FormControl mb={"0.6rem"}>
                                     <FormLabel fontSize={"0.8rem"}>confirm password</FormLabel>
                                     <Input type="password" value={value.confirm_password} name="confirm_password" onChange={handleInputChange} required />
-                                </FormControl>
+                                    </FormControl>
+                                    
                                     {!pending ? (<Button type="submit" mt={{ base: "0.6rem", md: "1rem" }} fontSize={"0.7rem"} colorScheme="red" isDisabled={value.password !== value.confirm_password}>sign up</Button>) : (
                                          <Button
                                             isLoading

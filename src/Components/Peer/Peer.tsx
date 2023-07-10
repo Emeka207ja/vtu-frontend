@@ -1,14 +1,16 @@
 import { useAppDispatch,useAppSelector } from "@/redux/hooks"
 import axios from "axios"
-import { Box,Heading,FormControl,FormLabel,Button,Input,FormHelperText,Spinner } from "@chakra-ui/react"
+import { Box,Heading,FormControl,FormLabel,Button,Input,FormHelperText,Spinner ,HStack} from "@chakra-ui/react"
 import { useState,useEffect } from "react"
-import { Spin } from "./Spinner"
+import { Spin } from "../Spinner"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {peerTransfer} from "@/Services/Data-fetching-service"
+import { useRouter, NextRouter } from "next/router"
+import { getName } from "./service"
 
-
-export const Peer = ()=>{
+export const Peer = () => {
+    const router:NextRouter = useRouter()
     const [data,setData] = useState<{username:string,Amount:string}>({username:"",Amount:""})
     const [debounce,setDeBounce] = useState<string>("")
     const [loading,setLoading] = useState<boolean>(false)
@@ -24,42 +26,47 @@ export const Peer = ()=>{
         }))
     }
 
-    const handleSubmit  = async(e:React.SyntheticEvent)=>{
-        e.preventDefault()
-        if(!accessToken){
-            toast.error("auth error");
-            return;
-        }
-       const {Amount,username:recieverName} = data
-       const amount = parseFloat(Amount)
-        try {
-            setSending(true)
-            const datax = await peerTransfer(amount,recieverName,accessToken)
-            setSending(false)
-            toast.success("transfer successfull")
-        } catch (error:any) {
-            const message = (error.response && error.response.data && error.response.data.message) || error.message;
+    // const handleSubmit  = async(e:React.SyntheticEvent)=>{
+    //     e.preventDefault()
+    //     if(!accessToken){
+    //         toast.error("auth error");
+    //         return;
+    //     }
+    //    const {Amount,username:recieverName} = data
+    //    const amount = parseFloat(Amount)
+    //     try {
+    //         setSending(true)
+    //         const datax = await peerTransfer(amount,recieverName,accessToken)
+    //         setSending(false)
+    //         toast.success("transfer successfull")
+    //     } catch (error:any) {
+    //         const message = (error.response && error.response.data && error.response.data.message) || error.message;
            
-            toast.error(message)
-             setSending(false)
-            console.log(error)
-        }
+    //         toast.error(message)
+    //          setSending(false)
+    //         console.log(error)
+    //     }
+    // }
+    
+    const handleSubmit = (e: React.SyntheticEvent) => {
+        e.preventDefault()
+        const {Amount,username} = data
+        router.push(`/peer/confirm?name=${confirmed}&amt=${Amount}&username=${username}`)
     }
 
     const confirmName = async()=>{
         const {username} = data
-        console.log(username)
-        const config = {
-            headers: {
-                Authorization :`Bearer ${accessToken?.slice(1,-1)}`
-            }
-        }
+        if (!accessToken) {
+            toast.error("Auth error");
+            return;
+       }
+       
         try {
             setLoading(true)
             setConfirmed(null)
-            const {data} = await axios.post("https://easybuyapi.adaptable.app/api/v1/peer/confirm_user",{username},config)
+           const data = await getName(username,accessToken)
             if(data){
-                setConfirmed(data.email)
+                setConfirmed(data.name)
             }
             setLoading(false)
             // toast.success("user confirmed")
@@ -112,7 +119,10 @@ export const Peer = ()=>{
                     <Input value={data.Amount} name="Amount" onChange={handleInputChange} isRequired/>
                 </FormControl>
 
-                <Button type={"submit"} w={"100%"} colorScheme="blue">Transfer</Button>
+                <HStack>
+                    <Button   colorScheme="red" onClick={()=>router.push("/dashboard")}>cancel</Button>
+                    <Button type={"submit"} colorScheme="blue" isDisabled={loading ||!confirmed}>proceed</Button>
+                </HStack>
             </form>
             <ToastContainer limit={1}/>
         </Box>
