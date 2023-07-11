@@ -103,7 +103,7 @@ export const Payment = () => {
 
    
     return (
-        <Box>
+        <Box mt={"2rem"}>
              <Box>
                 <Grid>
                     <GridItem>
