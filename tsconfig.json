@@ -18,6 +18,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/Components/Payment/Payment.js", "src/pages/flutterwave/index.tsx", "src/Components/Flutter/Flutterwave.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/Components/Payment/Payment.js", "src/pages/flutterwave/index.tsx", "src/Components/Flutter/Flutterwave.js", "src/Components/Data/DataSub.tsx"],
   "exclude": ["node_modules"]
 }

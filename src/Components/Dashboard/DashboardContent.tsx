@@ -79,10 +79,25 @@ export const DashboardContent = () => {
                     >
                         <HStack>
                             <ImConnection />
-                            <Box cursor={"pointer"}>Data</Box>
+                            <Box cursor={"pointer"}>Data </Box>
                         </HStack>
                     </Box>
                 </GridItem>
+
+                <GridItem>
+                    <Box
+                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                        borderRadius={"md"}
+                        padding={"2rem"}
+                         onClick={()=>router.push("/datasub")}
+                    >
+                        <HStack>
+                            <ImConnection />
+                            <Box cursor={"pointer"}>Data ++</Box>
+                        </HStack>
+                    </Box>
+                </GridItem>
+
                 <GridItem>
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
@@ -133,7 +148,7 @@ export const DashboardContent = () => {
                     >
                         <HStack>
                             <FaUserFriends/>
-                            <Box cursor={"pointer"}>P2P</Box>
+                            <Box cursor={"pointer"}>Peer 2 Peer</Box>
                         </HStack>
                     </Box>
                 </GridItem>
