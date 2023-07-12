@@ -148,7 +148,7 @@ export const DashboardContent = () => {
                     >
                         <HStack>
                             <FaUserFriends/>
-                            <Box cursor={"pointer"}>Peer 2 Peer</Box>
+                            <Box cursor={"pointer"}>P2p</Box>
                         </HStack>
                     </Box>
                 </GridItem>
