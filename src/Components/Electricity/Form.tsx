@@ -18,6 +18,7 @@ export const Form: React.FC = () => {
     const [name] = useQuerryString("key")
     const [serviceId] = useQuerryString("serviceId")
     const router: NextRouter = useRouter()
+
     const navigate = () => {
         router.push("/electricity")
     }
@@ -35,7 +36,10 @@ export const Form: React.FC = () => {
             toast.error("minimium of 1000 naira acceptable");
             return
         }
-        const {meter_number,meter_type,Amount,Phone} = data
+        const { meter_number, meter_type, Amount, Phone } = data
+        if (meter_type === "prepaid") {
+            router.push(`prepaidconfirm?meterNumber=${meter_number}&meterType=${meter_type}&Amount=${Amount}&Phone=${Phone}&serviceId=${serviceId}&name=${name}`);
+        }
         router.push(`confirm?meterNumber=${meter_number}&meterType=${meter_type}&Amount=${Amount}&Phone=${Phone}&serviceId=${serviceId}&name=${name}`);
     }
 

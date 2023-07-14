@@ -84,7 +84,7 @@ export const Peer = () => {
 
         const timer = setTimeout(()=>{
             setDeBounce(data.username)
-        },500)
+        },1000)
 
         return ()=>{
             clearTimeout(timer)

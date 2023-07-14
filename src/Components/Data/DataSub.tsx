@@ -6,6 +6,7 @@ import { Box, Flex,Heading,Image,Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { provider } from "./iProfvider";
 import { FlexItem } from "./FlexItem";
+import { GloSme } from "./GloSme";
 
 
 
@@ -14,6 +15,7 @@ export const DataSub: React.FC = () => {
     const [mtn,setMtn] = useState<boolean>(false)
     const [airtel,setAirtel] = useState<boolean>(false)
     const [glo,setGlo] = useState<boolean>(false)
+    const [gloSme,setGloSme] = useState<boolean>(false)
     const [nine,setNine] = useState<boolean>(false)
     // const [] = useState<boolean>(false)
 
@@ -26,10 +28,19 @@ export const DataSub: React.FC = () => {
                setGlo(false)
                setNine(false)
                setAirtel(false)
+               setGloSme(false)
             break;
         case "Glo Data":
                setMtn(false)
                setGlo(true)
+               setNine(false)
+               setAirtel(false)
+               setGloSme(false)
+            break;
+        case "Glo SME":
+               setMtn(false)
+               setGlo(false)
+               setGloSme(true)
                setNine(false)
                setAirtel(false)
             break;
@@ -38,12 +49,14 @@ export const DataSub: React.FC = () => {
                setGlo(false)
                setNine(false)
                setAirtel(true)
+               setGloSme(false)
             break;
         case "9mobile Data":
                setMtn(false)
                setGlo(false)
                setNine(true)
                setAirtel(false)
+               setGloSme(false)
             break;
        
            default:

@@ -22,6 +22,10 @@ export const provider: iProvider[] = [
         name: "Glo Data",
         image: "/assets/images/gloD.jpg"
     },
+    // {
+    //     name: "Glo SME",
+    //     image: "/assets/images/gloD.jpg"
+    // },
    
 ]
 

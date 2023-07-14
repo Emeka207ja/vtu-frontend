@@ -13,7 +13,7 @@ export const About = ()=>{
                     <Box>
                         <Heading textAlign={"center"} fontSize={"1.1rem"} mb={"0.5rem"}>About Us</Heading>
 
-                        <Text textAlign={"center"}  fontSize={"1rem"}>EASY BUY is a web platform where users can purchase Mobile Data Bundles, VTU Airtime, Pay Electricity Bills, TV Subscription..</Text>
+                        <Text textAlign={"center"}  fontSize={"1rem"}>AllPoint Vtu is a web platform where users can purchase Mobile Data Bundles, VTU Airtime, Pay Electricity Bills, TV Subscription..</Text>
 
                         <Text textAlign={"center"} fontSize={"0.8rem"}>We have designed our website to accommodate user needs. Providing users of our platform the opportunity to save cost, make fast, secured, efficient and rewarding purchases and bill payments. Our internet/mobile data plans work with all devices including Android, Iphone, Computers, Modems e.t.c. Data can be rollover if you re-subscribe before expiry date of current plan.</Text>
                     </Box>

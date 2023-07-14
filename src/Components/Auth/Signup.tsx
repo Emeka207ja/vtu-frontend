@@ -45,7 +45,12 @@ export const SignupComponent: React.FC = () => {
     function handleSubmit(e: React.SyntheticEvent): void{
         
         e.preventDefault()
-        const { email, username, password, confirm_password,name } = value;
+        const { email: Email, username: User, password: pass, confirm_password: cpass, name: nme } = value;
+        const email = Email.toLowerCase()
+        const username = User.toLowerCase()
+        const password = pass.toLowerCase()
+        const confirm_password = cpass.toLowerCase()
+        const name = nme.toLowerCase()
         if (referral) {
             dispatch(signupAction({email,username,password,referral,name}))
         } else {
