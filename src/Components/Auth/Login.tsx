@@ -25,8 +25,13 @@ export const Login: React.FC = () => {
     }
 
     const handleSubmit = (e: React.SyntheticEvent) => {
+        const password = data.password.toLowerCase()
+        const username = data.username.toLowerCase()
+        const Data = {
+            username, password
+        }
         e.preventDefault()
-        dispatch(loginAction(data))
+        dispatch(loginAction(Data))
         if (success) {
             setData({ username: "", password: "" })
 
