@@ -7,7 +7,7 @@ export const Dstv: React.FC = () => {
     
     const [old,setOld] = useState<boolean>(false)
     const [fresh,setFresh] = useState<boolean>(false)
-    const [selected,setSelected] = useState<string>("new")
+    const [selected,setSelected] = useState<string>("fresh")
 
     const handleChange = (e: React.SyntheticEvent) => {
         const target = e.target as HTMLInputElement;
@@ -31,8 +31,8 @@ export const Dstv: React.FC = () => {
         }
     },[selected])
     return (
-        <Box>
-            <Heading>Dstv</Heading>
+        <Box mt={"2rem"}>
+            <Heading fontSize={"1rem"} textAlign={"center"}>Dstv</Heading>
             <FormControl>
                 <FormLabel>Renewal or fresh subscription</FormLabel>
                 <Select value={selected} onChange={handleChange}>
