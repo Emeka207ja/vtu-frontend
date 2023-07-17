@@ -19,6 +19,7 @@ export const NewSub = () => {
     const [loading,setLoading] = useState<boolean>(false)
     
     const [holder, setHolder] = useState<iHolder | null>(null)
+     const [failed,setFailed] = useState<string|null>(null)
     
     const [formdata, setForm] = useState<{ varCode: string, phone: string }>({ varCode: "dstv-padi", phone: "" })
     
@@ -40,13 +41,19 @@ export const NewSub = () => {
         e.preventDefault();
         try {
             setLoading(true);
+            setFailed(null)
             setHolder(null)
             const datax = await verifySmartCard(card, authData, "dstv");
             if (datax) {
                 const val:iHolder = datax.content;
                 setHolder(val)
                 setLoading(false)
+                setFailed(null)
                 console.log(val)
+                 if (val.error) {
+                    setFailed(val.error)
+                    setHolder(null)
+                }
             }
             
         } catch (error:any) {
@@ -133,10 +140,13 @@ export const NewSub = () => {
                         holder && (<Box mt={"1rem"} fontSize={"0.9rem"}>
                             <Text>name: {holder.Customer_Name }</Text>
                             <Text>current package: {holder.Current_Bouquet }</Text>
-                            <Text>renewal amount: {holder.Renewal_Amount }</Text>
+                            {/* <Text>renewal amount: {holder.Renewal_Amount }</Text> */}
                             {/* <Text>due data: {holder.DUE_DATE }</Text> */}
                             {/* <Text>status: {holder.Status }</Text> */}
                         </Box>)
+                    }
+                     {
+                        failed && failed.length>0? (<Text color={"red.600"}>{ failed}</Text>): ""
                     }
                </form>
             </Box>

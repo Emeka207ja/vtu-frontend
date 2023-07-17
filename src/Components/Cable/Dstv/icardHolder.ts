@@ -9,4 +9,5 @@ export interface iHolder{
     Current_Bouquet: string;
     Current_Bouquet_Code: string;
     Renewal_Amount: number;
+    error?:string
 }

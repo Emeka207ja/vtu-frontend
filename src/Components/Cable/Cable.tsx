@@ -55,7 +55,13 @@ export const Cable: React.FC = () => {
                 {
                     cable?.map(item => {
                         return (
-                            <Box key={item.id} w={{base:"4rem", md:"6rem"}} onClick={()=>setSelected(item.id)}>
+                            <Box
+                                key={item.id}
+                                w={{ base: "4rem", md: "6rem" }}
+                                onClick={() => setSelected(item.id)}
+                                border={item.id === selected ? "2px solid yellow" : ""}
+                                borderRadius={"md"}
+                            >
                                 <Image src={item.image} alt={ item.id} w={"100%"} borderRadius={"md"} objectFit={"contain"}/>
                             </Box>
                         )
