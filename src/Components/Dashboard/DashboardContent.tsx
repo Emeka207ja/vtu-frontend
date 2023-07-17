@@ -134,7 +134,7 @@ export const DashboardContent = () => {
                     >
                         <HStack>
                             <FiMonitor/>
-                            <Box cursor={"pointer"}>Cable sub</Box>
+                            <Box cursor={"pointer"}>Tv sub</Box>
                         </HStack>
                     </Box>
                 </GridItem>
