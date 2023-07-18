@@ -51,7 +51,8 @@ export const ConfirmNewSub: React.FC = () => {
         const phone:number = parseFloat(Phone);
         const amount:number = parseFloat(Amount);
         const request_id:string = genReqId()
-        const content = {request_id, serviceID,billersCode,variation_code,amount,phone,subscription_type}
+        const content = { request_id, serviceID, billersCode, variation_code, amount, phone, subscription_type }
+        console.log(content)
         try {
             setLoading(true)
             const data: any = await newSub(auth, content)
@@ -94,7 +95,9 @@ export const ConfirmNewSub: React.FC = () => {
         <Box>
             <Card>
                 <CardHeader>
-                    <Heading fontSize={"1rem"}>confirm subscription</Heading>
+                    {
+                        loading? (<Spinner/>): <Heading fontSize={"1rem"}>confirm subscription</Heading>
+                    }
                 </CardHeader>
                 <CardBody>
                     <Text fontSize={"0.8rem"}>Phone number : {Phone }</Text>
