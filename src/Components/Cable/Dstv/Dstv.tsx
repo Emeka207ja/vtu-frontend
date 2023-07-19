@@ -33,8 +33,8 @@ export const Dstv: React.FC = () => {
     return (
         <Box mt={"2rem"}>
             <Heading fontSize={"1.2rem"} textAlign={"center"}>Dstv subscription</Heading>
-            <FormControl>
-                <FormLabel>Renewal or fresh subscription</FormLabel>
+            <FormControl mt={"2rem"}>
+                <FormLabel>Choose subscription category</FormLabel>
                 <Select value={selected} onChange={handleChange}>
                     <option value="fresh">New  Subscription</option>
                     <option value="old">Renewal Subscription</option>
