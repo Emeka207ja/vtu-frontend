@@ -85,9 +85,7 @@ export const ShowMax:React.FC = () => {
         <Box  mt={"3rem"}>
             <Heading fontSize={"1.2rem"} textAlign={"center"}>Showmax TV Subscription</Heading>
             
-           
-
-            <Box>
+            <Box mt={"2rem"}>
                 <form onSubmit={submitHandler}>
                     <Grid gap={"2rem"}>
 
