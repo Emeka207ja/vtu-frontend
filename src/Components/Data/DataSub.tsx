@@ -71,8 +71,20 @@ export const DataSub: React.FC = () => {
                 {
                     provider?.map(item => {
                         return (
-                        <Box w={{base:"3rem",md:"7rem"}} onClick={()=>setSelected(item.name)} key={item.name}>
-                            <Image src={item.image} alt={item.name} w={ "100%"} borderRadius={"md"} objectFit={"contain"}/>
+                            <Box
+                                w={{ base: "3rem", md: "7rem" }}
+                                onClick={() => setSelected(item.name)}
+                                key={item.name}
+                                border={selected === item.name ? "3px solid blue" : ""}
+                                borderRadius={"md"}
+                            >
+                                <Image
+                                    src={item.image}
+                                    alt={item.name}
+                                    w={"100%"}
+                                    borderRadius={"md"}
+                                    objectFit={"contain"}
+                                />
                         </Box>
                     )
                     } )

@@ -5,23 +5,22 @@ import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { useState, useEffect } from "react"
 
 import { getHeaders } from "@/Components/Airtime/service"
-import { renewSub} from "./service"
+import { newSub } from "./service"
+
 import { genReqId } from "@/Components/History/util.service"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { NextRouter,useRouter } from "next/router"
 
 
-export const ConfirmRenewal: React.FC = () => {
+export const ConfirmShowmax: React.FC = () => {
 
     const router: NextRouter = useRouter()
     
-   
-    const [billersCode] = useQuerryString("biller")
+    const [variation_code] = useQuerryString("varcode")
     const [Phone] = useQuerryString("phone")
     const [Amount] = useQuerryString("amt")
     const [serviceID] = useQuerryString("sId")
-    const [subscription_type] = useQuerryString("subType")
 
     const {accessToken} = useAppSelector(state=>state.loginAuth)
     const { Profile } = useAppSelector(state => state.fetchProfile)
@@ -51,10 +50,11 @@ export const ConfirmRenewal: React.FC = () => {
         const phone:number = parseFloat(Phone);
         const amount:number = parseFloat(Amount);
         const request_id:string = genReqId()
-        const content = {request_id, serviceID,billersCode,amount,phone,subscription_type}
+        const content = { request_id, serviceID, variation_code, amount, phone}
+        console.log(content)
         try {
             setLoading(true)
-            const data: any = await renewSub(auth, content)
+            const data: any = await newSub(auth, content)
             if (data) {
                 toast.success("success")
                 console.log(data)
@@ -95,12 +95,12 @@ export const ConfirmRenewal: React.FC = () => {
             <Card>
                 <CardHeader>
                     {
-                        loading?(<Spinner/>): <Heading fontSize={"1rem"}>confirm subscription renewal</Heading>
-                   }
+                        loading? (<Spinner/>): <Heading fontSize={"1rem"}>confirm subscription</Heading>
+                    }
                 </CardHeader>
                 <CardBody>
                     <Text fontSize={"0.8rem"}>Phone number : {Phone }</Text>
-                    <Text fontSize={"0.8rem"}>subscription type : package renewal</Text>
+                    <Text fontSize={"0.8rem"}>subscription type : {variation_code }</Text>
                     <Text fontSize={"0.8rem"}>Amount : {parseFloat(Amount)}</Text>
                 </CardBody>
                

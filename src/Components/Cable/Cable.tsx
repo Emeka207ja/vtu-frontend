@@ -1,9 +1,9 @@
 import { Box, Flex, Image, Heading } from "@chakra-ui/react"
 import { cable } from "./iCable"
 import { Dstv } from "./Dstv/Dstv"
-import { ShowMax } from "./ShowMax"
+import { ShowMax } from "./Showmax/ShowMax"
 import { Gotv } from "./Gotv/Gotv"
-import { Startimes } from "./Startimes"
+import { Startimes } from "./Startimes/Startimes"
 import { useState,useEffect } from "react"
 
 

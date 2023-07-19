@@ -34,7 +34,7 @@ export const Gotv: React.FC = () => {
     },[selected])
     return (
         <Box mt={"2rem"}>
-            <Heading fontSize={"1rem"} textAlign={"center"}>Gotv</Heading>
+            <Heading fontSize={"1.2rem"} textAlign={"center"}>Gotv subscription</Heading>
             <FormControl>
                 <FormLabel>Renewal or fresh subscription</FormLabel>
                 <Select value={selected} onChange={handleChange}>
