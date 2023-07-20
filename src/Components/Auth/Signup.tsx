@@ -13,7 +13,8 @@ interface signupDetails{
     username: string;
     name: string;
     password: string;
-    confirm_password:string
+    confirm_password: string;
+    phone:string
 }
 
 export const SignupComponent: React.FC = () => {
@@ -29,7 +30,8 @@ export const SignupComponent: React.FC = () => {
         username: "",
         name: "",
         password: "",
-        confirm_password: ""
+        confirm_password: "",
+        phone:""
     })
     const [err, setErr] = useState<any>(null)
     
@@ -45,18 +47,18 @@ export const SignupComponent: React.FC = () => {
     function handleSubmit(e: React.SyntheticEvent): void{
         
         e.preventDefault()
-        const { email: Email, username: User, password: pass, confirm_password: cpass, name: nme } = value;
+        const { email: Email, username: User, password: pass, confirm_password: cpass, name: nme ,phone} = value;
         const email = Email.toLowerCase()
         const username = User.toLowerCase()
         const password = pass.toLowerCase()
         const confirm_password = cpass.toLowerCase()
         const name = nme.toLowerCase()
         if (referral) {
-            dispatch(signupAction({email,username,password,referral,name}))
+            dispatch(signupAction({email,username,password,referral,name,phone}))
         } else {
-             dispatch(signupAction({email,username,password,name}))
+             dispatch(signupAction({email,username,password,name,phone}))
         }
-        console.log(email, username, password, confirm_password,name);
+       
         
     }
     useEffect(() => {
@@ -65,7 +67,7 @@ export const SignupComponent: React.FC = () => {
         }
         if (success) {
             toast.success("registered succesfully!")
-            setValue({ email: "", password: "", username: "", confirm_password: "",name:"" });
+            setValue({ email: "", password: "", username: "", confirm_password: "",name:"",phone:"" });
             setTimeout(()=>{push("/login")},2000)
         }
         dispatch(reset())
@@ -96,7 +98,7 @@ export const SignupComponent: React.FC = () => {
                                 <FormControl mb={"0.6rem"}>
                                     <FormLabel fontSize={"0.8rem"} >Full name</FormLabel>
                                     <Input value={ value.name} name="name"  onChange={handleInputChange} required  />
-                                    </FormControl>
+                                </FormControl>
                                     
                                 <FormControl mb={"0.6rem"}>
                                     <FormLabel fontSize={"0.8rem"}>email</FormLabel>
@@ -104,14 +106,19 @@ export const SignupComponent: React.FC = () => {
                                     </FormControl>
                                     
                                 <FormControl mb={"0.6rem"}>
+                                    <FormLabel fontSize={"0.8rem"}>phone number</FormLabel>
+                                    <Input  value={value.phone} name="phone" onChange={handleInputChange} required    />
+                                </FormControl>
+                                    
+                                <FormControl mb={"0.6rem"}>
                                     <FormLabel fontSize={"0.8rem"}>password</FormLabel>
                                     <Input type="password" value={value.password} name="password" onChange={handleInputChange} required  />
-                                    </FormControl>
+                                </FormControl>
                                     
                                 <FormControl mb={"0.6rem"}>
                                     <FormLabel fontSize={"0.8rem"}>confirm password</FormLabel>
                                     <Input type="password" value={value.confirm_password} name="confirm_password" onChange={handleInputChange} required />
-                                    </FormControl>
+                                </FormControl>
                                     
                                     {!pending ? (<Button type="submit" mt={{ base: "0.6rem", md: "1rem" }} fontSize={"0.7rem"} colorScheme="red" isDisabled={value.password !== value.confirm_password}>sign up</Button>) : (
                                          <Button

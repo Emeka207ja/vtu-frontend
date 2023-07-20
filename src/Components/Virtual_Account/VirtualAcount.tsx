@@ -75,6 +75,7 @@ export const VirtualAccount: React.FC = () => {
                         <CardBody>
                             <Box mb={"0.9rem"}>
                                  <Text>Make transfer to the account details below and your account will be automatically credited with the amount</Text>
+                                 <Text fontSize={"1rem"} color={"red.300"}>PS :  you will be chareged 50 naira for every amount transfered</Text>
                           </Box>
                             <Text>Account name: { actName}</Text>
                             <Text>Account number: { accNum}</Text>
