@@ -1,4 +1,4 @@
-import { Box,Text,Card,CardBody,CardFooter,CardHeader,Spinner,Heading } from "@chakra-ui/react"
+import { Box,Text,Card,CardBody,CardFooter,CardHeader,Spinner,Heading,Button } from "@chakra-ui/react"
 import { getSquadAuth,squadAcct } from "./service"
 import { useState, useEffect } from "react"
 import { ToastContainer, toast } from 'react-toastify';
@@ -92,12 +92,7 @@ export const SquadVirtAcct: React.FC = () => {
             
         }
     }
-    useEffect(() => {
-        if (Profile?.id) {
-            genAccount()
-      }
-        
-    }, [Profile?.id])
+    
     
     useEffect(() => {
          getAuth()
@@ -130,8 +125,14 @@ export const SquadVirtAcct: React.FC = () => {
                             <Text>Account number: { acctDetails.beneficiary_account}</Text>
                             <Text>Bank: GT Bank</Text>
                         </CardBody>
+                      
                     )
                 }
+                <CardFooter>
+                    {
+                        Profile?.id && (<Button onClick={  genAccount} colorScheme="blue" isDisabled={pending}>generate details</Button>)
+                    }
+                </CardFooter>
             </Card>
             <ToastContainer limit={1}/>
         </Box>
