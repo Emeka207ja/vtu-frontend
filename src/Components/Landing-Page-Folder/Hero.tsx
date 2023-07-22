@@ -18,9 +18,9 @@ export const Hero = () => {
             <Grid templateColumns={{base:"repeat(1fr)", md:"repeat(2, 1fr)"}} margin={"0 0.7rem"}>
                 <GridItem  >
                     <Box marginTop={{md:"5rem"}}>
-                         <Heading marginBottom={"1rem"} fontSize={"1rem"} textAlign={"center"}>Welcome to Allpoint Vtu</Heading>
+                         <Heading marginBottom={"1rem"} fontSize={"1rem"} textAlign={"center"}>Welcome to Allpoint </Heading>
                         <Text  fontSize={"0.9rem"} textAlign={"center"}>
-                            Here at Allpoint Vtu, we offer you the most affordable and most cheapest data, airtime, Dstv, Gotv and Startimes subscription. Here is the right place for your Electricity subscription..
+                            Here at Allpoint , we offer you the most affordable and most cheapest data, airtime, Dstv, Gotv and Startimes subscription. Here is the right place for your Electricity subscription..
                         </Text>
                         <Box marginTop={"0.7rem"} marginLeft={"1rem"}>
                              {/* <Flex alignItems={"center"} justifyContent={"space-between"} >

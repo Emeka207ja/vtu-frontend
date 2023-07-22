@@ -93,7 +93,7 @@ export default function Nav() {;
 						onClick={isOpen ? onClose : onOpen}
 					/>
 					<Box bg={"whiteAlpha.200"} px={4} py={2} borderRadius={"md"}>
-						<Text fontSize={15} fontStyle={"italic"}>Allpoint Vtu</Text>
+						<Text fontSize={15} fontStyle={"italic"}>Allpoint </Text>
 					</Box>
 
 					<Flex alignItems={"center"}>

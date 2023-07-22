@@ -61,7 +61,7 @@ export default function Footer() {
 				align={{ base: "center", md: "center" }}
 			>
 				{/* <Logo /> */}
-				<Text>© Easy Buy. All rights reserved</Text>
+				<Text>© allpoint. All rights reserved</Text>
 				<Box>
 					<Text>Contact us</Text>
 					<Text>+2348137663855</Text>
