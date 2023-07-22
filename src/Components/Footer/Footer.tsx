@@ -62,8 +62,17 @@ export default function Footer() {
 			>
 				{/* <Logo /> */}
 				<Text>© Easy Buy. All rights reserved</Text>
+				<Box>
+					<Text>Contact us</Text>
+					<Text>+2348137663855</Text>
+					<Text>allpointvtu@gmail.com</Text>
+					<Text>20,ungwan waje street</Text>
+					<Text>Lafia</Text>
+					<Text>Nasarawa state</Text>
+					<Text>Nigeria</Text>
+				</Box>
 				<Stack direction={"row"} spacing={6}>
-					<SocialButton label={"Twitter"} href={"#"}>
+					<SocialButton label={"Twitter"} href={"https://twitter.com/AllpointAFRICA"}>
 						<FaTwitter />
 					</SocialButton>
 					<SocialButton label={"YouTube"} href={"#"}>
