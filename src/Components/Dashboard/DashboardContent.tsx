@@ -6,6 +6,7 @@ import {ImConnection} from "react-icons/im"
 import {BiPhoneCall} from "react-icons/bi"
 import {BsLightbulb} from "react-icons/bs"
 import { FiMonitor } from "react-icons/fi"
+import {AiTwotoneInsurance} from "react-icons/ai"
 import { useRouter, NextRouter } from "next/router"
 import { useFetchProfile } from "@/hooks/useFetchProfile";
 import { getProfileAction } from "@/redux/actions/getProfile.action";
@@ -177,6 +178,21 @@ export const DashboardContent = () => {
                         <HStack>
                              <BiPhoneCall/>
                             <Box cursor={"pointer"}>Spectranet</Box>
+                        </HStack>
+                    </Box>
+                </GridItem>
+               
+
+                <GridItem>
+                    <Box
+                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                        borderRadius={"md"}
+                        padding={"2rem"}
+                         onClick={()=>router.push("/insurance")}
+                    >
+                        <HStack>
+                             <AiTwotoneInsurance/>
+                            <Box cursor={"pointer"}>Insurance</Box>
                         </HStack>
                     </Box>
                 </GridItem>
