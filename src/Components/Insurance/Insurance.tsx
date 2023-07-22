@@ -2,7 +2,8 @@ import { Box, Grid, Text, Image ,Heading,HStack,Card,CardBody,CardHeader,Button,
 import { insuranceData } from "./iInsurance";
 import { NextRouter,useRouter } from "next/router";
 
-export const Insurance:React.FC = () => {
+export const Insurance: React.FC = () => {
+    const router:NextRouter = useRouter()
     return (
         <Box>
             <Heading>Insurance</Heading>
@@ -27,7 +28,7 @@ export const Insurance:React.FC = () => {
                                  
                                 </CardBody>
                                 <CardFooter>
-                                    <Button colorScheme="blue">learn more</Button>
+                                    <Button colorScheme="blue" onClick={()=>router.push(`/insurance/purchase?type=${item.type}`)}>learn more</Button>
                                 </CardFooter>
                             </Card>
                         )

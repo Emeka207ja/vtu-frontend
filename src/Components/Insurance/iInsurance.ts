@@ -30,3 +30,33 @@ export const insuranceData: iInsure[] = [
         insurer:"FBN General Insurance"
     },
 ]
+
+
+export interface icarInsureData{
+    Plate_Number: string;
+    varCode: string;
+   
+    phone: string;
+    Insured_Name: string;
+    Engine_Number: string;
+    Chasis_Number: string;
+    Vehicle_Make: string;
+    Vehicle_Color: string;
+    Vehicle_Model: string;
+    Year_of_Make: string;
+    Contact_Address:string
+}
+
+export const carInsuranceBioData: icarInsureData = {
+    "Plate_Number": "",
+    "varCode": "1",
+    "phone": "",
+    "Insured_Name" : "",
+    "Engine_Number": "",
+    "Chasis_Number": "",
+    "Vehicle_Make": "",
+    "Vehicle_Color": "",
+    "Vehicle_Model": "",
+    "Year_of_Make": "",
+    "Contact_Address":""
+}
