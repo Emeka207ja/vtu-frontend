@@ -6,7 +6,7 @@ import { iInsure } from "./iInsurance"
 import {useState,useEffect} from "react"
 import insurance from "@/pages/insurance"
 import { CarInsurance } from "./Car/CarInsurance"
-import { HomeInsurace } from "./HomeInsurance"
+import { HomeInsurance } from "./Home/HomeInsurance"
 import { PersonalInsurance } from "./PersonalInsurance"
 
 
@@ -59,7 +59,7 @@ export const Purchase: React.FC = () => {
             }
 
             {
-                home && <HomeInsurace/>
+                home && <HomeInsurance/>
             }
 
             {

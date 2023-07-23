@@ -197,6 +197,20 @@ export const DashboardContent = () => {
                     </Box>
                 </GridItem>
                
+                <GridItem>
+                    <Box
+                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                        borderRadius={"md"}
+                        padding={"2rem"}
+                         onClick={()=>router.push("/internationalairtime")}
+                    >
+                        <HStack>
+                             <BiPhoneCall/>
+                            <Box cursor={"pointer"}>International Airtime</Box>
+                        </HStack>
+                    </Box>
+                </GridItem>
+               
             </Grid>
         </Box>
     )
