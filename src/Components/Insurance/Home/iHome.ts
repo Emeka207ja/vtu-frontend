@@ -17,3 +17,22 @@ export const homeData: iHome = {
     "business_occupation": "",
     "date_of_birth": "",
 }
+
+interface ihomeType{
+    type:string
+}
+
+export const homeTypeData: ihomeType[] = [
+    {
+        "type":"Bungalow"
+    },
+    {
+        "type":"Duplex"
+    },
+    {
+        "type":"Flat"
+    },
+    {
+        "type":"Others"
+    },
+]

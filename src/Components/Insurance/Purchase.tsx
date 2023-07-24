@@ -7,7 +7,7 @@ import {useState,useEffect} from "react"
 import insurance from "@/pages/insurance"
 import { CarInsurance } from "./Car/CarInsurance"
 import { HomeInsurance } from "./Home/HomeInsurance"
-import { PersonalInsurance } from "./PersonalInsurance"
+import { PersonalInsurance } from "./Personal/PersonalInsurance"
 
 
 

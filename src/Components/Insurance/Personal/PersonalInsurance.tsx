@@ -4,15 +4,16 @@ import { useState,useEffect } from "react"
 import { iVar } from "../../Data/iProfvider"
 import { icarInsureData, carInsuranceBioData } from "../iInsurance"
 import { NextRouter, useRouter } from "next/router"
-import { homeData,iHome,homeTypeData } from "./iHome"
-import { getOptionType } from "./service"
+import { homeData } from "../Home/iHome" 
+import { iHome } from "../Home/iHome"
+import { iPersonal,personalInsuranceData } from "./iPersonal"
 
-export const HomeInsurance: React.FC = () => {
+export const PersonalInsurance: React.FC = () => {
 
     const router = useRouter()
 
     const [vars, setVars] = useState<iVar[] | []>([])
-    const [formdata, setFormdata] = useState<iHome>(homeData)
+    const [formdata, setFormdata] = useState<iPersonal>(personalInsuranceData)
     const [price,setPrice] = useState<string>("")
     
     const handleInput = (e: React.SyntheticEvent) => {
@@ -24,7 +25,7 @@ export const HomeInsurance: React.FC = () => {
 
     const insuranceVars = async () => {
         try {
-            const data = await getDataVars("home-cover-insurance")
+            const data = await getDataVars("personal-accident-insurance")
             
             if (data) {
                 const varation: iVar[] = data.content?.varations
@@ -38,22 +39,11 @@ export const HomeInsurance: React.FC = () => {
         }
     }
 
-    const getOptionHandler = async () => {
-        try {
-            const data = await getOptionType("type_building","home-cover-insurance")
-            console.log(data)
-        } catch (error:any) {
-            console.log(error)
-        }
-    }
-
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
-        console.log(formdata)
     }
     useEffect(() => {
         insuranceVars()
-        // getOptionHandler()
     }, [])
 
     useEffect(() => {
@@ -92,12 +82,13 @@ export const HomeInsurance: React.FC = () => {
                     </FormControl>
 
                     <FormControl>
-                        <FormLabel>Type of building</FormLabel>
-                        <Select fontSize={"0.9rem"} name="type_building" value={formdata.type_building} onChange={handleInput}>
-                            {
-                                homeTypeData.map(item => (<option value={item.type} key={item.type}>{ item.type}</option>))
-                            }
-                        </Select>
+                        <FormLabel>next of kin name</FormLabel>
+                        <Input fontSize={"0.9rem"} name="type_building" value={formdata.next_kin_name} onChange={handleInput}/>
+                    </FormControl>
+
+                    <FormControl>
+                        <FormLabel>next of kin phone number</FormLabel>
+                        <Input fontSize={"0.9rem"} name="type_building" value={formdata.next_kin_phone} onChange={handleInput}/>
                     </FormControl>
 
                     <FormControl>
@@ -107,7 +98,7 @@ export const HomeInsurance: React.FC = () => {
 
                     <FormControl>
                         <FormLabel>Date of Birth</FormLabel>
-                        <Input fontSize={"0.9rem"} name="date_of_birth" value={formdata.date_of_birth} onChange={handleInput} type="datetime-local"/>
+                        <Input fontSize={"0.9rem"} name="date_of_birth" value={formdata.dob} onChange={handleInput} type="datetime-local"/>
                     </FormControl>
 
                     <FormControl>
@@ -120,10 +111,10 @@ export const HomeInsurance: React.FC = () => {
                         <Input value={ price}readOnly />
                     </FormControl>
 
-                    <Box>
+                    <Box mt={{md: "2rem"} }>
                          <HStack>
                             <Button colorScheme="red">cancel</Button>
-                            <Button colorScheme="blue" type="submit" > proceed</Button>
+                            <Button colorScheme="blue" type="submit" isDisabled> proceed</Button>
                         </HStack>
                    </Box>
                </Grid>
