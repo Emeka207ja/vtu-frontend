@@ -62,7 +62,7 @@ export const DashboardContent = () => {
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                         borderRadius={"md"}
-                        padding={"2rem"}
+                        padding={"1rem"}
                         onClick={()=>router.push("/airtime")}
                     >
                         <HStack>
@@ -75,7 +75,7 @@ export const DashboardContent = () => {
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                         borderRadius={"md"}
-                        padding={"2rem"}
+                        padding={"1rem"}
                          onClick={()=>router.push("/data")}
                     >
                         <HStack>
@@ -89,7 +89,7 @@ export const DashboardContent = () => {
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                         borderRadius={"md"}
-                        padding={"2rem"}
+                        padding={"1rem"}
                          onClick={()=>router.push("/datasub")}
                     >
                         <HStack>
@@ -103,7 +103,7 @@ export const DashboardContent = () => {
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                         borderRadius={"md"}
-                        padding={"2rem"}
+                        padding={"1rem"}
                          onClick={()=>router.push("/wallet")}
                     >
                         <HStack>
@@ -116,7 +116,7 @@ export const DashboardContent = () => {
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                         borderRadius={"md"}
-                        padding={"2rem"}
+                        padding={"1rem"}
                          onClick={()=>router.push("/electricity")}
                     >
                         <HStack>
@@ -130,7 +130,7 @@ export const DashboardContent = () => {
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                         borderRadius={"md"}
-                        padding={"2rem"}
+                        padding={"1rem"}
                          onClick={()=>router.push("/cable")}
                     >
                         <HStack>
@@ -144,7 +144,7 @@ export const DashboardContent = () => {
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                         borderRadius={"md"}
-                        padding={"2rem"}
+                        padding={"1rem"}
                          onClick={()=>router.push("/peer")}
                     >
                         <HStack>
@@ -158,7 +158,7 @@ export const DashboardContent = () => {
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                         borderRadius={"md"}
-                        padding={"2rem"}
+                        padding={"1rem"}
                          onClick={()=>router.push("/smile")}
                     >
                         <HStack>
@@ -172,7 +172,7 @@ export const DashboardContent = () => {
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                         borderRadius={"md"}
-                        padding={"2rem"}
+                        padding={"1rem"}
                          onClick={()=>router.push("/spectranet")}
                     >
                         <HStack>
@@ -187,7 +187,7 @@ export const DashboardContent = () => {
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                         borderRadius={"md"}
-                        padding={"2rem"}
+                        padding={"1rem"}
                          onClick={()=>router.push("/insurance")}
                     >
                         <HStack>
@@ -201,7 +201,7 @@ export const DashboardContent = () => {
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                         borderRadius={"md"}
-                        padding={"2rem"}
+                        padding={"1rem"}
                          onClick={()=>router.push("/internationalairtime")}
                     >
                         <HStack>
