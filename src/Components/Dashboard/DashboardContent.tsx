@@ -6,6 +6,7 @@ import {ImConnection} from "react-icons/im"
 import {BiPhoneCall} from "react-icons/bi"
 import {BsLightbulb} from "react-icons/bs"
 import { FiMonitor } from "react-icons/fi"
+import {SiGooglescholar} from "react-icons/si"
 import {AiTwotoneInsurance} from "react-icons/ai"
 import { useRouter, NextRouter } from "next/router"
 import { useFetchProfile } from "@/hooks/useFetchProfile";
@@ -207,6 +208,20 @@ export const DashboardContent = () => {
                         <HStack>
                              <BiPhoneCall/>
                             <Box cursor={"pointer"}>International Airtime</Box>
+                        </HStack>
+                    </Box>
+                </GridItem>
+
+                <GridItem>
+                    <Box
+                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                        borderRadius={"md"}
+                        padding={"1rem"}
+                         onClick={()=>router.push("/waec")}
+                    >
+                        <HStack>
+                             <SiGooglescholar/>
+                            <Box cursor={"pointer"}>Education Waec</Box>
                         </HStack>
                     </Box>
                 </GridItem>
