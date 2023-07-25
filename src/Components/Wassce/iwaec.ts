@@ -19,3 +19,15 @@ export const waecTypeData: iwaec[] = [
         img:"/assets/images/privatewaec.jpg"
     },
 ]
+
+export interface iformData{
+    varCode: string;
+    quantity: string;
+    phone: string;
+}
+
+export const formData: iformData = {
+    varCode: "",
+    quantity: "",
+    phone:""
+}
