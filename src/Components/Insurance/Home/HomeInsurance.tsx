@@ -7,9 +7,10 @@ import { NextRouter, useRouter } from "next/router"
 import { homeData,iHome,homeTypeData } from "./iHome"
 import { getOptionType } from "./service"
 
+
 export const HomeInsurance: React.FC = () => {
 
-    const router = useRouter()
+    const router:NextRouter = useRouter()
 
     const [vars, setVars] = useState<iVar[] | []>([])
     const [formdata, setFormdata] = useState<iHome>(homeData)
@@ -49,6 +50,10 @@ export const HomeInsurance: React.FC = () => {
 
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
+        const { varCode, phone, full_name, business_occupation, address, date_of_birth, type_building } = formdata
+
+        router.push(`/insurance/homeconfirm?varcode=${varCode}&name=${full_name}&bo=${business_occupation}&dob=${date_of_birth}&type=${type_building}&sid=home-cover-insurance&phone=${phone}&address=${address}&price=${price}`)
+        
         console.log(formdata)
     }
     useEffect(() => {

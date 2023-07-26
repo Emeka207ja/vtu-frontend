@@ -9,13 +9,13 @@ export interface iHome{
 }
 
 export const homeData: iHome = {
-    "varCode": "",
-   "phone": "",
-    "full_name": "",
-   "address": "",
-    "type_building": "",
-    "business_occupation": "",
-    "date_of_birth": "",
+    varCode: "",
+   phone: "",
+    full_name: "",
+   address: "",
+    type_building: "",
+    business_occupation: "",
+    date_of_birth: "",
 }
 
 interface ihomeType{
