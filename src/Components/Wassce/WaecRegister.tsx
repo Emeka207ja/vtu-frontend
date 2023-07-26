@@ -7,26 +7,19 @@ import {
     FormLabel,
     HStack,
     Button,
-    useDisclosure,
-    Modal,
-    ModalBody,
-    ModalHeader,
     Text,
-    ModalContent,
-    ModalFooter,
-    ModalOverlay,
-    ModalCloseButton
 } from "@chakra-ui/react";
 
 import { iVar } from "../Data/iProfvider";
 import { getDataVars } from "../Data/service";
 import { useState, useEffect } from "react";
 import { iformData, formData } from "./iwaec";
+import { useRouter,NextRouter } from "next/router";
 
 
 
 export const WaecRegister: React.FC = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const router:NextRouter = useRouter()
     const [vars, setVars] = useState<iVar[] | []>([])
     const [formdata, setFormdata] = useState<iformData>(formData)
     const [price,setPrice] = useState<string>("")
@@ -40,7 +33,8 @@ export const WaecRegister: React.FC = () => {
 
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
-        console.log(formdata)
+        const { varCode, phone, quantity } = formdata
+        router.push(`/waec/confirm?varcode=${varCode}&phone=${phone}&qty=${quantity}&sid=waec-registration&amt=${price}`)
     }
     
     const varsHandler = async () => {
@@ -109,23 +103,7 @@ export const WaecRegister: React.FC = () => {
                     </HStack>
                 </Box>
             </form>
-            <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                <ModalHeader>Modal Title</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                   <Text>hii</Text>
-                </ModalBody>
-
-                <ModalFooter>
-                    <Button colorScheme='blue' mr={3} onClick={onClose}>
-                    Close
-                    </Button>
-                    <Button variant='ghost'>Secondary Action</Button>
-                </ModalFooter>
-                </ModalContent>
-            </Modal>
+           
         </Box>
     )
 }

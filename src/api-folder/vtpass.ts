@@ -1,0 +1,1 @@
+export const payApi = " https://sandbox.vtpass.com/api/pay"
