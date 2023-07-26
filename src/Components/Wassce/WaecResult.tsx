@@ -3,10 +3,14 @@ import { LabelData } from "./Label";
 import { iVar } from "../Data/iProfvider";
 import { getDataVars } from "../Data/service";
 import { useState, useEffect } from "react";
-import { iformData,formData } from "./iwaec";
+import { iformData, formData } from "./iwaec";
+import { useRouter,NextRouter } from "next/router";
 
 
 export const WaecResult: React.FC = () => {
+
+    const router: NextRouter = useRouter()
+    
     const [vars, setVars] = useState<iVar[] | []>([])
     const [formdata, setFormdata] = useState<iformData>(formData)
     const [price,setPrice] = useState<string>("")
@@ -20,7 +24,8 @@ export const WaecResult: React.FC = () => {
 
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
-        console.log(formdata)
+        const { varCode, phone, quantity } = formdata
+        router.push(`/waec/confirm?varcode=${varCode}&phone=${phone}&qty=${quantity}&sid=waec&amt=${price}`)
     }
     
     const varsHandler = async () => {
@@ -35,6 +40,8 @@ export const WaecResult: React.FC = () => {
             console.log(error)
         }
     }
+
+    
 
     useEffect(() => {
         varsHandler()

@@ -18,17 +18,23 @@ import {
     ModalFooter,
     ModalOverlay,
     ModalCloseButton,
-    Spinner
+    Spinner,
+    Center,
 } from "@chakra-ui/react";
 import useQuerryString from "@/hooks/useQueryString";
 import { getProfileAction } from "@/redux/actions/getProfile.action";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useEffect, useState } from "react";
-import { paymentHandler } from "./service";
+import { paymentHandler,idata,iAuth } from "./service";
 import { getHeaders } from "../Airtime/service";
+import { genReqId } from "../History/util.service";
+import { BsCheck2Circle } from "react-icons/bs"
+import { useRouter,NextRouter } from "next/router";
 
 
 export const ConfirmWaec: React.FC = () => {
+
+    const router:NextRouter = useRouter()
 
     const [variation_code] = useQuerryString("varcode")
 
@@ -39,11 +45,15 @@ export const ConfirmWaec: React.FC = () => {
     const dispatch = useAppDispatch()
 
     const [Phone] = useQuerryString("phone")
-    const [quantity] = useQuerryString("qty")
+    const [qty] = useQuerryString("qty")
     const [serviceID] = useQuerryString("sid")
     const [price] = useQuerryString("amt")
     const [value, setValue] = useState<string>("")
-    const [errorMessage,setErrmsg] = useState<string|null>()
+    const [errorMessage, setErrmsg] = useState<string | null>()
+
+    const [formState,setFormState] = useState<{loading:boolean,success:boolean}>({loading:false,success:false})
+    
+    const [auth,setAuth] = useState<iAuth>({api_key:"",secret_key:""})
 
     const handleInput = (val: string) => {
         setValue(val)
@@ -51,7 +61,7 @@ export const ConfirmWaec: React.FC = () => {
     }
 
     const handleComplete = async (val: string) => {
-        if (!accessToken) {
+        if (!accessToken || Object.keys(auth).length === 0) {
             setErrmsg("auth error,ensure you have good internet connection,refresh page")
             return
         }
@@ -61,10 +71,46 @@ export const ConfirmWaec: React.FC = () => {
             setErrmsg("invalid credentials")
             return
         }
+        const quantity:number = parseFloat(qty)
+        const request_id: string = genReqId()
+        const amount:number = parseFloat(price) * quantity;
+        const phone: number = parseFloat(Phone)
+        
+        const details: idata = {
+            request_id,
+            serviceID,
+            variation_code,
+            amount,
+            quantity,
+            phone
+        }
+       
+        
+        try {
+            setFormState({loading:true,success:false})
+            const data = await paymentHandler(auth, details)
+            setFormState({loading:false,success:true})
+            console.log(data)
+        } catch (error:any) {
+            console.log(error)
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            setErrmsg(message)
+            setFormState({loading:false,success:false})
+        }
        
     }
 
+    const headerHandler = async () => {
+        try {
+            const data:iAuth = await getHeaders()
+            setAuth(data)
+        } catch (error:any) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
+        headerHandler()
         if (accessToken) {
             dispatch(getProfileAction(accessToken))
         }
@@ -74,21 +120,46 @@ export const ConfirmWaec: React.FC = () => {
         <Box>
             <Card>
                 <CardHeader>
-                    <Heading fontSize={"1rem"}>confirm transaction</Heading>
+                    {
+                        !formState.success&&( <Heading fontSize={"1rem"}>confirm transaction</Heading>)
+                   }
                 </CardHeader>
 
                 <CardBody>
-                    <Text>service : {variation_code }</Text>
-                    <Text>Total price : {parseFloat(price)*parseFloat(quantity)}</Text>
-                    <Text>quantity : {quantity }</Text>
-                    <Text>phone  number : {Phone }</Text>
+                    {
+                        !formState.success && (
+                            <Box>
+                                <Text>service : {variation_code }</Text>
+                                <Text>Total price : {parseFloat(price)*parseFloat(qty)}</Text>
+                                <Text>quantity : {qty }</Text>
+                                <Text>phone  number : {Phone }</Text>
+                            </Box>
+                        )
+                    }
+
+                     {
+                        formState.success&&(
+                            <Center>
+                                <Box>
+                                    <BsCheck2Circle />
+                                    <Text>success</Text>
+                                </Box>
+                            </Center>
+                        )
+                    }
                 </CardBody>
 
                 <CardFooter>
                     <Box>
                         <HStack spacing={"1rem"}>
-                            <Button colorScheme="red">cancel</Button>
-                            <Button colorScheme="blue"  onClick={onOpen}>purchase</Button>
+                            <Button colorScheme="red" onClick={()=>router.push("/waec")}>
+                                {
+                                    formState.success? "close": "cancel"
+                                }
+                            </Button>
+                            {
+                                !formState.success && ( <Button colorScheme="blue"  onClick={onOpen}>purchase</Button>)
+                           }
                         </HStack>
                     </Box>
                 </CardFooter>
@@ -96,9 +167,22 @@ export const ConfirmWaec: React.FC = () => {
              <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                <ModalHeader>Input transaction pin</ModalHeader>
+                    <ModalHeader>
+                         {
+                        !formState.success && (
+                            <Heading fontSize={"0.9rem"}>Input transaction pin</Heading>
+                        )
+                    }
+                   </ModalHeader>
                 <ModalCloseButton />
                     <ModalBody>
+                        {
+                            formState.loading && (
+                                <Heading textAlign={"center"} mb={"0.8rem"}>
+                                    <Spinner/>
+                                </Heading>
+                            )
+                        }
                         {
                             errorMessage && (
                                 <Box mb={"2rem"} bg={"red"} borderRadius={"md"}padding={"0.7rem 0"} transition={"all,2s"}>
@@ -106,12 +190,28 @@ export const ConfirmWaec: React.FC = () => {
                                 </Box>
                             )
                        }
-                    <PinInput onChange={handleInput} onComplete={handleComplete}>
-                        <PinInputField/>
-                        <PinInputField/>
-                        <PinInputField/>
-                        <PinInputField/>
-                  </PinInput>
+                        {
+                            !formState.success && (
+                                <Center>
+                                    <PinInput onChange={handleInput} onComplete={handleComplete}>
+                                        <PinInputField/>
+                                        <PinInputField/>
+                                        <PinInputField/>
+                                        <PinInputField/>
+                                    </PinInput>
+                                </Center>
+                            )
+                       }
+                        {
+                            formState.success&&(
+                                <Center>
+                                    <Box>
+                                        <BsCheck2Circle />
+                                        <Text>success</Text>
+                                  </Box>
+                                </Center>
+                            )
+                        }
                 </ModalBody>
 
                 <ModalFooter>
