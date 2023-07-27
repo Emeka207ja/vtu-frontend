@@ -26,14 +26,14 @@ import { getProfileAction } from "@/redux/actions/getProfile.action";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useEffect, useState } from "react";
 import {iAuth } from "@/Components/Wassce/service"; 
-import { homeinsureHandler,iData } from "./service";
+import { homeinsureHandler,iData } from "../Home/service";
 import { getHeaders } from "@/Components/Airtime/service"; 
 import { genReqId } from "@/Components/History/util.service"; 
 import { BsCheck2Circle } from "react-icons/bs"
 import { useRouter,NextRouter } from "next/router";
 
 
-export const ConfirmHome: React.FC = () => {
+export const ConfirmPersonal: React.FC = () => {
 
     const router:NextRouter = useRouter()
 
@@ -50,9 +50,9 @@ export const ConfirmHome: React.FC = () => {
     const [serviceID] = useQuerryString("sid")
     const [price] = useQuerryString("price")
     const [business_occupation] = useQuerryString("bo")
-    const [type_building] = useQuerryString("type")
-    const [full_name] = useQuerryString("name")
-    const [address] = useQuerryString("address")
+    const [next_kin_name] = useQuerryString("np")
+    const [full_name] = useQuerryString("fn")
+    const [address] = useQuerryString("ad")
 
     const [value, setValue] = useState<string>("")
     const [errorMessage, setErrmsg] = useState<string | null>()
@@ -81,26 +81,26 @@ export const ConfirmHome: React.FC = () => {
         const request_id:string = genReqId()
         const billersCode: string = full_name
         const amount :number = parseFloat(price)
-        const details: iData = {
-            request_id,
-            serviceID,
-            billersCode,
-            variation_code,
-            date_of_birth,
-            full_name,
-            phone,
-            amount,
-            type_building,
-            business_occupation,
-            address
-      }
-      console.log(details)
+    //     const details: iData = {
+    //         request_id,
+    //         serviceID,
+    //         billersCode,
+    //         variation_code,
+    //         date_of_birth,
+    //         full_name,
+    //         phone,
+    //         amount,
+    //         type_building,
+    //         business_occupation,
+    //         address
+    //   }
+    //   console.log(details)
         
         try {
             setFormState({loading:true,success:false})
-            const data = await homeinsureHandler(auth, details)
+            // const data = await homeinsureHandler(auth, details)
             setFormState({loading:false,success:true})
-            console.log(data)
+            // console.log(data)
         } catch (error:any) {
             console.log(error)
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message
@@ -141,12 +141,12 @@ export const ConfirmHome: React.FC = () => {
                             <Box>
                                 <Text>service : {serviceID}</Text>
                                 <Text> price : {parseFloat(price)}</Text>
-                                <Text>option : {variation_code }</Text>
+                                <Text>service: {variation_code }</Text>
                                 <Text>phone  number : {Phone}</Text>
                                 <Text>name : {full_name}</Text>
                                 <Text>occupation  : {business_occupation}</Text>
                                 <Text>DOB  : {date_of_birth}</Text>
-                                <Text>house type  : {type_building}</Text>
+                                <Text>next_kin_name  : {next_kin_name}</Text>
                                 <Text>address  : {address}</Text>
                                 
                             </Box>

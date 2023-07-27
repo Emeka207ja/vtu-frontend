@@ -10,12 +10,12 @@ export interface iPersonal{
 }
 
 export const personalInsuranceData: iPersonal = {
-    "varCode": "",
-    "phone": "",
-    "address": "",
-    "dob": "",
-    "next_kin_name": "",
-    "full_name": "",
-    "next_kin_phone": "",
-    "business_occupation": "",
+    varCode: "",
+    phone: "",
+    address: "",
+    dob: "",
+    next_kin_name: "",
+    full_name: "",
+    next_kin_phone: "",
+    business_occupation: "",
 }

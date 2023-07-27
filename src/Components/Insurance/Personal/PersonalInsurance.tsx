@@ -38,10 +38,22 @@ export const PersonalInsurance: React.FC = () => {
             console.log(error)
         }
     }
+    
 
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
+        const { varCode,
+            phone,
+            address,
+            dob,
+            next_kin_name,
+            full_name,
+            next_kin_phone,
+            business_occupation
+        } = formdata
+        router.push(`/insurance/confirmpersonal?phone=${phone}&ad=${address}&nk=${next_kin_name}&np=${next_kin_phone}&bo=${business_occupation}&fn=${full_name}&price=${price}&sid=personal-accident-insurance&dob=${dob}`)
     }
+
     useEffect(() => {
         insuranceVars()
     }, [])
@@ -83,12 +95,12 @@ export const PersonalInsurance: React.FC = () => {
 
                     <FormControl>
                         <FormLabel>next of kin name</FormLabel>
-                        <Input fontSize={"0.9rem"} name="type_building" value={formdata.next_kin_name} onChange={handleInput}/>
+                        <Input fontSize={"0.9rem"} name="next_kin_name" value={formdata.next_kin_name} onChange={handleInput}/>
                     </FormControl>
 
                     <FormControl>
                         <FormLabel>next of kin phone number</FormLabel>
-                        <Input fontSize={"0.9rem"} name="type_building" value={formdata.next_kin_phone} onChange={handleInput}/>
+                        <Input fontSize={"0.9rem"} name="next_kin_phone" value={formdata.next_kin_phone} onChange={handleInput}/>
                     </FormControl>
 
                     <FormControl>
@@ -98,7 +110,7 @@ export const PersonalInsurance: React.FC = () => {
 
                     <FormControl>
                         <FormLabel>Date of Birth</FormLabel>
-                        <Input fontSize={"0.9rem"} name="date_of_birth" value={formdata.dob} onChange={handleInput} type="datetime-local"/>
+                        <Input fontSize={"0.9rem"} name="dob" value={formdata.dob} onChange={handleInput} type="datetime-local"/>
                     </FormControl>
 
                     <FormControl>
@@ -114,7 +126,7 @@ export const PersonalInsurance: React.FC = () => {
                     <Box mt={{md: "2rem"} }>
                          <HStack>
                             <Button colorScheme="red">cancel</Button>
-                            <Button colorScheme="blue" type="submit" isDisabled> proceed</Button>
+                            <Button colorScheme="blue" type="submit"> proceed</Button>
                         </HStack>
                    </Box>
                </Grid>
