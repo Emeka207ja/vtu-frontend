@@ -1,10 +1,11 @@
 import axios from "axios"
 import { getProfileApi } from "@/api-folder/profile"
 
-export const getProfile = async (token:string) => {
+export const getProfile = async (token: string) => {
+   const Token = token.replace(/"/g, '')
     const config = {
             headers: {
-                Authorization: `Bearer ${token.slice(1,-1)}`
+                Authorization: `Bearer ${Token}`
             }
         }
 
