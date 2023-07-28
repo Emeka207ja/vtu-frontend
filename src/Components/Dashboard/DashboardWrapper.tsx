@@ -41,7 +41,8 @@ import { NextRouter, useRouter } from 'next/router';
 import { signout } from '@/redux/actions/login-action';
 import {FaHistory} from "react-icons/fa"
 import {SiAuthy} from "react-icons/si"
-import {BsFillPeopleFill} from "react-icons/bs"
+import { BsFillPeopleFill } from "react-icons/bs"
+import { Footer } from './Footer/Footer';
 
 
 interface LinkItemProps {
@@ -96,6 +97,7 @@ export default function SidebarWithHeader({
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
       </Box>
+      <Footer/>
     </Box>
   );
 }
