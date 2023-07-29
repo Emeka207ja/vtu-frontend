@@ -1,5 +1,5 @@
 export interface iPersonal{
-    varCode: string;
+   variation_code: string;
     phone: string;
     address: string;
     dob: string;
@@ -10,7 +10,7 @@ export interface iPersonal{
 }
 
 export const personalInsuranceData: iPersonal = {
-    varCode: "",
+    variation_code: "",
     phone: "",
     address: "",
     dob: "",

@@ -30,14 +30,16 @@ import { homeinsureHandler,iData } from "../Home/service";
 import { getHeaders } from "@/Components/Airtime/service"; 
 import { genReqId } from "@/Components/History/util.service"; 
 import { BsCheck2Circle } from "react-icons/bs"
-import { useRouter,NextRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
+import { payPersonal,idetails } from "./service"
+// import { idetails } from "./service";
 
 
 export const ConfirmPersonal: React.FC = () => {
 
     const router:NextRouter = useRouter()
 
-    const [variation_code] = useQuerryString("varcode")
+    // const [variation_code] = useQuerryString("varcode")
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -46,13 +48,15 @@ export const ConfirmPersonal: React.FC = () => {
     const dispatch = useAppDispatch()
 
     const [Phone] = useQuerryString("phone")
-    const [date_of_birth] = useQuerryString("dob")
-    const [serviceID] = useQuerryString("sid")
+    const [dob] = useQuerryString("dob")
+    const [serviceID] = useQuerryString("sid");
     const [price] = useQuerryString("price")
     const [business_occupation] = useQuerryString("bo")
-    const [next_kin_name] = useQuerryString("np")
+    const [next_kin_name] = useQuerryString("nk")
+    const [next_kin_phone] = useQuerryString("np")
     const [full_name] = useQuerryString("fn")
     const [address] = useQuerryString("ad")
+    const [variation_code] = useQuerryString("vcode")
 
     const [value, setValue] = useState<string>("")
     const [errorMessage, setErrmsg] = useState<string | null>()
@@ -80,27 +84,28 @@ export const ConfirmPersonal: React.FC = () => {
         const phone: number = parseFloat(Phone)
         const request_id:string = genReqId()
         const billersCode: string = full_name
-        const amount :number = parseFloat(price)
-    //     const details: iData = {
-    //         request_id,
-    //         serviceID,
-    //         billersCode,
-    //         variation_code,
-    //         date_of_birth,
-    //         full_name,
-    //         phone,
-    //         amount,
-    //         type_building,
-    //         business_occupation,
-    //         address
-    //   }
-    //   console.log(details)
+        const amount: number = parseFloat(price)
+        const details: idetails = {
+            request_id,
+            serviceID,
+            billersCode,
+            variation_code,
+            dob,
+            full_name,
+            phone,
+            amount,
+            next_kin_name,
+            business_occupation,
+            address,
+            next_kin_phone,
+      }
+      console.log(details)
         
         try {
             setFormState({loading:true,success:false})
-            // const data = await homeinsureHandler(auth, details)
+            const data = await payPersonal(auth, details)
             setFormState({loading:false,success:true})
-            // console.log(data)
+            console.log(data)
         } catch (error:any) {
             console.log(error)
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message
@@ -145,7 +150,7 @@ export const ConfirmPersonal: React.FC = () => {
                                 <Text>phone  number : {Phone}</Text>
                                 <Text>name : {full_name}</Text>
                                 <Text>occupation  : {business_occupation}</Text>
-                                <Text>DOB  : {date_of_birth}</Text>
+                                <Text>DOB  : {dob}</Text>
                                 <Text>next_kin_name  : {next_kin_name}</Text>
                                 <Text>address  : {address}</Text>
                                 

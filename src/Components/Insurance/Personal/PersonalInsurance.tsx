@@ -2,15 +2,12 @@ import { Box, Grid, FormControl, FormLabel, Select, Button, HStack,Input } from 
 import { getDataVars } from "../../Data/service"
 import { useState,useEffect } from "react"
 import { iVar } from "../../Data/iProfvider"
-import { icarInsureData, carInsuranceBioData } from "../iInsurance"
-import { NextRouter, useRouter } from "next/router"
-import { homeData } from "../Home/iHome" 
-import { iHome } from "../Home/iHome"
-import { iPersonal,personalInsuranceData } from "./iPersonal"
 
+import { NextRouter, useRouter } from "next/router"
+import { iPersonal,personalInsuranceData } from "./iPersonal"
 export const PersonalInsurance: React.FC = () => {
 
-    const router = useRouter()
+    const router:NextRouter = useRouter()
 
     const [vars, setVars] = useState<iVar[] | []>([])
     const [formdata, setFormdata] = useState<iPersonal>(personalInsuranceData)
@@ -42,7 +39,7 @@ export const PersonalInsurance: React.FC = () => {
 
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
-        const { varCode,
+        const { variation_code,
             phone,
             address,
             dob,
@@ -51,7 +48,7 @@ export const PersonalInsurance: React.FC = () => {
             next_kin_phone,
             business_occupation
         } = formdata
-        router.push(`/insurance/confirmpersonal?phone=${phone}&ad=${address}&nk=${next_kin_name}&np=${next_kin_phone}&bo=${business_occupation}&fn=${full_name}&price=${price}&sid=personal-accident-insurance&dob=${dob}`)
+        router.push(`/insurance/confirmpersonal?phone=${phone}&ad=${address}&nk=${next_kin_name}&np=${next_kin_phone}&bo=${business_occupation}&fn=${full_name}&price=${price}&sid=personal-accident-insurance&dob=${dob}&vcode=${variation_code}`)
     }
 
     useEffect(() => {
@@ -60,21 +57,21 @@ export const PersonalInsurance: React.FC = () => {
 
     useEffect(() => {
         if (vars.length > 0) {
-            const selected: iVar[] = vars.filter(item => item.variation_code === formdata.varCode)
+            const selected: iVar[] = vars.filter(item => item.variation_code === formdata.variation_code)
             if (selected) {
-                const amount: string = selected[0].variation_amount
+                const amount: string = selected[0]?.variation_amount
                 setPrice(amount)
 
             }
         }
-    },[formdata.varCode])
+    },[formdata.variation_code])
     return (
-        <Box mt={"2rem"}>
+        <Box mt={"2rem"} >
             <form onSubmit={handleSubmit}>
                 <Grid gridTemplateColumns={{base:"repeat(1,1fr)",md:"repeat(2,1fr)"}} gap={"2rem"}>
                     <FormControl>
                         <FormLabel>Insurance type</FormLabel>
-                        <Select fontSize={"0.9rem"} name="varCode" value={formdata.varCode} onChange={handleInput}>
+                        <Select fontSize={"0.9rem"} name="variation_code" value={formdata.variation_code} onChange={handleInput}>
                             {
                                 vars.length > 0 && vars.map(item => (<option value={item.variation_code} key={item.name}>{ item.name}</option>))
                             }

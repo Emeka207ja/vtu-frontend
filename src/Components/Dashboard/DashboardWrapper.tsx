@@ -43,6 +43,7 @@ import {FaHistory} from "react-icons/fa"
 import {SiAuthy} from "react-icons/si"
 import { BsFillPeopleFill } from "react-icons/bs"
 import { Footer } from './Footer/Footer';
+import useQuerryString from "@/hooks/useQueryString"
 
 
 interface LinkItemProps {
@@ -73,6 +74,7 @@ export default function SidebarWithHeader({
   const Logout = () => {
     dispatch(logout)
   }
+  const [type] = useQuerryString("type")
     // const { colorMode, toggleColorMode } = useColorMode()
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
@@ -97,7 +99,9 @@ export default function SidebarWithHeader({
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
       </Box>
-      <Footer/>
+      {
+        !type&&<Footer/>
+      }
     </Box>
   );
 }

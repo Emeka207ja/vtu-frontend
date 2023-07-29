@@ -6,8 +6,8 @@ export const Insurance: React.FC = () => {
     const router:NextRouter = useRouter()
     return (
         <Box>
-            <Heading>Insurance</Heading>
-            <Grid gridTemplateColumns={{base:"repeat(1,1fr)",md:"repeat(3,1fr)"}} gap={"1rem"}>
+            {/* <Heading fontSize={"1rem"} textAlign={"center"}>Insurance</Heading> */}
+            <Grid gridTemplateColumns={{base:"repeat(1,1fr)",md:"repeat(3,1fr)"}} gap={"0.7rem"}>
                 {
                     insuranceData.map(item => {
                         return (

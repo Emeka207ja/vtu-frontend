@@ -8,6 +8,7 @@ import { Featured } from '@/Components/Landing-Page-Folder/Featured/Featured'
 import { About } from "@/Components/Landing-Page-Folder/About"
 import { Services } from '@/Components/Landing-Page-Folder/Services'
 import { Features } from '@/Components/Landing-Page-Folder/Features'
+import { HomePage } from '@/Components/Home/HomePage'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -27,6 +28,7 @@ export default function Home() {
         <About />
         <Services />
         <Features/>
+        {/* <HomePage/> */}
       </Layout>
      
     </>
