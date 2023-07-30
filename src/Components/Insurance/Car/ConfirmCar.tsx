@@ -27,6 +27,10 @@ import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { BsCheck2Circle } from "react-icons/bs"
 import { useRouter, NextRouter } from "next/router";
+import { carInsuranceHandler, idetails } from "./service"
+import { genReqId } from "@/Components/History/util.service"
+import { iAuth } from "@/Components/Wassce/service"
+import { getHeaders } from "@/Components/Airtime/service"
 
 export const ConfirmCarInsurance: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -39,7 +43,8 @@ export const ConfirmCarInsurance: React.FC = () => {
     const [formState, setFormState] = useState<{ loading: boolean, success: boolean }>({ loading: false, success: false })
     const [value, setValue] = useState<string>("")
     const [errorMessage, setErrmsg] = useState<string | null>()
-
+    const [auth,setAuth] = useState<iAuth>({api_key:"",secret_key:""})
+    const [serviceID] = useQuerryString("sid");
     const [Insured_Name] = useQuerryString("name")
     const [variation_code] = useQuerryString("vcode")
     const [Engine_Number] = useQuerryString("engine")
@@ -50,18 +55,74 @@ export const ConfirmCarInsurance: React.FC = () => {
     const [Vehicle_Model] = useQuerryString("model")
     const [Year_of_Make] = useQuerryString("year")
     const [Contact_Address] = useQuerryString("address")
-    const [Amount] = useQuerryString("price")
+    const [price] = useQuerryString("price")
+    const [Phone] = useQuerryString("phone")
+
+
+    const headerHandler = async () => {
+        try {
+            const data:iAuth = await getHeaders()
+            setAuth(data)
+        } catch (error:any) {
+            console.log(error)
+        }
+    }
 
      const handleInput = (val: string) => {
         setValue(val)
         setErrmsg(null)
     }
 
-     const handleComplete = (val: string) => {
-      
+     const handleComplete = async (val: string) => {
+        if (!accessToken || Object.keys(auth).length === 0) {
+            setErrmsg("auth error,ensure you have good internet connection,refresh page")
+            return
+        }
+        const pin: number = parseFloat(val);
+        const userPin: number = Profile?.pin!
+        if (userPin !== pin) {
+            setErrmsg("invalid credentials")
+            return
+        }
+        const phone: number = parseFloat(Phone)
+        const request_id:string = genReqId()
+        const billersCode: string = Plate_Number
+        const amount: number = parseFloat(price)
+        const details: idetails = {
+            request_id,
+            serviceID,
+            billersCode,
+            variation_code,
+            phone,
+            amount,
+            Year_of_Make,
+            Engine_Number,
+            Contact_Address,
+            Plate_Number,
+            Vehicle_Color,
+            Vehicle_Make,
+            Vehicle_Model,
+            Insured_Name,
+            Chasis_Number
+      }
+      console.log(details)
+        
+        try {
+            setFormState({loading:true,success:false})
+            const data = await carInsuranceHandler(auth, details)
+            setFormState({loading:false,success:true})
+            console.log(data)
+        } catch (error:any) {
+            console.log(error)
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            setErrmsg(message)
+            setFormState({loading:false,success:false})
+        }
+       
     }
     
     useEffect(() => {
+         headerHandler()
         if (accessToken) {
             dispatch(getProfileAction(accessToken))
         }
@@ -70,12 +131,36 @@ export const ConfirmCarInsurance: React.FC = () => {
         <Box>
             <Card>
                 <CardHeader>
-                    <Heading fontSize={"1rem"}>Confirm vehicle insurance purchase</Heading>
+                    {
+                        !formState.success &&  <Heading fontSize={"1rem"}>Confirm vehicle insurance purchase</Heading>
+                   }
                 </CardHeader>
                 <CardBody>
-                    <Text>product: vehicle insurance</Text>
-                    <Text>type: {variation_code}</Text>
-                    <Text>Price : {Amount }</Text>
+                    {
+                        !formState.success && (
+                            <Box>
+                                <Text>product: vehicle insurance</Text>
+                                <Text>type: {variation_code}</Text>
+                                <Text>Insured_Name: {Insured_Name}</Text>
+                                <Text>Chasis_Number: {Chasis_Number}</Text>
+                                <Text>Plate_Number: {Plate_Number}</Text>
+                                <Text>Engine_Number: {Engine_Number}</Text>
+                                <Text>Vehicle_Make: {Vehicle_Make}</Text>
+                                <Text>Price : {price }</Text>
+                            </Box>
+                        )
+                    }
+                    
+                    {
+                        formState.success&&(
+                            <Center>
+                                <Box>
+                                    <BsCheck2Circle />
+                                    <Text color={"green"}>success</Text>
+                                </Box>
+                            </Center>
+                        )
+                    }
                 </CardBody>
                 <CardFooter>
                     <Box>

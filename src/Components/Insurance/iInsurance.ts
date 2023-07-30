@@ -34,7 +34,7 @@ export const insuranceData: iInsure[] = [
 
 export interface icarInsureData{
     Plate_Number: string;
-    varCode: string;
+   variation_code: string;
    
     phone: string;
     Insured_Name: string;
@@ -48,15 +48,15 @@ export interface icarInsureData{
 }
 
 export const carInsuranceBioData: icarInsureData = {
-    "Plate_Number": "",
-    "varCode": "1",
-    "phone": "",
-    "Insured_Name" : "",
-    "Engine_Number": "",
-    "Chasis_Number": "",
-    "Vehicle_Make": "",
-    "Vehicle_Color": "",
-    "Vehicle_Model": "",
-    "Year_of_Make": "",
-    "Contact_Address":""
+    Plate_Number: "",
+    variation_code: "1",
+    phone: "",
+    Insured_Name : "",
+    Engine_Number: "",
+    Chasis_Number: "",
+    Vehicle_Make: "",
+    Vehicle_Color: "",
+    Vehicle_Model: "",
+    Year_of_Make: "",
+    Contact_Address:""
 }

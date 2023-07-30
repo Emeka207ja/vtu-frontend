@@ -39,7 +39,7 @@ export const CarInsurance: React.FC = () => {
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
         const {
-            varCode,
+            variation_code,
             phone,
             Insured_Name,
             Engine_Number,
@@ -53,7 +53,7 @@ export const CarInsurance: React.FC = () => {
         } = formdata
         console.log(formdata)
 
-        router.push(`/insurance/carconfirm?vcode=${varCode}
+        router.push(`/insurance/carconfirm?vcode=${variation_code}
         &name=${Insured_Name}
         &engine=${Engine_Number}
         &chasis=${Chasis_Number}
@@ -62,28 +62,28 @@ export const CarInsurance: React.FC = () => {
         &color=${Vehicle_Color}
         &model=${Vehicle_Model}
         &year=${Year_of_Make}
-        &address=${Contact_Address}&price=${price}`)
+        &address=${Contact_Address}&price=${price}&phone=${phone}&sid=ui-insure`)
     }
     useEffect(() => {
         insuranceVars()
     }, [])
     useEffect(() => {
         if (vars.length > 0) {
-            const selected: iVar[] = vars.filter(item => item.variation_code === formdata.varCode)
+            const selected: iVar[] = vars.filter(item => item.variation_code === formdata.variation_code)
             if (selected) {
                 const amount: string = selected[0].variation_amount
                 setPrice(amount)
 
             }
         }
-    },[formdata.varCode])
+    },[formdata.variation_code])
     return (
         <Box mt={"2rem"}>
             <form onSubmit={handleSubmit}>
                 <Grid gridTemplateColumns={{base:"repeat(1,1fr)",md:"repeat(2,1fr)"}} gap={"2rem"}>
                     <FormControl>
                         <FormLabel>Insurance type</FormLabel>
-                        <Select fontSize={"0.9rem"} name="varCode" value={formdata.varCode} onChange={handleInput}>
+                        <Select fontSize={"0.9rem"} name="variation_code" value={formdata.variation_code} onChange={handleInput}>
                             {
                                 vars.length > 0 && vars.map(item => (<option value={item.variation_code} key={item.name}>{ item.name}</option>))
                             }
