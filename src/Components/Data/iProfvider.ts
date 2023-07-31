@@ -1,6 +1,6 @@
 
 
-interface iProvider{
+export interface iProvider{
     name: string;
     image: string;
 }

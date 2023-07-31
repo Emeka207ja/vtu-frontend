@@ -15,28 +15,29 @@ export const Footer: React.FC = () => {
                     <Box position={"relative"} left={"0.9rem"}>
                         <AiFillHome/>
                    </Box>
-                    {/* <Box>Home</Box> */}
+                    <Box>Home</Box>
                 </Box>
 
                 <Box cursor={"pointer"}>
                     <Box position={"relative"} left={"0.4rem"}>
                         <BsFillPeopleFill/>
                    </Box>
-                    {/* <Box>p2p</Box> */}
+                    <Box>p2p</Box>
                 </Box>
 
                 <Box cursor={"pointer"}>
                     <Box position={"relative"} left={"0.9rem"}>
                         <GrServices/>
                     </Box>
-                    {/* <Box>services</Box> */}
+                    <Box>services</Box>
                 </Box>
 
                 <Box cursor={"pointer"}>
                     <Box position={"relative"} left={"0.5rem"}>
                          <BsFillCreditCardFill/>
                    </Box>
-                    {/* <Box>card</Box> */}
+                    <Box>card</Box>
+                    
                 </Box>
            </Flex>
         </Box>

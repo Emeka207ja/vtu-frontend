@@ -105,6 +105,20 @@ export const DashboardContent = () => {
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                         borderRadius={"md"}
                         padding={"1rem"}
+                         onClick={()=>router.push("/datatwo")}
+                    >
+                        <HStack>
+                            <ImConnection />
+                            <Box cursor={"pointer"}>Data option 3</Box>
+                        </HStack>
+                    </Box>
+                </GridItem>
+
+                <GridItem>
+                    <Box
+                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                        borderRadius={"md"}
+                        padding={"1rem"}
                          onClick={()=>router.push("/wallet")}
                     >
                         <HStack>
