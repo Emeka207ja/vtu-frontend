@@ -212,7 +212,7 @@ export const DashboardContent = () => {
                     </Box>
                 </GridItem>
                
-                <GridItem>
+                {/* <GridItem>
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                         borderRadius={"md"}
@@ -224,7 +224,7 @@ export const DashboardContent = () => {
                             <Box cursor={"pointer"}>International Airtime</Box>
                         </HStack>
                     </Box>
-                </GridItem>
+                </GridItem> */}
 
                 <GridItem>
                     <Box
@@ -235,7 +235,7 @@ export const DashboardContent = () => {
                     >
                         <HStack>
                              <SiGooglescholar/>
-                            <Box cursor={"pointer"}>Education Waec</Box>
+                            <Box cursor={"pointer"}> Waec Pins</Box>
                         </HStack>
                     </Box>
                 </GridItem>
