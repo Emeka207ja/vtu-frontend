@@ -30,8 +30,9 @@ export const GloGift: React.FC = () => {
 
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
-        const { plan_id, phone } = formVal
-        console.log({plan_id,phone,price})
+        const { plan_id, phone } = formVal;
+        router.push(`/datatwo/confirm?plan=${plan_id}&phone=${phone}&amt=${price}`)
+        
     }
 
 

@@ -31,7 +31,8 @@ export const AirtelCG: React.FC = () => {
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
         const { plan_id, phone } = formVal
-        console.log({plan_id,phone,price})
+        console.log({ plan_id, phone, price })
+        router.push(`/datatwo/confirm?plan=${plan_id}&phone=${phone}&amt=${price}`)
     }
 
 

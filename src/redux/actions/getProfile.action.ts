@@ -13,7 +13,7 @@ export const getProfileAction = createAsyncThunk('profile/getProfile',
         }
         try {
             const { data } = await axios.get(getProfileApi, config);
-            console.log(data)
+            // console.log(data)
             return data;
         } catch (error:any) {
             console.log(error)
