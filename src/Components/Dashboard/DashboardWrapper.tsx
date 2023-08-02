@@ -252,6 +252,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem>Profile</MenuItem>
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
+              <MenuItem as={"a"} href='/admin'>Admin panel</MenuItem>
               <MenuDivider />
               <MenuItem>
                 <Box onClick={()=>Logout()} w="100%">Sign out</Box>
