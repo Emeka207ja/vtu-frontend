@@ -95,7 +95,7 @@ export const UpdateData: React.FC = () => {
                                 </Heading>
                             ) : optionState.success  && datas.length > 0 && datas.map((item,id )=> {
                                 return (
-                                    <Tr>
+                                    <Tr key={item.id}>
                                         <Td>{ id+1}</Td>
                                         <Td>{ item.plan_id}</Td>
                                         <Td>{ item.name}</Td>
