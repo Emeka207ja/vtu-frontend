@@ -212,7 +212,7 @@ export const DashboardContent = () => {
                     </Box>
                 </GridItem>
                
-                {/* <GridItem>
+                <GridItem>
                     <Box
                         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                         borderRadius={"md"}
@@ -221,10 +221,10 @@ export const DashboardContent = () => {
                     >
                         <HStack>
                              <BiPhoneCall/>
-                            <Box cursor={"pointer"}>International Airtime</Box>
+                            <Box cursor={"pointer"}>Int. Airtime</Box>
                         </HStack>
                     </Box>
-                </GridItem> */}
+                </GridItem>
 
                 <GridItem>
                     <Box

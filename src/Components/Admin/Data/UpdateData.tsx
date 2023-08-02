@@ -27,6 +27,8 @@ import { useState, useEffect } from "react"
 import { useAppDispatch,useAppSelector } from "@/redux/hooks"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { BsCheck2Circle } from "react-icons/bs"
+import { getDatabyId } from "@/Components/DataTwo/service"
+import { idataUpdate,updateData } from "./idataUpdate"
 
 export const UpdateData: React.FC = () => {
 
@@ -36,7 +38,10 @@ export const UpdateData: React.FC = () => {
     const {accessToken} = useAppSelector(state=>state.loginAuth)
     const {Profile,pending,error} = useAppSelector(state=>state.fetchProfile)
     const [optionState, setOptionState] = useState<{ loading: boolean, success: boolean, err: string }>({ loading: false, success: false, err: "" })
+    const [getState, setgetState] = useState<{ loading: boolean, success: boolean, err: string }>({ loading: false, success: false, err: "" })
     const [datas,setData] = useState<ioptions[]|[]>([])
+
+    const [formdata,setFormdata] = useState<idataUpdate>(updateData)
     
     const dataHandler = async () => {
         if (!accessToken) {
@@ -54,6 +59,34 @@ export const UpdateData: React.FC = () => {
             setOptionState({ loading: false, success: false, err: message })
             console.log(error)
         }
+    }
+
+    const dataById = async (idx: number) => {
+        const id:string = idx + "";
+        if (!accessToken) {
+            setgetState({ loading: false, success: false, err: "please reload browser on good network" })
+            return;
+        }
+        try {
+            setgetState({ loading: true, success: false, err: "" })
+             setFormdata({name:"",plan_id:"",network:"",size:"",price:""})
+            const data: ioptions = await getDatabyId(accessToken, id)
+            const price = data.price+""
+           setFormdata({name:data.name,plan_id:data.plan_id,network:data.network,size:data.size,price:price})
+            console.log(data);
+            setgetState({ loading: false, success: true, err: "" })
+        } catch (error:any) {
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            setgetState({ loading: false, success: false, err: message })
+            console.log(error)
+        }
+    }
+
+    const inputHandler = (e: React.SyntheticEvent) => {
+        const target = e.target as HTMLInputElement;
+        setFormdata(prev => ({
+            ...prev, [target.name]:target.value
+        }))
     }
 
     useEffect(() => {
@@ -90,9 +123,7 @@ export const UpdateData: React.FC = () => {
                     <Tbody>
                         {
                             optionState.loading ? (
-                                <Heading textAlign={"center"}>
-                                    <Spinner/>
-                                </Heading>
+                               <Spinner/>
                             ) : optionState.success  && datas.length > 0 && datas.map((item,id )=> {
                                 return (
                                     <Tr key={item.id}>
@@ -102,7 +133,7 @@ export const UpdateData: React.FC = () => {
                                         <Td>{ item.price}</Td>
                                         <Td>{ item.size}</Td>
                                         <Td>
-                                            <Button colorScheme="blue" onClick={onOpen}>update</Button>
+                                            <Button colorScheme="blue" onClick={() => { onOpen(); dataById(item.id)}} >update</Button>
                                         </Td>
                                     </Tr>
                                 )
@@ -122,29 +153,36 @@ export const UpdateData: React.FC = () => {
                         <ModalBody>
                         <Center>
                             <form>
+                                {
+                                    getState.loading && (
+                                        <Heading  textAlign={"center"}>
+                                            <Spinner/>
+                                        </Heading>
+                                    )
+                                }
                                 <FormControl>
                                     <FormLabel>Plan Id </FormLabel>
-                                    <Input/>
+                                    <Input name="plan_id" value={formdata.plan_id } onChange={inputHandler} />
                                 </FormControl>
 
                                 <FormControl>
                                     <FormLabel>Network </FormLabel>
-                                    <Input/>
+                                    <Input name="network" value={formdata.network } onChange={inputHandler}/>
                                 </FormControl>
 
                                 <FormControl>
                                     <FormLabel>Bundle size</FormLabel>
-                                    <Input/>
+                                    <Input name="size" value={formdata.size } onChange={inputHandler}/>
                                 </FormControl>
 
                                 <FormControl>
                                     <FormLabel>Bundle Name </FormLabel>
-                                    <Input/>
+                                    <Input name="name" value={formdata.name} onChange={inputHandler}/>
                                 </FormControl>
 
                                 <FormControl mb={"0.5rem"}>
                                     <FormLabel>Bundle Price </FormLabel>
-                                    <Input/>
+                                    <Input name="price" value={formdata.price } onChange={inputHandler}/>
                                 </FormControl>
 
                                 <Button colorScheme="blue">update</Button>

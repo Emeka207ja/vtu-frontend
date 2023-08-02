@@ -59,18 +59,19 @@ export const PrepaidConfirm: React.FC = () => {
             setLoading(true)
             setSuccess(false)
             const data = await subElectricity({ api_key, secret_key, amount, phone, serviceID, variation_code, billersCode, request_id })
-           
+        //    console.log(data)
             if (data) {
                 const amt:string = data.amount;
-                const mainToken:string = data.mainToken;
+                const mainToken:string = data.purchased_code
                 const purchased_code:string = data.purchased_code
                 const date:string = data.transaction_date?.date
-                const utilityName:string = data.content?.transactions.product_name
+                const utilityName:string = data.content?.transactions?.product_name
                 const requestId:string = data.requestId
                 const amount = parseFloat(amt)
                 const vals = {
                     amount,mainToken,purchased_code,date,utilityName,requestId
                 }
+                // console.log(vals)
                 const datax = await subPrepaid(accessToken, vals)
                 console.log(datax)
             
