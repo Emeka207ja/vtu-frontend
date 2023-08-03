@@ -5,7 +5,7 @@ import { iAuth } from "@/Components/Wassce/service";
 import { vtpassHeaderfn } from "@/Services/utilityFn";
 
 export interface idetails extends Omit<icarInsureData, "phone">{
-    phone: number;
+    phone: string;
     billersCode: string;
     amount: number;
     serviceID: string;

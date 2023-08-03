@@ -9,7 +9,7 @@ export interface idetails{
     billersCode: string;
     variation_code: string;
     amount: number;
-    phone:number
+    phone:string
 }
 
 export const getDataVars = async(vars:string) => {
@@ -20,6 +20,7 @@ export const getDataVars = async(vars:string) => {
 
 export const dataSubHandler = async (auth: iAuth, details: idetails) => {
     const config = vtpassHeaderfn(auth)
+    console.log(details)
 
     const { data } = await axios.post(payApi, details, config);
     return data;

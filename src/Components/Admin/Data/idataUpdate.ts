@@ -5,7 +5,7 @@ export interface idataUpdate{
 
     plan_id: string;
 
-    price: string;
+    Price: string;
 
     size: string;
 
@@ -15,6 +15,6 @@ export const updateData: idataUpdate = {
     name: "",
     network: "",
     plan_id: "",
-    price: "",
+    Price: "",
     size:""
 }

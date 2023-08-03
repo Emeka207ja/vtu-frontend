@@ -45,7 +45,7 @@ export const ConfirmHome: React.FC = () => {
     const { Profile } = useAppSelector(state => state.fetchProfile)
     const dispatch = useAppDispatch()
 
-    const [Phone] = useQuerryString("phone")
+    const [phone] = useQuerryString("phone")
     const [date_of_birth] = useQuerryString("dob")
     const [serviceID] = useQuerryString("sid")
     const [price] = useQuerryString("price")
@@ -77,7 +77,7 @@ export const ConfirmHome: React.FC = () => {
             setErrmsg("invalid credentials")
             return
         }
-        const phone: number = parseFloat(Phone)
+       
         const request_id:string = genReqId()
         const billersCode: string = full_name
         const amount :number = parseFloat(price)
@@ -142,7 +142,7 @@ export const ConfirmHome: React.FC = () => {
                                 <Text>service : {serviceID}</Text>
                                 <Text> price : {parseFloat(price)}</Text>
                                 <Text>option : {variation_code }</Text>
-                                <Text>phone  number : {Phone}</Text>
+                                <Text>phone  number : {phone}</Text>
                                 <Text>name : {full_name}</Text>
                                 <Text>occupation  : {business_occupation}</Text>
                                 <Text>DOB  : {date_of_birth}</Text>

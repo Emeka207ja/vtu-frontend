@@ -2,7 +2,8 @@ import {Box,Grid,Input,FormControl,Select,FormLabel,Button,Heading,HStack} from 
 import { useState,useEffect } from "react"
 import { getDataVars } from "./service"
 import { iVar } from "./iProfvider"
-import { useRouter,NextRouter } from "next/router"
+import { useRouter, NextRouter } from "next/router"
+import { genReqId } from "../History/util.service"
 
 export const GloData = () => {
 
@@ -40,6 +41,11 @@ export const GloData = () => {
         router.push(`/datasub/confirm?varcode=${varCode}&biller=${biller}&sID=${serviceID}&amt=${amt}`)
     }
 
+    const idHandler = () => {
+        const id = genReqId()
+        console.log(id)
+    }
+
     useEffect(() => {
         handleVars()
     }, [])
@@ -50,7 +56,7 @@ export const GloData = () => {
             const selected: iVar[] = vars.filter(item => item.variation_code === val)
             console.log(selected)
             if (selected) {
-                const amount = selected[0].variation_amount
+                const amount = selected[0]?.variation_amount
                 console.log(amount)
                 setAmt(amount)
             }
@@ -88,6 +94,8 @@ export const GloData = () => {
                     </HStack>
                 </Box>
             </form>
+
+            <Button onClick={()=>idHandler()} colorScheme="green" mt={"0.5rem"}>gen request id</Button>
         </Box>
     )
 }

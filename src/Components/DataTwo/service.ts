@@ -41,17 +41,7 @@ export const getOptions = async (token: string, type: string) => {
     return data;
 }
 
-export const getDatabyId = async (token: string,id: string) => {
-    
-    const config = {
-        headers: {
-            Authorization :`Bearer ${token?.slice(1,-1)}`
-        }
-    }
-    
-    const { data } = await axios.get(`https://easybuyapi.adaptable.app/api/v1/data/selected/${id}`, config)
-    return data;
-}
+
 
 export const getToken = async () => {
     const { data } = await axios.get("https://easybuyapi.adaptable.app/api/v1/auth/geotop");

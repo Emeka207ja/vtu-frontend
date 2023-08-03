@@ -56,7 +56,7 @@ export const ConfirmCarInsurance: React.FC = () => {
     const [Year_of_Make] = useQuerryString("year")
     const [Contact_Address] = useQuerryString("address")
     const [price] = useQuerryString("price")
-    const [Phone] = useQuerryString("phone")
+    const [phone] = useQuerryString("phone")
 
 
     const headerHandler = async () => {
@@ -84,7 +84,7 @@ export const ConfirmCarInsurance: React.FC = () => {
             setErrmsg("invalid credentials")
             return
         }
-        const phone: number = parseFloat(Phone)
+        
         const request_id:string = genReqId()
         const billersCode: string = Plate_Number
         const amount: number = parseFloat(price)

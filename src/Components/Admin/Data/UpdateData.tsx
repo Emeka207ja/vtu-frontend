@@ -27,7 +27,7 @@ import { useState, useEffect } from "react"
 import { useAppDispatch,useAppSelector } from "@/redux/hooks"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { BsCheck2Circle } from "react-icons/bs"
-import { getDatabyId } from "@/Components/DataTwo/service"
+import { getDatabyId,updateById,iUpdate } from "./service"
 import { idataUpdate,updateData } from "./idataUpdate"
 
 export const UpdateData: React.FC = () => {
@@ -39,7 +39,9 @@ export const UpdateData: React.FC = () => {
     const {Profile,pending,error} = useAppSelector(state=>state.fetchProfile)
     const [optionState, setOptionState] = useState<{ loading: boolean, success: boolean, err: string }>({ loading: false, success: false, err: "" })
     const [getState, setgetState] = useState<{ loading: boolean, success: boolean, err: string }>({ loading: false, success: false, err: "" })
-    const [datas,setData] = useState<ioptions[]|[]>([])
+    const [updateState, setUpdateState] = useState<{ loading: boolean, success: boolean, err: string }>({ loading: false, success: false, err: "" })
+    const [datas, setData] = useState<ioptions[] | []>([])
+    const [idz,setId] = useState<string>("")
 
     const [formdata,setFormdata] = useState<idataUpdate>(updateData)
     
@@ -49,6 +51,7 @@ export const UpdateData: React.FC = () => {
             return;
         }
         try {
+            setUpdateState({ loading: false, success: false, err: "" })
             setOptionState({ loading: true, success: false, err: "" })
             const data: ioptions[] = await getAllData(accessToken)
             setData(data)
@@ -62,22 +65,45 @@ export const UpdateData: React.FC = () => {
     }
 
     const dataById = async (idx: number) => {
-        const id:string = idx + "";
+        const id: string = idx + "";
+        setId(id)
         if (!accessToken) {
             setgetState({ loading: false, success: false, err: "please reload browser on good network" })
             return;
         }
         try {
             setgetState({ loading: true, success: false, err: "" })
-             setFormdata({name:"",plan_id:"",network:"",size:"",price:""})
+             setFormdata({name:"",plan_id:"",network:"",size:"",Price:""})
             const data: ioptions = await getDatabyId(accessToken, id)
             const price = data.price+""
-           setFormdata({name:data.name,plan_id:data.plan_id,network:data.network,size:data.size,price:price})
+           setFormdata({name:data.name,plan_id:data.plan_id,network:data.network,size:data.size,Price:price})
             console.log(data);
             setgetState({ loading: false, success: true, err: "" })
         } catch (error:any) {
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message
             setgetState({ loading: false, success: false, err: message })
+            console.log(error)
+        }
+    }
+
+    const updateHandler = async (e: React.SyntheticEvent) => {
+        e.preventDefault()
+        
+        if (!accessToken) {
+            setgetState({ loading: false, success: false, err: "please reload browser on good network" })
+            return;
+        }
+        const price = parseFloat(formdata.Price)
+        const {plan_id,network,size,name} = formdata
+        const details:iUpdate = {price,plan_id,size,network,name}
+        try {
+            setUpdateState({ loading: true, success: false, err: "" })
+            const updateRes= await updateById(accessToken, idz,details)
+            console.log(updateRes);
+            setUpdateState({ loading: false, success: true, err: "" })
+        } catch (error:any) {
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            setUpdateState({ loading: false, success: false, err: message })
             console.log(error)
         }
     }
@@ -89,12 +115,14 @@ export const UpdateData: React.FC = () => {
         }))
     }
 
+   
+
     useEffect(() => {
         dataHandler()
         if (accessToken) {
             dispatch(getProfileAction(accessToken))
         }
-    },[accessToken])
+    },[accessToken,updateState.success])
     return (
         <Box>
             {
@@ -123,7 +151,9 @@ export const UpdateData: React.FC = () => {
                     <Tbody>
                         {
                             optionState.loading ? (
-                               <Spinner/>
+                              <Heading textAlign={"center"}>
+                                <Spinner/>
+                            </Heading>
                             ) : optionState.success  && datas.length > 0 && datas.map((item,id )=> {
                                 return (
                                     <Tr key={item.id}>
@@ -152,12 +182,27 @@ export const UpdateData: React.FC = () => {
                         <ModalCloseButton />
                         <ModalBody>
                         <Center>
-                            <form>
+                            <form onSubmit={updateHandler}>
                                 {
                                     getState.loading && (
                                         <Heading  textAlign={"center"}>
                                             <Spinner/>
                                         </Heading>
+                                    )
+                                }
+                                {
+                                    updateState.loading && (
+                                        <Heading  textAlign={"center"}>
+                                            <Spinner/>
+                                        </Heading>
+                                    )
+                                }
+                                {
+                                    updateState.success && (
+                                        <Box  textAlign={"center"}>
+                                            <BsCheck2Circle /> 
+                                            <Text color={"green"}>update!</Text>
+                                        </Box>
                                     )
                                 }
                                 <FormControl>
@@ -182,10 +227,10 @@ export const UpdateData: React.FC = () => {
 
                                 <FormControl mb={"0.5rem"}>
                                     <FormLabel>Bundle Price </FormLabel>
-                                    <Input name="price" value={formdata.price } onChange={inputHandler}/>
+                                    <Input name="Price" value={formdata.Price } onChange={inputHandler}/>
                                 </FormControl>
 
-                                <Button colorScheme="blue">update</Button>
+                                <Button colorScheme="blue" type="submit">update</Button>
                             </form>
                             </Center>
                         </ModalBody>

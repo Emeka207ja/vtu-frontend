@@ -8,7 +8,7 @@ export interface idetails extends Omit<iPersonal,"phone">{
     serviceID: string;
     request_id: string;
     billersCode:string
-    phone:number
+    phone: string;
 }
 
 

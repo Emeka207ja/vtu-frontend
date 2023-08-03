@@ -80,7 +80,8 @@ export const ConfirmData: React.FC = () => {
         }
         // const phone: number = parseFloat(Phone)
         const request_id:string = genReqId()
-        const phone:number = parseFloat(billersCode)
+        // const phone:number = parseFloat(billersCode)
+        const phone:string = billersCode
         const amount: number = parseFloat(amt)
         const details: idetails = {
             request_id,

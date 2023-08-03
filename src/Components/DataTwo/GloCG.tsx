@@ -87,7 +87,7 @@ export const GloCG: React.FC = () => {
                 <Grid gridTemplateColumns={{base:"repeat(1,1fr)",md:"repeat(2,1fr)"}} gap={"1rem"}>
                     <FormControl mb={"1rem"} >
                         <FormLabel>select plan</FormLabel>
-                        <Select name="plan_id" value={formVal.plan_id} onChange={inputHandler}>
+                        <Select name="plan_id" value={formVal.plan_id} onChange={inputHandler} onClick={inputHandler}>
                             {
                                 Options.length > 0 && Options.map(item => (<option value={ item.plan_id} key={item.name}>{ item.name}</option>))
                             }

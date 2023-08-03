@@ -8,7 +8,7 @@ export interface iData {
     billersCode:string
     variation_code: string
     amount:number
-    phone: number
+    phone: string
     full_name: string
     address: string
     type_building: string
