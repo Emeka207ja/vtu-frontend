@@ -4,7 +4,6 @@ import { iLabel } from "./iLabel"
 
 export const Label: React.FC<{image:string}> = (prop) => {
     const { image } = prop
-    console.log(image)
     
     return (
         <Card>
