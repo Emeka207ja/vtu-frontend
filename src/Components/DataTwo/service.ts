@@ -9,6 +9,11 @@ interface iauth{
     token:string
 }
 
+export interface ipurchase{
+    phone: string;
+    price:number
+}
+
 
 
 
@@ -46,4 +51,17 @@ export const getOptions = async (token: string, type: string) => {
 export const getToken = async () => {
     const { data } = await axios.get("https://easybuyapi.adaptable.app/api/v1/auth/geotop");
     return data;
+}
+
+export const purchaseDataHandler = async (token: string, details: ipurchase) => {
+   
+    const config = {
+        headers: {
+            Authorization :`Bearer ${token?.slice(1,-1)}`
+        }
+    }
+     console.log(config)
+    const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/data/buydata", details, config);
+    return data;
+
 }

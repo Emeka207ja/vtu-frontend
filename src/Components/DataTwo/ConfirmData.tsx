@@ -20,6 +20,7 @@ import {
     Spinner,
     Center,
     Button,
+    Flex
     
 } from "@chakra-ui/react"
 import useQuerryString from "@/hooks/useQueryString"
@@ -27,7 +28,7 @@ import { useState, useEffect } from "react"
 import { BsCheck2Circle } from "react-icons/bs"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { genReqId } from "../History/util.service"
-import { idetails, dataSubHandler,getToken } from "./service"
+import { idetails, dataSubHandler,getToken,purchaseDataHandler,ipurchase } from "./service"
 import { getHeaders } from "../Airtime/service"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { useRouter, NextRouter } from "next/router";
@@ -66,9 +67,15 @@ export const ConfirmDataTwo: React.FC = () => {
         setErrmsg(null)
     }
 
-     const handleComplete = async (val: string) => {
+    const handleComplete = async (val: string) => {
+        const price = parseFloat(amt)
         if (!accessToken || Object.keys(auth).length === 0) {
             setErrmsg("auth error,ensure you have good internet connection,refresh page")
+            return
+         }
+        
+        if (Profile && Profile.balance < price) {
+            setErrmsg("insufficient balance")
             return
         }
         const pin: number = parseFloat(val);
@@ -78,12 +85,18 @@ export const ConfirmDataTwo: React.FC = () => {
             return
         }
         // const phone: number = parseFloat(Phone)
-        const reference:string = genReqId()
+         const reference: string = genReqId()
+        
          const details: idetails = {
             plan,
             number,
             reference
-        }
+         }
+         
+         const purchaseDetail: ipurchase = {
+            price: price,
+            phone:number
+        } 
         
         try {
             setFormState({loading:true,success:false})
@@ -93,6 +106,7 @@ export const ConfirmDataTwo: React.FC = () => {
                 setErrmsg(data.message)
                 return
             }
+            const res = await purchaseDataHandler(accessToken,purchaseDetail)
             setFormState({loading:false,success:true})
             console.log(data)
         } catch (error:any) {
@@ -116,7 +130,12 @@ export const ConfirmDataTwo: React.FC = () => {
         <Box>
             <Card>
                 <CardHeader>
-                    <Heading fontSize={"1rem"}>Confirm data purchase</Heading>
+                    <Flex alignItems={"center"} justifyContent={"space-between"}>
+                        <Heading fontSize={"1rem"}>Confirm data purchase</Heading>
+                        <Box  color={Profile && Profile.balance<parseFloat(amt)? "red":"blue.300"}>
+                            balance: 	&#8358; {Profile && Profile.balance}
+                        </Box>
+                   </Flex>
                     <Box textAlign={"center"}>
                         {
                             pending ? (<Spinner />) : error ? <Text color={"red"} fontSize={"0.9rem"}>{ error}</Text>:""
