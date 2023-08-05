@@ -1,7 +1,7 @@
-import { Box, Grid, FormControl, FormLabel, Input,Select } from "@chakra-ui/react"
+import { Box, Grid, FormControl, FormLabel, Input,Select,Spinner,Heading,Text,FormHelperText } from "@chakra-ui/react"
 import { Label } from "./Label"
-import { getCountries,getOptions,getOperator } from "./service"
-import { iCountry,idata,intData,ioption,ioperator } from "./iLabel"
+import { getCountries,getOptions,getOperator,getOperatorType } from "./service"
+import { iCountry,idata,intData,ioption,ioperator,ioperatorType } from "./iLabel"
 import {useState,useEffect} from "react"
 
 
@@ -15,6 +15,12 @@ export const IntAirtime: React.FC = () => {
     const [type, setType] = useState<string>("4")
     const [operator, setOperator] = useState<ioperator[]|[]>([])
     const [optionData, setOptionData] = useState<ioption[]|[]>([])
+    const [operatortypeData, setOperatorTypeData] = useState<ioperatorType[] | []>([])
+    const [amount,setAmount] = useState<string>("")
+    const [rate,setRate] = useState<number>(1)
+    const [isflexible, setIsflexible] = useState<boolean>(false)
+    const [formState, setFormState] = useState<{ loading: boolean, success: boolean }>({ loading: false, success: false })
+    const [errorMessage, setErrmsg] = useState<string | null>()
     
     
     const handleInput = (e: React.SyntheticEvent) => {
@@ -23,54 +29,109 @@ export const IntAirtime: React.FC = () => {
            ...prev,[target.name]:target.value
        }))
     }
+    const handleAmount = (e: React.SyntheticEvent) => { 
+        const target = e.target as HTMLInputElement;
+        setAmount(target.value);
+    }
     
+
     const handleCountries = async () => {
         try {
+             setErrmsg(null)
+            setFormState({loading:true,success:false})
             const data = await getCountries()
+            
             if(data){
                 const country: iCountry[] = data.content?.countries
                 setCountries(country)
             }
+            setFormState({loading:false,success:true})
         } catch (error:any) {
             console.log(error)
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            setErrmsg(message)
+            setFormState({loading:false,success:false})
         }
     }
+
+
     const handleOptions = async (id: string) => {
          console.log(id)
         try {
+            setErrmsg(null)
+            setFormState({loading:true,success:false})
             const data = await getOptions(id)
             if(data){
                 const val: ioption[] = data.content
                 setOptionData(val)
                 // console.log(val)
             }
+            setFormState({loading:false,success:true})
             // console.log(data)
             
         } catch (error:any) {
             console.log(error)
         }
     }
-    const handleOperator = async (code:string,id: string) => {
-         console.log(id)
+
+    const handleOperatorType = async (id: string,typex:string) => {
+        
         try {
+             setErrmsg(null)
+             setFormState({loading:true,success:false})
+            const data = await getOperatorType(id, typex)
+            if (data) {
+                const varation: ioperatorType[] = data.content?.variations
+                setOperatorTypeData(varation)
+                // console.log(varation)
+            }
+            setFormState({loading:false,success:true})
+            // console.log(data)
+            
+        } catch (error:any) {
+            console.log(error)
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            setErrmsg(message)
+            setFormState({loading:false,success:false})
+        }
+    }
+
+
+    const handleOperator = async (code:string,id: string) => {
+        try {
+            setErrmsg(null)
+            setFormState({loading:true,success:false})
             const data = await getOperator(code, id)
             if(data){
                 const val: ioperator[] = data.content
                 setOperator(val)
-                console.log(val)
+                // console.log(val)
             }
-            console.log(data)
+            // console.log(data)
+            setFormState({loading:false,success:true})
             
         } catch (error:any) {
             console.log(error)
+             
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            setErrmsg(message)
+            setFormState({loading:false,success:false})
         }
     }
 
     useEffect(() => {
         handleCountries()
         handleOptions(option)
-        handleOperator(option,type)
-    }, [option,type])
+        handleOperator(option, type)
+       
+    }, [option, type])
+    
+    useEffect(() => {
+        const id = formdata.operator_id.length > 0 ? formdata.operator_id : "1"
+        const typex = formdata.product_type.length > 0 ? formdata.product_type : "1"
+        console.log(id,typex)
+        handleOperatorType(id,typex)
+    },[formdata.operator_id,formdata.product_type])
 
     useEffect(() => {
         if (countries.length > 0) {
@@ -87,14 +148,48 @@ export const IntAirtime: React.FC = () => {
     useEffect(() => {
         if (optionData.length > 0) {
             const selected:ioption[] = optionData.filter(item => item.product_type_id === parseFloat(formdata.product_type))
-             console.log(selected)
+            //  console.log(selected)
             if (selected) {
                 const id: string = selected[0]?.product_type_id +""
                 setType(id)
-                console.log(id)
+                // console.log(id)
             }
         }
     }, [formdata.product_type])
+
+    useEffect(() => {
+        setIsflexible(false)
+        console.log(name)
+        if (operatortypeData.length > 0) {
+            const selected = operatortypeData.filter(item => item.name === "Enter flexible amount")
+            if (selected.length>0) {
+                setIsflexible(true)
+                const val = selected[0]?.name
+                // setName(val)
+            }
+
+        }
+        if (operatortypeData.length > 0) {
+            const selected = operatortypeData.filter(item => item.variation_code === formdata.operator_type)
+            console.log(selected)
+             if (selected.length>0) {
+              
+               
+                const flex = selected[0]?.name
+                 
+                if (flex !== "Enter flexible amount") {
+                    const price = selected[0]?.variation_amount
+                    const rate = selected[0]?.variation_rate
+                    setAmount(price)
+                    setRate(rate)
+                    setIsflexible(false)
+                } else {
+                    setAmount("")
+                    setIsflexible(true)
+                }
+            }
+        }
+    },[formdata.operator_type])
     
     // console.log()
     
@@ -103,6 +198,16 @@ export const IntAirtime: React.FC = () => {
         <Box>
             <Label image={img} />
             <Box mt={"2rem"}>
+                {
+                    formState.loading && (
+                        <Heading textAlign={"center"}>
+                            <Spinner/>
+                        </Heading>
+                    )
+                }
+                {
+                    errorMessage && <Text textAlign={"center"} color={"red"}>{ errorMessage}</Text>
+                }
                 <form>
                     <Grid gridTemplateColumns={{base:"repeat(1,1fr)",md:"repeat(2,1fr)"}} gap={"1rem"}>
                         <FormControl>
@@ -133,7 +238,7 @@ export const IntAirtime: React.FC = () => {
                             {
                                 formdata.country.length > 0 && formdata.product_type.length > 0 && (
                                     <Box>
-                                        <FormLabel>Product type</FormLabel>
+                                        <FormLabel>operator</FormLabel>
                                         <Select value={formdata.operator_id} name="operator_id" onChange={handleInput} onClick={handleInput}>
                                             {
                                                 operator.length > 0 && operator.map(item => (<option value={item.operator_id} key={item.name}>{ item.name}</option>))
@@ -141,6 +246,29 @@ export const IntAirtime: React.FC = () => {
                                         </Select>
                                     </Box>
                                 )
+                            }
+                        </FormControl>
+
+                        <FormControl>
+                            {
+                                formdata.country.length > 0 && formdata.product_type.length > 0 &&formdata.operator_id.length > 0  && (
+                                    <Box>
+                                        <FormLabel>operator type</FormLabel>
+                                        <Select value={formdata.operator_type} name="operator_type" onChange={handleInput} onClick={handleInput}>
+                                            {
+                                                operatortypeData.length > 0 && operatortypeData.map(item => (<option value={item.variation_code} key={item.name}>{ item.name}</option>))
+                                           }
+                                        </Select>
+                                    </Box>
+                                )
+                            }
+                        </FormControl>
+
+                        <FormControl>
+                            <FormLabel>Amount</FormLabel>
+                            <Input value={amount} onChange={handleAmount} isDisabled={!isflexible} />
+                            {
+                                !isflexible?<FormHelperText> you are to pay &#8358; {( parseFloat(amount) * rate).toFixed(2)}</FormHelperText>:""
                             }
                         </FormControl>
                     </Grid>
