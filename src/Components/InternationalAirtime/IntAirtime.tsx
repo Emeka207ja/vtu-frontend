@@ -1,4 +1,11 @@
-import { Box, Grid, FormControl, FormLabel, Input,Select,Spinner,Heading,Text,FormHelperText } from "@chakra-ui/react"
+import {
+    Box, Grid,
+    FormControl, FormLabel,
+    Input, Select, Spinner,
+    Heading, Text, FormHelperText,
+    InputGroup, InputLeftAddon,
+    Button,HStack
+} from "@chakra-ui/react"
 import { Label } from "./Label"
 import { getCountries,getOptions,getOperator,getOperatorType } from "./service"
 import { iCountry,idata,intData,ioption,ioperator,ioperatorType } from "./iLabel"
@@ -9,7 +16,8 @@ export const IntAirtime: React.FC = () => {
 
     const [countries, setCountries] = useState<iCountry[] | []>([])
     const [img,setImg] = useState<string>("")
-    // const [selected, setSelected] = useState<string>("")
+    const [currencycode,setCurrencyCode] = useState<string>("")
+    const [countrycode, setCountrycode] = useState<string>("")
     const [formdata, setFormdata] = useState<idata>(intData)
     const [option, setOption] = useState<string>("GH")
     const [type, setType] = useState<string>("4")
@@ -17,10 +25,13 @@ export const IntAirtime: React.FC = () => {
     const [optionData, setOptionData] = useState<ioption[]|[]>([])
     const [operatortypeData, setOperatorTypeData] = useState<ioperatorType[] | []>([])
     const [amount,setAmount] = useState<string>("")
+    const [currency,setCurrency] = useState<string>("")
     const [rate,setRate] = useState<number>(1)
-    const [isflexible, setIsflexible] = useState<boolean>(false)
+    const [isflexible, setIsflexible] = useState<boolean>(true)
     const [formState, setFormState] = useState<{ loading: boolean, success: boolean }>({ loading: false, success: false })
     const [errorMessage, setErrmsg] = useState<string | null>()
+    const [minMax, setMinMax] = useState<{ min: string, max: string }>({ min: "", max: "" })
+    const [check,setCheck] = useState<boolean>(false)
     
     
     const handleInput = (e: React.SyntheticEvent) => {
@@ -37,7 +48,8 @@ export const IntAirtime: React.FC = () => {
 
     const handleCountries = async () => {
         try {
-             setErrmsg(null)
+            setErrmsg(null)
+            setCheck(false)
             setFormState({loading:true,success:false})
             const data = await getCountries()
             
@@ -45,7 +57,8 @@ export const IntAirtime: React.FC = () => {
                 const country: iCountry[] = data.content?.countries
                 setCountries(country)
             }
-            setFormState({loading:false,success:true})
+            setFormState({ loading: false, success: true })
+            console.log(data)
         } catch (error:any) {
             console.log(error)
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message
@@ -77,12 +90,15 @@ export const IntAirtime: React.FC = () => {
     const handleOperatorType = async (id: string,typex:string) => {
         
         try {
-             setErrmsg(null)
+            setErrmsg(null)
              setFormState({loading:true,success:false})
             const data = await getOperatorType(id, typex)
             if (data) {
                 const varation: ioperatorType[] = data.content?.variations
                 setOperatorTypeData(varation)
+                const currCode: string = data.content?.currency 
+                setCurrencyCode(currCode)
+               
                 // console.log(varation)
             }
             setFormState({loading:false,success:true})
@@ -92,7 +108,7 @@ export const IntAirtime: React.FC = () => {
             console.log(error)
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message
             setErrmsg(message)
-            setFormState({loading:false,success:false})
+            setFormState({ loading: false, success: false })
         }
     }
 
@@ -137,8 +153,12 @@ export const IntAirtime: React.FC = () => {
         if (countries.length > 0) {
             const country: iCountry[] = countries.filter(item => item.code === formdata.country)
             if (country) {
-                const flag:string = country[0]?.flag
-                setImg(flag)
+                const flag: string = country[0]?.flag
+                const countryCode: string = country[0]?.prefix
+                const currencyCode:string = country[0]?.currency
+                setCountrycode(countryCode)
+                setCurrency(currencyCode)
+                setImg(flag);
                 const code:string = country[0]?.code
                 setOption(code)
             }
@@ -158,13 +178,19 @@ export const IntAirtime: React.FC = () => {
     }, [formdata.product_type])
 
     useEffect(() => {
-        setIsflexible(false)
-        console.log(name)
+        setCurrency("")
+        setCheck(false)
+        // setIsflexible(false)
+        // console.log(name)
         if (operatortypeData.length > 0) {
             const selected = operatortypeData.filter(item => item.name === "Enter flexible amount")
             if (selected.length>0) {
                 setIsflexible(true)
                 const val = selected[0]?.name
+                const minVal: string = selected[0]?.variation_amount_min +"";
+                const maxVal: string = selected[0]?.variation_amount_max +"" ;
+                setMinMax({ min: minVal, max: maxVal })
+                setCheck(true)
                 // setName(val)
             }
 
@@ -183,15 +209,22 @@ export const IntAirtime: React.FC = () => {
                     setAmount(price)
                     setRate(rate)
                     setIsflexible(false)
+                    setCheck(false)
                 } else {
                     setAmount("")
+                    setCurrency("")
                     setIsflexible(true)
                 }
             }
         }
     },[formdata.operator_type])
     
-    // console.log()
+    const handleSubmit = (e: React.SyntheticEvent) => {
+        e.preventDefault()
+        console.log(formdata)
+        console.log(countrycode)
+
+    }
     
     
     return (
@@ -208,7 +241,7 @@ export const IntAirtime: React.FC = () => {
                 {
                     errorMessage && <Text textAlign={"center"} color={"red"}>{ errorMessage}</Text>
                 }
-                <form>
+                <form onSubmit={handleSubmit}>
                     <Grid gridTemplateColumns={{base:"repeat(1,1fr)",md:"repeat(2,1fr)"}} gap={"1rem"}>
                         <FormControl>
                             <FormLabel>country</FormLabel>
@@ -266,12 +299,38 @@ export const IntAirtime: React.FC = () => {
 
                         <FormControl>
                             <FormLabel>Amount</FormLabel>
-                            <Input value={amount} onChange={handleAmount} isDisabled={!isflexible} />
                             {
-                                !isflexible?<FormHelperText> you are to pay &#8358; {( parseFloat(amount) * rate).toFixed(2)}</FormHelperText>:""
+                                // check && (<Text> amount between {`${currencycode} `} </Text>)
+                                check && (<Text> amount between {`${minMax.min} - ${minMax.max} ${currencycode}  `} </Text>)
+                            }
+                            <Input value={`${currency+ amount}`} onChange={handleAmount} isDisabled={!isflexible} />
+                            {
+                                !isflexible&&<Text> you are to pay &#8358; {( parseFloat(amount) * rate).toFixed(2)}</Text>
                             }
                         </FormControl>
+
+                        <FormControl mt={{md: check?"2rem":""}}>
+                              <FormLabel>phone number</FormLabel>
+                            <InputGroup>
+                                <InputLeftAddon children={`+${countrycode}`} />
+                                <Input type='tel' placeholder='phone number' name="phone" value={ formdata.phone} onChange={handleInput} />
+                            </InputGroup>
+                        </FormControl>
+
+                        <FormControl>
+                            <FormLabel>email</FormLabel>
+                            <Input  name="email" value={ formdata.email} onChange={handleInput}/>
+                        </FormControl>
+                       
                     </Grid>
+
+                    <Box mt={"1rem"}>
+                        <HStack>
+                            <Button colorScheme="red">cancel</Button>
+                            <Button colorScheme="blue" type="submit">proceed</Button>
+                        </HStack>
+                    </Box>
+                   
                 </form>
            </Box>
         </Box>

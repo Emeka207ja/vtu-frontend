@@ -14,7 +14,9 @@ export interface idata{
     country: string;
     product_type: string
     operator_id: string;
-    operator_type:string
+    operator_type: string;
+    phone: string;
+    email:string
 }
 
 
@@ -22,7 +24,9 @@ export const intData: idata = {
     country: "",
     product_type: "",
     operator_id: "",
-    operator_type:""
+    operator_type:"",
+    phone: "",
+    email:""
 }
 
 
