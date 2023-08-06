@@ -312,7 +312,9 @@ export const IntAirtime: React.FC = () => {
                         <FormControl mt={{md: check?"2rem":""}}>
                               <FormLabel>phone number</FormLabel>
                             <InputGroup>
-                                <InputLeftAddon children={`+${countrycode}`} />
+                                <InputLeftAddon>
+                                    +{countrycode}
+                                </InputLeftAddon>
                                 <Input type='tel' placeholder='phone number' name="phone" value={ formdata.phone} onChange={handleInput} />
                             </InputGroup>
                         </FormControl>
