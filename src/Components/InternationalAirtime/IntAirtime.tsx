@@ -9,11 +9,13 @@ import {
 import { Label } from "./Label"
 import { getCountries,getOptions,getOperator,getOperatorType } from "./service"
 import { iCountry,idata,intData,ioption,ioperator,ioperatorType } from "./iLabel"
-import {useState,useEffect} from "react"
+import { useState, useEffect } from "react"
+import { useRouter,NextRouter } from "next/router"
 
 
 export const IntAirtime: React.FC = () => {
 
+    const router:NextRouter = useRouter()
     const [countries, setCountries] = useState<iCountry[] | []>([])
     const [img,setImg] = useState<string>("")
     const [currencycode,setCurrencyCode] = useState<string>("")
@@ -221,8 +223,12 @@ export const IntAirtime: React.FC = () => {
     
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
-        console.log(formdata)
+        const { operator_id, operator_type, phone, email, product_type } = formdata
+        const Price: number = parseFloat(amount) * rate
+        const price = Price.toFixed(2)
+         console.log(formdata)
         console.log(countrycode)
+        router.push(`internationalairtime/confirm?sid=foreign-airtime&vcode=${operator_type}&oid=${operator_id}&amt=${amount}&ptype=${product_type}&code=${countrycode}&email=${email}&phone=${phone}&price=${price}&curr=${currencycode}`)
 
     }
     
@@ -303,7 +309,7 @@ export const IntAirtime: React.FC = () => {
                                 // check && (<Text> amount between {`${currencycode} `} </Text>)
                                 check && (<Text> amount between {`${minMax.min} - ${minMax.max} ${currencycode}  `} </Text>)
                             }
-                            <Input value={`${currency+ amount}`} onChange={handleAmount} isDisabled={!isflexible} />
+                            <Input value={`${currencycode + amount}`} onChange={handleAmount} isDisabled={!isflexible} />
                             {
                                 !isflexible&&<Text> you are to pay &#8358; {( parseFloat(amount) * rate).toFixed(2)}</Text>
                             }

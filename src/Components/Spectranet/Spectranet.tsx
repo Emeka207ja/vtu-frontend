@@ -57,7 +57,8 @@ export const Spectranet: React.FC = () => {
             setAmt(strPrice)
             console.log(selected)
         }
-    },[data.varCode])
+    }, [data.varCode])
+    console.log(data.varCode)
     return (
         <Box>
             <SpecLogo/>
