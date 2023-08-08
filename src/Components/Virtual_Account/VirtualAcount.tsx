@@ -102,6 +102,13 @@ export const VirtualAccount: React.FC = () => {
                 )
             }
 
+            {
+                formState.success && <Text color={"green"} textAlign={"center"}>generated! please scroll down.</Text>
+            }
+            {
+                errorMessage?.length > 0 && <Text textAlign={"center"} color={"red"}>{ errorMessage}</Text>
+            }
+
             <form onSubmit={handleSubmit}>
                 <FormControl  mt={"2rem"}>
                     <FormLabel>name</FormLabel>
