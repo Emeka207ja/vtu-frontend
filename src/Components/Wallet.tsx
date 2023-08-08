@@ -11,7 +11,7 @@ import {BsBank} from "react-icons/bs"
 export const Wallet = () => {
     const { colorMode, toggleColorMode } = useColorMode()
     const { Profile } = useAppSelector(state => state.fetchProfile)
-    const [selected,setSelected] = useState<string>("")
+    const [selected,setSelected] = useState<string>("card")
     const [card,setCard] = useState<boolean>(false)
     const [tf, setTf] = useState<boolean>(false)
     const [tfZero, setTfZero] = useState<boolean>(false)

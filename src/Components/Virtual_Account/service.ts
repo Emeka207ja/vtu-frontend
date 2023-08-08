@@ -8,6 +8,12 @@ export interface isquad{
     beneficiary_account: string
 }
 
+export interface idetail{
+    name: string;
+    email:string
+}
+import { getProfileApi } from "@/api-folder/profile";
+
 
 export const genVirtualAccount = async (id:string,name:string) => {
     const config = {
@@ -42,4 +48,32 @@ export const squadAcct = async (auth: string, val: isquad) => {
 export const getSquadAuth = async () => {
     const { data } = await axios.get("https://easybuyapi.adaptable.app/api/v1/auth/squad_acct")
     return data;
+}
+
+export const getProfile = async (token:string) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token.slice(1,-1)}`
+        }
+    }
+    const { data } = await axios.get(getProfileApi, config)
+    return data;
+}
+
+export const acountHandler = async (amount: number, detail: idetail,id:string) => {
+    const payload = {
+        account_name: "Allpoint",
+        amount: amount,
+        currency: "NGN",
+        reference:id,
+        customer:detail
+    }
+    const config = {
+        headers: {
+            Authorization: `Bearer sk_live_QQazfziwwW6nF29vmUuM2tN8TDKdbYTvYY63q3YH`
+        }
+    }
+    
+    const { data } = await axios.post("https://api.korapay.com/merchant/api/v1/charges/bank-transfer", payload, config)
+    return data
 }

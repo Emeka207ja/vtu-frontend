@@ -1,89 +1,146 @@
-import { Box,Text,Card,CardBody,CardFooter,CardHeader,Spinner,Heading } from "@chakra-ui/react"
-import { genVirtualAccount } from "./service"
+import {
+    Box, Text,
+    Card, CardBody,
+    CardFooter, CardHeader,
+    Spinner, Heading, Input,
+    FormLabel, FormControl,
+    HStack,Button
+} from "@chakra-ui/react"
+import { genVirtualAccount,getProfile,acountHandler } from "./service"
 import { useState, useEffect } from "react"
 import { genReqId } from "../History/util.service"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
+import { iProfile } from "@/redux/interface/profileInterface"
+import { iKora, koraData } from "./iKorapay"
+import { format } from 'timeago.js';
 
 
 export const VirtualAccount: React.FC = () => {
 
     const [actName,setAccname] = useState<string>("")
     const [accNum, setAccnum] = useState<string>("")
-    const [fetched, setFetched] = useState<boolean>(false)
-    const [loading, setLoading] = useState<boolean>(false)
-    const [bank, setBank] = useState<string>("")
+    const [formState, setFormState] = useState<{ loading: boolean, success: boolean }>({ loading: false, success: false })
+    const [userDetail,setUser] = useState<{name:string,email:string}>({name:"",email:""})
+    const [errorMessage, setErrmsg] = useState<string | null>()
+    const [amount,setAmount] = useState<string>("")
+    const [bankdetails, setBank] = useState<iKora|null>(null)
     
     const dispatch = useAppDispatch()
 
     const {accessToken} = useAppSelector(state=>state.loginAuth)
-    const {Profile,pending,success} = useAppSelector(state=>state.fetchProfile)
+    const { Profile, pending, success } = useAppSelector(state => state.fetchProfile)
 
-    const genAccount = async () => {
-        const id = Date.now() + ""
-       
+
+    const handleAmountInput = (e: React.SyntheticEvent) => {
+        const target = e.target as HTMLInputElement;
+        setAmount(target.value);
+    }
+
+    const handleSubmit = async(e: React.SyntheticEvent) => {
+        e.preventDefault()
+        const id: string = genReqId()
+        const Amount = parseFloat(amount)
         try {
-            // if (Profile.name) {
-            //    setName(Profile.name)
-            // }
-            setLoading(true)
-            setFetched(false)
-            const data = await genVirtualAccount(id, Profile?.name!);
+            setFormState({ loading: true, success: false })
+            setBank(null)
+            setErrmsg("")
+            const data = await acountHandler(Amount, userDetail, id)
             if (data) {
-                setAccname(data.data?.account_name)
-                setAccnum(data.data?.account_number)
-                setBank(data.data?.bank_name)
-                console.log(data.data?.account_name)
-                setLoading(false)
-                setFetched(true)
+                const vals: iKora = data.data?.bank_account;
+                setBank(vals)
             }
+            setFormState({ loading: false, success: true })
             console.log(data)
-            
-        } catch (error: any) {
-            console.log(error)
-            setLoading(false)
-            setFetched(false)
-            
+        } catch (error:any) {
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            setFormState({ loading: false, success: false })
+            setErrmsg(message)
+            setBank(null)
+            console.log(message)
         }
     }
-    useEffect(() => {
-        if (Profile?.id) {
-            genAccount()
-      }
-        
-    }, [Profile?.id])
     
+    const profileHandler = async () => {
+        if (!accessToken) {
+            setErrmsg("auth error,refresh page");
+            return;
+        }
+        try {
+            setFormState({ loading: true, success: false })
+            setErrmsg("")
+            const data:iProfile = await getProfile(accessToken)
+            if (data) {
+                const { email, name } = data
+                if (email && name) {
+                    setUser({name:name,email:email})
+                }
+            }
+            setFormState({ loading: false, success: true})
+            setErrmsg("")
+            console.log(data)
+        } catch (error:any) {
+            console.log(error)
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            setFormState({ loading: false, success: false })
+            setErrmsg(message)
+        }
+    }
+
     useEffect(() => {
-        if (accessToken) {
-           dispatch(getProfileAction(accessToken))
-       }
+      profileHandler()
 
     },[accessToken])
     return (
         <Box mt={"2rem"}>
-           
-            <Card>
-                <CardHeader>
-                    <Heading fontSize={"1.1rem"}>
-                        {
-                            pending||loading ? (<Spinner/>):"Account details"
-                        }
+            <Heading textAlign={"center"} fontSize={"1rem"}>payment account generation</Heading>
+            {
+                formState.loading && (
+                    <Heading textAlign={"center"}>
+                        <Spinner />
                     </Heading>
-                </CardHeader>
-                {
-                    success && fetched && (
+                )
+            }
+
+            <form onSubmit={handleSubmit}>
+                <FormControl  mt={"2rem"}>
+                    <FormLabel>name</FormLabel>
+                    <Input value={userDetail.name} readOnly/>
+                </FormControl>
+
+                <FormControl  mt={"2rem"}>
+                    <FormLabel>email</FormLabel>
+                    <Input value={userDetail.email} readOnly type="email"/>
+                </FormControl>
+
+                <FormControl  mt={"2rem"}>
+                    <FormLabel>amount</FormLabel>
+                    <Input value={amount} onChange={handleAmountInput}  />
+                </FormControl>
+
+                <Box mt={"2rem"}>
+                    <HStack>
+                        <Button colorScheme="red">cancel</Button>
+                        <Button colorScheme="blue" type="submit" isDisabled={formState.loading}>proceed</Button>
+                    </HStack>
+                </Box>
+            </form>
+            {
+                bankdetails && (
+                    <Card  mt={"2rem"}>
+                        <CardHeader>
+                            <Heading  fontSize={"1rem"}>virtual account details</Heading>
+                        </CardHeader>
                         <CardBody>
-                            <Box mb={"0.9rem"}>
-                                 <Text>Make transfer to the account details below and your account will be automatically credited with the amount</Text>
-                                 <Text fontSize={"1rem"} color={"red.300"}>PS :  you will be chareged 50 naira for every amount transfered</Text>
-                          </Box>
-                            <Text>Account name: { actName}</Text>
-                            <Text>Account number: { accNum}</Text>
-                            <Text>Bank: { bank}</Text>
+                            <Text>Account name : { bankdetails.account_name}</Text>
+                            <Text>Account number : { bankdetails.account_number}</Text>
+                            <Text>Bank name : { bankdetails.bank_name}</Text>
+                            <Text>Bank code : { bankdetails.bank_code}</Text>
+                            <Text>expires  : { format(bankdetails.expiry_date_in_utc)}</Text>
                         </CardBody>
-                    )
-                }
-            </Card>
+                    </Card>
+                )
+          }
         </Box>
     )
 }
