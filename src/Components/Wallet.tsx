@@ -6,7 +6,8 @@ import { useAppSelector } from "@/redux/hooks"
 import { VirtualAccount } from "./Virtual_Account/VirtualAcount"
 import { SquadVirtAcct } from "./Virtual_Account/SquadVirtAcct"
 import { useState, useEffect } from "react"
-import {BsBank} from "react-icons/bs"
+import { BsBank } from "react-icons/bs"
+import { Monify } from "./Virtual_Account/Monify/Monify"
 
 export const Wallet = () => {
     const { colorMode, toggleColorMode } = useColorMode()
@@ -112,7 +113,7 @@ export const Wallet = () => {
                     tf&& (<VirtualAccount/>)
                 }
                 {
-                    tfZero && (<SquadVirtAcct/>)
+                    tfZero && (<Monify/>)
                 }
                
             </Box>
