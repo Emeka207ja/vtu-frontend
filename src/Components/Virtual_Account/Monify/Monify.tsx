@@ -9,7 +9,8 @@ import {
     FormLabel,
     Textarea,
     HStack,
-    Center
+    Center,
+    ModalContent,Modal,ModalBody,ModalHeader,ModalFooter,useDisclosure,ModalOverlay,ModalCloseButton
 } from "@chakra-ui/react";
 import { genReqId } from "@/Components/History/util.service";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -19,6 +20,7 @@ import { getProfileAction } from "@/redux/actions/getProfile.action";
 
 
 export const Monify: React.FC = () => {
+    const { isOpen, onOpen, onClose } = useDisclosure()
     const [formState, setFormState] = useState<{ loading: boolean, success: boolean }>({ loading: false, success: false })
     // const [userDetail,setUser] = useState<{name:string,email:string}>({name:"",email:""})
     const [errorMessage, setErrmsg] = useState<string | null>()
@@ -111,6 +113,12 @@ export const Monify: React.FC = () => {
             dispatch(getProfileAction(accessToken))
         }
     }, [accessToken])
+
+    useEffect(() => {
+        if (url) {
+            onOpen()
+        }
+    },[url])
     // console.log(userDetail)
     return (
         <Box>
@@ -122,11 +130,7 @@ export const Monify: React.FC = () => {
                     </Center>
                 )
             }
-            {
-                url && url.length > 0 && (
-                    <Button as={"a"} href={url} mt={"2rem"} colorScheme="blue">click to proceed</Button>
-                )
-            }
+           
             <form onSubmit={ bearerHandler}>
                 <FormControl mt={"2rem"}>
                     <FormLabel>name</FormLabel>
@@ -155,6 +159,32 @@ export const Monify: React.FC = () => {
                     </HStack>
                 </Box>
             </form>
+
+            {
+                url && url.length > 0 && (
+                    <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={onClose}>
+                        <ModalOverlay />
+                        <ModalContent>
+                        <ModalHeader>proceed</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            {
+                                url && url.length > 0 && (
+                                    <Button as={"a"} href={url}  colorScheme="red">click to proceed</Button>
+                                )
+                            }
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <Button colorScheme='blue' mr={3} onClick={onClose}>
+                            Close
+                            </Button>
+                           
+                        </ModalFooter>
+                        </ModalContent>
+                    </Modal>
+                )
+            }
         </Box>
     )
 }
