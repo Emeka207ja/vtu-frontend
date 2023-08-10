@@ -77,3 +77,16 @@ export const acountHandler = async (amount: number, detail: idetail,id:string) =
     const { data } = await axios.post("https://api.korapay.com/merchant/api/v1/charges/bank-transfer", payload, config)
     return data
 }
+
+export const storeRefId = async (reference: string,token:string) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token.slice(1,-1)}`
+        }
+    }
+    const val = {
+        reference
+    }
+    const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/profile/storekoraid", val, config)
+    return data;
+}

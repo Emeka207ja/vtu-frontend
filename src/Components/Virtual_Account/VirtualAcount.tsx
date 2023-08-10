@@ -6,7 +6,7 @@ import {
     FormLabel, FormControl,
     HStack,Button
 } from "@chakra-ui/react"
-import { genVirtualAccount,getProfile,acountHandler } from "./service"
+import { genVirtualAccount,getProfile,acountHandler,storeRefId } from "./service"
 import { useState, useEffect } from "react"
 import { genReqId } from "../History/util.service"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
@@ -39,6 +39,10 @@ export const VirtualAccount: React.FC = () => {
 
     const handleSubmit = async(e: React.SyntheticEvent) => {
         e.preventDefault()
+        if (!accessToken) {
+            setErrmsg("auth error,please refresh");
+            return
+        }
         const id: string = genReqId()
         const Amount = parseFloat(amount)
         try {
@@ -46,12 +50,15 @@ export const VirtualAccount: React.FC = () => {
             setBank(null)
             setErrmsg("")
             const data = await acountHandler(Amount, userDetail, id)
+            const idx = await storeRefId(id, accessToken)
             if (data) {
                 const vals: iKora = data.data?.bank_account;
                 setBank(vals)
             }
+            
+            console.log(idx)
             setFormState({ loading: false, success: true })
-            console.log(data)
+            // console.log(data)
         } catch (error:any) {
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message
             setFormState({ loading: false, success: false })
