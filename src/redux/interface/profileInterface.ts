@@ -12,6 +12,7 @@ export interface iProfile{
     name:string|null
     phone:string|null
     gender: string | null;
+    isMonified: boolean;
     pin: number;
     verifiled: boolean;
     defaultPinChanged: boolean;
@@ -57,6 +58,7 @@ export const InitialProfile:iProfile ={
     image: "",
     ReferralCount: 0,
     TotalReferred: 0,
+    isMonified:false,
     auth: {
         id: 0,
         created_at: "",

@@ -27,7 +27,8 @@ export const Monify: React.FC = () => {
     const [token, setToken] = useState<string | null>()
     const [url, setUrl] = useState<string | null>()
     const [userDetail,setUser] = useState<{name:string,email:string}>({name:"",email:""})
-    const [formdata,setFormdata] = useState<{amount:string,desc:string}>({amount:"",desc:""})
+    const [formdata, setFormdata] = useState<{ amount: string, desc: string }>({ amount: "", desc: "" })
+    // const [token, setToken] = useState<string | null>()
 
     const dispatch = useAppDispatch()
     const { accessToken } = useAppSelector(state => state.loginAuth)

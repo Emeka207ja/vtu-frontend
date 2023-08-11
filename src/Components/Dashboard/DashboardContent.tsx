@@ -1,4 +1,12 @@
-import { Box, Grid, GridItem, HStack, VStack, Flex, Heading, useColorMode } from "@chakra-ui/react"
+import {
+    Box,
+    Grid,
+    GridItem, HStack,
+    VStack, Flex,
+    Heading,
+    useColorMode,
+    Card,CardBody,CardHeader,Text
+} from "@chakra-ui/react"
 import { useState,useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {FaWallet,FaUserFriends} from "react-icons/fa"
@@ -12,28 +20,114 @@ import { useRouter, NextRouter } from "next/router"
 import { useFetchProfile } from "@/hooks/useFetchProfile";
 import { getProfileAction } from "@/redux/actions/getProfile.action";
 import { Spin } from "../Spinner";
+import { getBearToken } from "../Virtual_Account/Monify/service";
+import { genReqId } from "../History/util.service";
+import { getProfile } from "../Virtual_Account/service";
+import { iProfile } from "@/redux/interface/profileInterface";
+import { idetail, getReservedAccount,storeReservedAccount,userReservedAccount } from "./service";
+import { iMonnyfyAccount,iStoreMonnify } from "./iaccount";
 
 
 
 export const DashboardContent = () => {
+    const [formState, setFormState] = useState<{ loading: boolean, success: boolean }>({ loading: false, success: false })
+    // const [userDetail,setUser] = useState<{name:string,email:string}>({name:"",email:""})
+    const [errorMessage, setErrmsg] = useState<string | null>()
+     const [userDetail,setUser] = useState<{name:string,email:string}>({name:"",email:""})
     const router: NextRouter = useRouter()
+
+    const [bankVal,setBankVal] = useState<{bankCode:string,bankName:string,accountNumber:string,accountName:string}|null>(null)
+
+
     const dispatch = useAppDispatch()
-      const {accessToken } = useAppSelector(state => state.loginAuth)
-      const {Profile:profile,pending } = useAppSelector(state => state.fetchProfile)
+    const {accessToken } = useAppSelector(state => state.loginAuth)
+    const {Profile:profile,pending } = useAppSelector(state => state.fetchProfile)
     const { colorMode, toggleColorMode } = useColorMode()
-    
+
+
+    const accountHandler = async () => {
+        if (!accessToken) {
+            setErrmsg("auth error,please refresh");
+            return;
+        }
+
+        if(profile.isMonified){
+            return
+        }
+        
+        try {
+            const user: iProfile = await getProfile(accessToken)
+                if(user.isMonified){
+                return
+            }
+            const val = await getBearToken()
+            const token:string = val.responseBody?.accessToken
+            const { name, email,username } = user
+            if (name && email && username) {
+                const refex:string = genReqId()
+                const detail: idetail = {
+                    accountReference: refex,
+                    accountName: name,
+                    currencyCode: "NGN",
+                    contractCode: "793559574257",
+                    customerEmail: email,
+                    customerName:  name,
+                    preferredBanks:["50515"],
+                    getAllAvailableBanks: false
+                }
+
+                const acct = await getReservedAccount(token,detail)
+                const bankDetails:iMonnyfyAccount = acct.responseBody?.accounts[0]
+                
+                const {accountName,accountNumber,bankCode,bankName} = bankDetails
+                const storePayload: iStoreMonnify = {
+                    accountName,
+                    accountNumber,
+                    bankCode,
+                    bankName,
+                    accountReference:refex
+                }
+                const res = await storeReservedAccount(accessToken, storePayload)
+            }
+            
+        } catch (error:any) {
+            console.log(error)
+        }
+    }
+
+    const getAccount = async () => {
+        if (!accessToken) {
+            setErrmsg("auth error,please refresh");
+            return;
+        }
+        try {
+            const data = await userReservedAccount(accessToken);
+            setBankVal({
+                bankCode: data?.bankCode,
+                bankName: data?.bankName,
+                accountName: data?.accountName,
+                accountNumber:data?.accountNumber
+            })
+          
+        } catch (error:any) {
+            console.log(error)
+        }
+    }
+      console.log("acct",bankVal)
     useEffect(() => {
+        accountHandler()
         if(!accessToken){
             router.push("/login")
         }
         if (accessToken) {
             dispatch(getProfileAction(accessToken))
         }
+        getAccount()
     },[accessToken])
     return (
         <Box>
             <Heading fontSize={"1.4rem"} mb={"1rem"} textAlign={"center"}>{pending?(<Spin/>): profile? profile.username:"Dashboard"}</Heading>
-            <Grid>
+            <Grid gridTemplateColumns={{base:"repeat(1,1fr)"}} gap={"2rem"}>
                 <GridItem>
                     <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"} padding={"1rem"} borderLeft={"3px solid red"}>
                          <HStack spacing={100} >
@@ -54,6 +148,23 @@ export const DashboardContent = () => {
                             </Box>
                            
                         </HStack>
+                   </Box>
+                </GridItem>
+                <GridItem>
+                    <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"} padding={"1rem"} borderLeft={"3px solid red"}>
+                        {
+                            bankVal && (
+                                <Card>
+                                    <CardHeader>wallet</CardHeader>
+                                    <CardBody>
+                                        <Text>Bank Code : {bankVal.bankCode }</Text>
+                                        <Text>Bank Name : {bankVal.bankName }</Text>
+                                        <Text>Account Name : {`Allpoint-${bankVal.accountName }`}</Text>
+                                        <Text>Account Number : {bankVal.accountNumber }</Text>
+                                    </CardBody>
+                                </Card>
+                            )
+                        }
                    </Box>
                 </GridItem>
             </Grid>
