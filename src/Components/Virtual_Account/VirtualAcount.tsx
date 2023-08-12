@@ -24,8 +24,10 @@ export const VirtualAccount: React.FC = () => {
     const [userDetail,setUser] = useState<{name:string,email:string}>({name:"",email:""})
     const [errorMessage, setErrmsg] = useState<string | null>()
     const [amount,setAmount] = useState<string>("")
+   
     const [bankdetails, setBank] = useState<iKora | null>(null)
-     const [isProfile,setIsProfile] = useState<boolean>(false)
+    const [isProfile, setIsProfile] = useState<boolean>(false)
+    
     
     const dispatch = useAppDispatch()
 
@@ -44,9 +46,11 @@ export const VirtualAccount: React.FC = () => {
             setErrmsg("auth error,please refresh");
             return
         }
-        const id: string = genReqId()
-        const Amount = parseFloat(amount)
+        
+       
         try {
+            const id: string = genReqId()
+            const Amount = parseFloat(amount)
             setFormState({ loading: true, success: false })
             setBank(null)
             setErrmsg("")
@@ -107,14 +111,8 @@ export const VirtualAccount: React.FC = () => {
             console.log("store",user.id)
         }
         
-    },[])
-
-    // useEffect(() => {
-    //     if (accessToken) {
-    //       profileHandler()
-    //  }
-
-    // },[accessToken])
+    }, [])
+    
     return (
         <Box mt={"2rem"}>
             <Heading textAlign={"center"} fontSize={"1rem"}>payment account generation</Heading>

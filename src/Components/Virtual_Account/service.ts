@@ -79,9 +79,10 @@ export const acountHandler = async (amount: number, detail: idetail,id:string) =
 }
 
 export const storeRefId = async (reference: string,token:string) => {
+    const Token = token.replace(/"/g, '')
     const config = {
         headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${Token}`
         }
     }
     const val = {
