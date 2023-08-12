@@ -91,15 +91,30 @@ export const Payment = () => {
         }
      }
 
-     useEffect(()=>{
+    //  useEffect(()=>{
     
-        if(response){
+    //     if(response){
       
-            fetchProfile()
+    //         fetchProfile()
+    //     }
+        
+    //     fetchProfile()
+    //  },[response])
+
+
+      useEffect(() => {
+       const profilex = typeof window !== 'undefined' ? localStorage.getItem('profile') : null
+         if (profilex) {
+             const user = JSON.parse(profilex)
+            if(user){
+                const balance = user.balance;
+                setBalance(balance)
+            }
+            //  setUser({name:user.name,email:user.email})
+            console.log("store",user.id)
         }
         
-        fetchProfile()
-     },[response])
+    },[])
 
    
     return (

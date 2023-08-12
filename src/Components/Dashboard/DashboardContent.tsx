@@ -37,7 +37,8 @@ export const DashboardContent = () => {
     const [errorMessage, setErrmsg] = useState<string | null>()
      const [userDetail,setUser] = useState<{name:string,email:string}>({name:"",email:""})
     const router: NextRouter = useRouter()
-    const [userProfile,setUserProfile] = useState<iProfile|null>(null)
+    const [userProfile, setUserProfile] = useState<iProfile | null>(null)
+    const [isProfile,setIsProfile] = useState<boolean>(false)
 
     const [bankVal,setBankVal] = useState<{bankCode:string,bankName:string,accountNumber:string,accountName:string}|null>(null)
 
@@ -48,6 +49,9 @@ export const DashboardContent = () => {
     const { colorMode, toggleColorMode } = useColorMode()
 
     const profileHandler = async () => {
+        if (isProfile) {
+            return
+        }
         if (!accessToken) {
             return
         }
@@ -59,6 +63,7 @@ export const DashboardContent = () => {
             const user:iProfile = await getProfile(mainToken)
             
             setUserProfile(user)
+            typeof window !== 'undefined' ? localStorage.setItem('profile',JSON.stringify(user)) : null
             await accountHandler(user)
             setFormState({ loading: false, success: true })
         } catch (error:any) {
@@ -174,6 +179,17 @@ export const DashboardContent = () => {
 
     }, [Usertoken,accessToken])
     
+     useEffect(() => {
+         const profilex: string|null = typeof window !== 'undefined' ? localStorage.getItem('profile') : null
+         if (profilex) {
+             const user: iProfile = JSON.parse(profilex)
+             setIsProfile(true)
+             setUserProfile(user)
+             accountHandler(user)
+            console.log("store",user.id)
+       }
+        
+    },[])
     
     return (
         <Box>

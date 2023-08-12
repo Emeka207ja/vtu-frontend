@@ -108,14 +108,20 @@ export const Monify: React.FC = () => {
         }
     }
 
+
     useEffect(() => {
-       
-       
-        if (accessToken) {
-            // dispatch(getProfileAction(accessToken))
-             profileHandler()
+       const profilex: string|null = typeof window !== 'undefined' ? localStorage.getItem('profile') : null
+         if (profilex) {
+             const user: iProfile = JSON.parse(profilex)
+             const { name, email } = user
+             if (name && email) {
+                  setUser({name:name,email:email})
+             }
+            
+            console.log("store",user.id)
         }
-    }, [accessToken])
+        
+    },[])
 
     useEffect(() => {
         if (url) {

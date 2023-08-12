@@ -24,7 +24,8 @@ export const VirtualAccount: React.FC = () => {
     const [userDetail,setUser] = useState<{name:string,email:string}>({name:"",email:""})
     const [errorMessage, setErrmsg] = useState<string | null>()
     const [amount,setAmount] = useState<string>("")
-    const [bankdetails, setBank] = useState<iKora|null>(null)
+    const [bankdetails, setBank] = useState<iKora | null>(null)
+     const [isProfile,setIsProfile] = useState<boolean>(false)
     
     const dispatch = useAppDispatch()
 
@@ -69,6 +70,9 @@ export const VirtualAccount: React.FC = () => {
     }
     
     const profileHandler = async () => {
+        if (isProfile) {
+            return
+        }
         if (!accessToken) {
             setErrmsg("auth error,refresh page");
             return;
@@ -95,11 +99,22 @@ export const VirtualAccount: React.FC = () => {
     }
 
     useEffect(() => {
-        if (accessToken) {
-          profileHandler()
-     }
+       const profilex: string|null = typeof window !== 'undefined' ? localStorage.getItem('profile') : null
+         if (profilex) {
+             const user: iProfile = JSON.parse(profilex)
+             setIsProfile(true)
+             setUser({name:user.name!,email:user.email!})
+            console.log("store",user.id)
+        }
+        
+    },[])
 
-    },[accessToken])
+    // useEffect(() => {
+    //     if (accessToken) {
+    //       profileHandler()
+    //  }
+
+    // },[accessToken])
     return (
         <Box mt={"2rem"}>
             <Heading textAlign={"center"} fontSize={"1rem"}>payment account generation</Heading>

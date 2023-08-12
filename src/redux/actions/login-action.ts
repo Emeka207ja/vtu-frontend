@@ -23,6 +23,11 @@ export const loginAction = createAsyncThunk(
 export const signout = createAsyncThunk(
     "logout",
     async (_, thunkApi) => {
-        localStorage.removeItem("token");
+       try {
+         localStorage.removeItem("token");
+        localStorage.removeItem("profile");
+       } catch (error:any) {
+        console.log(error)
+       }
     }
 )

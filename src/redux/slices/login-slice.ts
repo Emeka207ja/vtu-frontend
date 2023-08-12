@@ -34,7 +34,8 @@ export const loginSlice = createSlice({
         },
         logout: (state) => {
             if (typeof window !== undefined) {
-               localStorage.removeItem("token")
+                localStorage.removeItem("token");
+                localStorage.removeItem("profile");
            }
             state.accessToken = null
         }
