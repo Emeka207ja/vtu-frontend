@@ -155,12 +155,11 @@ export const DashboardContent = () => {
                         {
                             bankVal && (
                                 <Card>
-                                    <CardHeader>wallet</CardHeader>
                                     <CardBody>
-                                        <Text>Bank Code : {bankVal.bankCode }</Text>
-                                        <Text>Bank Name : {bankVal.bankName }</Text>
-                                        <Text>Account Name : {`Allpoint-${bankVal.accountName }`}</Text>
-                                        <Text>Account Number : {bankVal.accountNumber }</Text>
+                                        {/* <Text>Bank Code : {bankVal.bankCode }</Text> */}
+                                        <Text fontSize={"0.7rem"}>Bank Name : {bankVal.bankName ==="Moniepoint Microfinance Bank"?"Moniepoint MFB":bankVal.bankName }</Text>
+                                        <Text fontSize={"0.7rem"}>Account Name : {`Allpoint-${bankVal.accountName }`}</Text>
+                                        <Text fontSize={"0.7rem"}>Account Number : {bankVal.accountNumber }</Text>
                                     </CardBody>
                                 </Card>
                             )
