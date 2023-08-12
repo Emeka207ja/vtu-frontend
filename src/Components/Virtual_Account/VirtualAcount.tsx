@@ -65,7 +65,7 @@ export const VirtualAccount: React.FC = () => {
             setFormState({ loading: false, success: false })
             setErrmsg(message)
             setBank(null)
-            console.log(message)
+            console.log(error)
         }
     }
     
@@ -100,10 +100,10 @@ export const VirtualAccount: React.FC = () => {
 
     useEffect(() => {
        const profilex: string|null = typeof window !== 'undefined' ? localStorage.getItem('profile') : null
-         if (profilex) {
-             const user: iProfile = JSON.parse(profilex)
-             setIsProfile(true)
-             setUser({name:user.name!,email:user.email!})
+        if (profilex) {
+            const user: iProfile = JSON.parse(profilex)
+            setIsProfile(true)
+            setUser({name:user.name!,email:user.email!})
             console.log("store",user.id)
         }
         
