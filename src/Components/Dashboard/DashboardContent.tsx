@@ -5,7 +5,7 @@ import {
     VStack, Flex,
     Heading,
     useColorMode,
-    Card,CardBody,CardHeader,Text
+    Card,CardBody,CardHeader,Text,Spinner,Center
 } from "@chakra-ui/react"
 import { useState,useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -22,19 +22,22 @@ import { getProfileAction } from "@/redux/actions/getProfile.action";
 import { Spin } from "../Spinner";
 import { getBearToken } from "../Virtual_Account/Monify/service";
 import { genReqId } from "../History/util.service";
-import { getProfile } from "../Virtual_Account/service";
+// import { getProfile } from "../Virtual_Account/service";
 import { iProfile } from "@/redux/interface/profileInterface";
-import { idetail, getReservedAccount,storeReservedAccount,userReservedAccount } from "./service";
-import { iMonnyfyAccount,iStoreMonnify } from "./iaccount";
+import { idetail, getReservedAccount,storeReservedAccount,userReservedAccount,getProfile } from "./service";
+import { iMonnyfyAccount, iStoreMonnify } from "./iaccount";
+import useQuerryString from "@/hooks/useQueryString";
 
 
 
 export const DashboardContent = () => {
+    const [Usertoken] = useQuerryString("token")
     const [formState, setFormState] = useState<{ loading: boolean, success: boolean }>({ loading: false, success: false })
     // const [userDetail,setUser] = useState<{name:string,email:string}>({name:"",email:""})
     const [errorMessage, setErrmsg] = useState<string | null>()
      const [userDetail,setUser] = useState<{name:string,email:string}>({name:"",email:""})
     const router: NextRouter = useRouter()
+    const [userProfile,setUserProfile] = useState<iProfile|null>(null)
 
     const [bankVal,setBankVal] = useState<{bankCode:string,bankName:string,accountNumber:string,accountName:string}|null>(null)
 
@@ -44,25 +47,53 @@ export const DashboardContent = () => {
     const {Profile:profile,pending } = useAppSelector(state => state.fetchProfile)
     const { colorMode, toggleColorMode } = useColorMode()
 
-
-    const accountHandler = async () => {
+    const profileHandler = async () => {
         if (!accessToken) {
-            setErrmsg("auth error,please refresh");
-            return;
+            return
         }
+        const mainToken = Usertoken ? Usertoken : accessToken
+       
+        try {
+            setFormState({ loading: true, success: false })
+            setUserProfile(null)
+            const user:iProfile = await getProfile(mainToken)
+            
+            setUserProfile(user)
+            await accountHandler(user)
+            setFormState({ loading: false, success: true })
+        } catch (error:any) {
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            setErrmsg(message)
+            setFormState({ loading: false, success: false })
+            console.log(message)
+        }
+    }
 
-        if(profile.isMonified){
+
+
+
+
+    const accountHandler = async (prof:iProfile) => {
+          if (!accessToken) {
             return
         }
         
+        if (userProfile && userProfile.isMonified) {
+            console.log("monified")
+            return
+        }
         try {
-            const user: iProfile = await getProfile(accessToken)
-                if(user.isMonified){
+            const mainToken = Usertoken? Usertoken:accessToken
+            setFormState({loading:true,success:false})
+            // const user: iProfile = await getProfile(mainToken)
+            if (prof.isMonified) {
+                setFormState({ loading: false, success: true })
+                await getAccount()
                 return
             }
             const val = await getBearToken()
             const token:string = val.responseBody?.accessToken
-            const { name, email,username } = user
+            const { name, email,username } = prof
             if (name && email && username) {
                 const refex:string = genReqId()
                 const detail: idetail = {
@@ -87,47 +118,84 @@ export const DashboardContent = () => {
                     bankName,
                     accountReference:refex
                 }
-                const res = await storeReservedAccount(accessToken, storePayload)
+                const res = await storeReservedAccount(mainToken, storePayload)
+                const data = await userReservedAccount(mainToken);
+                setBankVal({
+                    bankCode: data?.bankCode,
+                    bankName: data?.bankName,
+                    accountName: data?.accountName,
+                    accountNumber:data?.accountNumber
+                })
             }
-            
+              setFormState({loading:false,success:true})
         } catch (error:any) {
             console.log(error)
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            setErrmsg(message)
+            setFormState({loading:false,success:false})
         }
     }
 
     const getAccount = async () => {
-        if (!accessToken) {
-            setErrmsg("auth error,please refresh");
-            return;
+         if (!accessToken) {
+            return
         }
+        const mainToken = Usertoken? Usertoken:accessToken
+       
         try {
-            const data = await userReservedAccount(accessToken);
+            setFormState({loading:true,success:false})
+            const data = await userReservedAccount(mainToken);
             setBankVal({
                 bankCode: data?.bankCode,
                 bankName: data?.bankName,
                 accountName: data?.accountName,
                 accountNumber:data?.accountNumber
             })
-          
+          setFormState({loading:false,success:true})
         } catch (error:any) {
             console.log(error)
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            setErrmsg(message)
+            setFormState({ loading: false, success: false })
+            console.log(message)
         }
     }
-      console.log("acct",bankVal)
+     
     useEffect(() => {
-        accountHandler()
+       
         if(!accessToken){
             router.push("/login")
         }
-        if (accessToken) {
-            dispatch(getProfileAction(accessToken))
+        
+        if (Usertoken||accessToken) {
+            profileHandler()
+            // accountHandler()
         }
-        getAccount()
-    },[accessToken])
+
+    }, [Usertoken,accessToken])
+    
+    
     return (
         <Box>
-            <Heading fontSize={"1.4rem"} mb={"1rem"} textAlign={"center"}>{pending?(<Spin/>): profile? profile.username:"Dashboard"}</Heading>
-            <Grid gridTemplateColumns={{base:"repeat(1,1fr)"}} gap={"2rem"}>
+            {
+                formState.loading && (
+                    <Center>
+                        <Spinner/>
+                    </Center>
+                )
+            }
+            {
+                userProfile ? (
+                    <Center mb={"0.9rem"}>
+                        <Text>welcome {userProfile.name }</Text>
+                    </Center>
+                ) : (
+                        <Center>
+                            <Text>dashboard</Text>
+                        </Center>
+                )
+            }
+            <Grid gridTemplateColumns={{base:"repeat(1,1fr)"}} gap={"1rem"}>
                 <GridItem>
                     <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"} padding={"1rem"} borderLeft={"3px solid red"}>
                          <HStack spacing={100} >
@@ -135,7 +203,7 @@ export const DashboardContent = () => {
                                 <Box paddingLeft={"0.5rem"} fontSize={"0.9rem"}>Balance</Box>
                                 <HStack>
                                     <Box paddingLeft={"0.5rem"} cursor={"pointer"}>&#8358;</Box>
-                                    <Box cursor={"pointer"}>{ profile?profile.balance: 0}</Box>
+                                    <Box cursor={"pointer"}>{ userProfile?userProfile.balance: 0}</Box>
                                 </HStack>
                             </Box>
 
@@ -143,7 +211,7 @@ export const DashboardContent = () => {
                                 <Box paddingLeft={"0.5rem"} fontSize={"0.9rem"}>Point</Box>
                                 <HStack>
                                     <Box paddingLeft={"0.5rem"} cursor={"pointer"}>pt</Box>
-                                    <Box cursor={"pointer"}>{ profile?profile.point: 0}</Box>
+                                    <Box cursor={"pointer"}>{ userProfile?userProfile.point: 0}</Box>
                                 </HStack>
                             </Box>
                            
@@ -151,9 +219,9 @@ export const DashboardContent = () => {
                    </Box>
                 </GridItem>
                 <GridItem>
-                    <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"} padding={"1rem"} borderLeft={"3px solid red"}>
+                    <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"}  borderLeft={"3px solid red"}>
                         {
-                            bankVal && (
+                            bankVal? (
                                 <Card>
                                     <CardBody>
                                         {/* <Text>Bank Code : {bankVal.bankCode }</Text> */}
@@ -162,6 +230,10 @@ export const DashboardContent = () => {
                                         <Text fontSize={"0.7rem"}>Account Number : {bankVal.accountNumber }</Text>
                                     </CardBody>
                                 </Card>
+                            ) :  formState.loading || !bankVal && (
+                                    <Center>
+                                        <Spinner/>
+                                    </Center>
                             )
                         }
                    </Box>

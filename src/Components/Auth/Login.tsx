@@ -44,7 +44,7 @@ export const Login: React.FC = () => {
 
     useEffect(() => {
         if (accessToken) {
-            push(`/welcome-page?token=${accessToken}`)
+            push(`/dashboard?token=${accessToken}`)
         }
     },[accessToken])
 

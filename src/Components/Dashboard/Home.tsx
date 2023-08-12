@@ -71,7 +71,7 @@ export const Home: React.FC = () => {
                         <Box>
                             <HStack>
                                 <Box fontSize={"0.8rem"}> History</Box>
-                                <Box onClick={()=>router.push("/history")}> 
+                                <Box onClick={()=>router.push(`/dashboard?token=${token}`)}> 
                                   <FaHistory/>
                                 </Box>
                             </HStack>

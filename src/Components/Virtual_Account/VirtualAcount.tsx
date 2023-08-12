@@ -95,7 +95,9 @@ export const VirtualAccount: React.FC = () => {
     }
 
     useEffect(() => {
-      profileHandler()
+        if (accessToken) {
+          profileHandler()
+     }
 
     },[accessToken])
     return (

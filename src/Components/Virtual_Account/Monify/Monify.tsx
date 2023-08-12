@@ -46,6 +46,7 @@ export const Monify: React.FC = () => {
             setErrmsg("auth error,refresh page");
             return;
         }
+        // console.log(accessToken)
         try {
             setFormState({ loading: true, success: false })
             setErrmsg("")
@@ -109,9 +110,10 @@ export const Monify: React.FC = () => {
 
     useEffect(() => {
        
-        profileHandler()
+       
         if (accessToken) {
-            dispatch(getProfileAction(accessToken))
+            // dispatch(getProfileAction(accessToken))
+             profileHandler()
         }
     }, [accessToken])
 
