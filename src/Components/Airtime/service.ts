@@ -16,9 +16,9 @@ export const stroreAirtime = async (token: string, detail: iairtimePurchase) => 
     const Token = token.replace(/"/g, '')
     const config = {
         headers: {
-            Authorization: `Bearer ${Token}`
+            Authorization: `Bearer ${token.slice(1,-1)}`
         }
     }
-    const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/airtime", detail, config);
+    const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/airtime",detail,config);
     return data;
 }

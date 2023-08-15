@@ -22,6 +22,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { payApi } from "@/api-folder/vtpass"
+import { iProfile } from "@/redux/interface/profileInterface"
 
 export const ConfirmAirtime = () => {
     const [apikey,setApikey] = useState<string>("")
@@ -29,10 +30,11 @@ export const ConfirmAirtime = () => {
     const [network] = useQuerryString("network")
     const [Amount] = useQuerryString("amount")
     const [phone] = useQuerryString("phone")
+    const [profileUser,setProfile] = useState<iProfile|null>(null)
 
     const { accessToken } = useAppSelector(state => state.loginAuth)
-    const {Profile} = useAppSelector(state=>state.fetchProfile)
-    const dispatch = useAppDispatch()
+    // const {Profile} = useAppSelector(state=>state.fetchProfile)
+    // const dispatch = useAppDispatch()
    
      const [value, setValue] = useState("")
      const [loading, setLoading] = useState(false)
@@ -45,17 +47,20 @@ export const ConfirmAirtime = () => {
     const defaultPin = 1111
 
     const handleComplete = async (value: string) => {
+        if (!accessToken) {
+            toast.error("auth error")
+            return
+        }
          const amount = parseFloat(Amount)
         const pin = parseFloat(value)
        
-        if (pin!== Profile?.pin || Profile?.balance<amount) {
+        if (pin!== profileUser?.pin || profileUser?.balance<amount) {
             toast.error("invalid credentials or amount")
             return 0
         }
+       
         const request_id = genReqId()
         const serviceID = network
-       
-        console.log(request_id, serviceID, amount, phone)
         const payload = {
             request_id,
             serviceID,
@@ -70,30 +75,23 @@ export const ConfirmAirtime = () => {
             }
         }
         try {
+          
             setLoading(true)
             setSuccess(false)
-            
-            const { data } = await axios.post(payApi,payload, config)
-            console.log(data)
-            if (data.code === "016") {
-                toast.error("transaction failed");
-                setLoading(false)
-                setSuccess(false)
-                return
+            const val:iairtimePurchase ={
+                "network":serviceID,
+                "phone":phone,
+                "Amount":20,
+                "order_id":request_id
             }
-            if (data.code === "000") {
-                const { product_name, total_amount,phone } = data.content?.transactions
-                const { requestId } = data.content;
-                // const id:number = parseFloat(requestId)
-                const detail: iairtimePurchase = {
-                    phone: phone,
-                    network: product_name,
-                    Amount: total_amount,
-                    order_id:request_id
-                }
-                const res = await stroreAirtime(accessToken!, detail)
+         const res = await stroreAirtime(accessToken, val)
                 console.log(res)
-            }
+            
+            if (res) {
+                const { data } = await axios.post(payApi, payload, config)
+                console.log(data)
+           }
+          
            
             toast.success("success")
             setLoading(false)
@@ -104,12 +102,15 @@ export const ConfirmAirtime = () => {
             toast.error(message)
             setLoading(false)
             setSuccess(false)
+            console.log(error)
         }
        
     }
 
     const getheaderParams = async () => {
         try {
+            setLoading(true)
+            setSuccess(false)
             const data = await getHeaders()
             
             if (data) {
@@ -117,19 +118,36 @@ export const ConfirmAirtime = () => {
                 setApikey(api_key)
                 setSecret(secret_key)
             }
-        } catch (error) {
+            setLoading(false)
+            setSuccess(true)
+        } catch (error:any) {
             console.log(error)
+            const message = (error.response && error.response.data && error.response.data.message)||error.message
+            console.log(message)
+            toast.error(message)
+            setLoading(false)
+            setSuccess(false)
         }
     }
   
 
     useEffect(() => {
         getheaderParams();
-        if (accessToken) {
-            dispatch(getProfileAction(accessToken))
-       }
+    //     if (accessToken) {
+    //         dispatch(getProfileAction(accessToken))
+    //    }
         
-    },[accessToken])
+    }, [])
+    
+    useEffect(() => {
+       const profilex: string|null = typeof window !== 'undefined' ? localStorage.getItem('profile') : null
+        if (profilex) {
+            const user: iProfile = JSON.parse(profilex)
+            setProfile(user)
+            console.log("store",user.id)
+        }
+        
+    }, [])
     
     return (
         <Box>
