@@ -5,7 +5,7 @@ import {
     VStack, Flex,
     Heading,
     useColorMode,
-    Card,CardBody,CardHeader,Text,Spinner,Center
+    Card,CardBody,CardHeader,Text,Spinner,Center, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, useDisclosure
 } from "@chakra-ui/react"
 import { useState,useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -30,6 +30,7 @@ import useQuerryString from "@/hooks/useQueryString";
 
 
 
+
 export const DashboardContent = () => {
     const [Usertoken] = useQuerryString("token")
     const [formState, setFormState] = useState<{ loading: boolean, success: boolean }>({ loading: false, success: false })
@@ -41,6 +42,8 @@ export const DashboardContent = () => {
     const [isProfile,setIsProfile] = useState<boolean>(false)
 
     const [bankVal,setBankVal] = useState<{bankCode:string,bankName:string,accountNumber:string,accountName:string}|null>(null)
+
+     const { isOpen, onOpen, onClose } = useDisclosure()
 
 
     const dispatch = useAppDispatch()
@@ -189,7 +192,14 @@ export const DashboardContent = () => {
             console.log("store",user.id)
        }
         
-    },[])
+     }, [])
+    
+    useEffect(() => {
+        if (userProfile && !userProfile.defaultPinChanged ) {
+            onOpen()
+        }
+      
+    },[userProfile?.defaultPinChanged])
     
     return (
         <Box>
@@ -439,6 +449,23 @@ export const DashboardContent = () => {
                 </GridItem>
                
             </Grid>
+
+
+
+            { userProfile?.defaultPinChanged === false && (<Modal isOpen={isOpen} onClose={userProfile?.defaultPinChanged? onClose: ()=>{}} closeOnOverlayClick={false}>
+                <ModalOverlay />
+                <ModalContent>
+                <ModalHeader color={"red"} fontSize={"1em"}>action needed!!</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                        <Text fontSize={"0.8rem"}>please change your default password, to be able to transact with us</Text>
+                        <Button colorScheme="blue" mt={"0.6rem"} as={"a"} href="/update_pin"> update</Button>
+                </ModalBody>
+
+               
+                </ModalContent>
+            </Modal>)
+            }
         </Box>
     )
 }

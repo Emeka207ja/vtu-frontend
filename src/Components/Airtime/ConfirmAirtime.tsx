@@ -15,19 +15,20 @@ import {
 import useQuerryString from "@/hooks/useQueryString"
 import { genReqId } from "../History/util.service"
 import { useEffect, useState } from "react"
-import { getHeaders } from "./service"
+import { getHeaders,stroreAirtime,iairtimePurchase } from "./service"
 import axios from "axios"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
+import { payApi } from "@/api-folder/vtpass"
 
 export const ConfirmAirtime = () => {
     const [apikey,setApikey] = useState<string>("")
     const [secretKey,setSecret] = useState<string>("")
     const [network] = useQuerryString("network")
     const [Amount] = useQuerryString("amount")
-    const [Phone] = useQuerryString("phone")
+    const [phone] = useQuerryString("phone")
 
     const { accessToken } = useAppSelector(state => state.loginAuth)
     const {Profile} = useAppSelector(state=>state.fetchProfile)
@@ -44,19 +45,24 @@ export const ConfirmAirtime = () => {
     const defaultPin = 1111
 
     const handleComplete = async (value: string) => {
+         const amount = parseFloat(Amount)
         const pin = parseFloat(value)
-        if (pin === defaultPin ) {
-            toast.error("can not use default pin please rest")
-            return 0
-        }
-        if (pin!== Profile?.pin) {
-            toast.error("invalid credentials")
+       
+        if (pin!== Profile?.pin || Profile?.balance<amount) {
+            toast.error("invalid credentials or amount")
             return 0
         }
         const request_id = genReqId()
         const serviceID = network
-        const amount = parseFloat(Amount)
-        const phone = parseFloat(Phone)
+       
+        console.log(request_id, serviceID, amount, phone)
+        const payload = {
+            request_id,
+            serviceID,
+            amount,
+            phone
+        }
+        // const phone = parseFloat(Phone)
         const config = {
             headers: {
                " api-key": apikey,
@@ -66,8 +72,29 @@ export const ConfirmAirtime = () => {
         try {
             setLoading(true)
             setSuccess(false)
-            const { data } = await axios.post("https://sandbox.vtpass.com/api/pay", {request_id,serviceID, amount, phone }, config)
+            
+            const { data } = await axios.post(payApi,payload, config)
             console.log(data)
+            if (data.code === "016") {
+                toast.error("transaction failed");
+                setLoading(false)
+                setSuccess(false)
+                return
+            }
+            if (data.code === "000") {
+                const { product_name, total_amount,phone } = data.content?.transactions
+                const { requestId } = data.content;
+                // const id:number = parseFloat(requestId)
+                const detail: iairtimePurchase = {
+                    phone: phone,
+                    network: product_name,
+                    Amount: total_amount,
+                    order_id:request_id
+                }
+                const res = await stroreAirtime(accessToken!, detail)
+                console.log(res)
+            }
+           
             toast.success("success")
             setLoading(false)
             setSuccess(true)
@@ -120,7 +147,7 @@ export const ConfirmAirtime = () => {
                 </CardHeader>
                 <CardBody>
                     <Text>Network : {network }</Text>
-                    <Text>Phone number : {Phone}</Text>
+                    <Text>Phone number : {phone}</Text>
                     <Text>Amount : {Amount}</Text>
                     
                 </CardBody>
