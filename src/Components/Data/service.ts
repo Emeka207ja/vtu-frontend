@@ -12,6 +12,12 @@ export interface idetails{
     phone:string
 }
 
+export interface  iDataStore{
+    serviceID: string;
+    phone: string;
+    amount: number;
+    request_id: string;
+}
 export const getDataVars = async(vars:string) => {
     const { data } = await axios.get(` https://sandbox.vtpass.com/api/service-variations?serviceID=${vars
 }`)
@@ -23,5 +29,16 @@ export const dataSubHandler = async (auth: iAuth, details: idetails) => {
     console.log(details)
 
     const { data } = await axios.post(payApi, details, config);
+    return data;
+}
+
+export const storeDataSub = async (token: string, detail: iDataStore) => {
+    const Token = token.replace(/"/g, '')
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token.slice(1,-1)}`
+        }
+    }
+    const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/airtime/vtdata",detail,config);
     return data;
 }

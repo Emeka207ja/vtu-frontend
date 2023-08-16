@@ -28,7 +28,7 @@ import { BsCheck2Circle } from "react-icons/bs"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { iAuth } from "../Wassce/service"
 import { genReqId } from "../History/util.service"
-import { idetails, dataSubHandler } from "./service"
+import { idetails, dataSubHandler,storeDataSub,iDataStore } from "./service"
 import { getHeaders } from "../Airtime/service"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { useRouter, NextRouter } from "next/router";
@@ -95,6 +95,16 @@ export const ConfirmData: React.FC = () => {
         try {
             setFormState({loading:true,success:false})
             const data = await dataSubHandler(auth, details)
+            if (data && data.code === "000") {
+                const detail: iDataStore = {
+                    request_id,
+                    phone,
+                    amount,
+                    serviceID
+                }
+                const res = await storeDataSub(accessToken, detail)
+                console.log(res)
+            }
             setFormState({loading:false,success:true})
             console.log(data)
         } catch (error:any) {
@@ -112,7 +122,6 @@ export const ConfirmData: React.FC = () => {
             dispatch(getProfileAction(accessToken))
         }
     }, [accessToken])
-    console.log(error)
 
     return (
         <Box>
