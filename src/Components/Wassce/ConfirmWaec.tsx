@@ -25,7 +25,7 @@ import useQuerryString from "@/hooks/useQueryString";
 import { getProfileAction } from "@/redux/actions/getProfile.action";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useEffect, useState } from "react";
-import { paymentHandler,idata,iAuth } from "./service";
+import { paymentHandler,idata,iAuth,storeEducation,iEducation } from "./service";
 import { getHeaders } from "../Airtime/service";
 import { genReqId } from "../History/util.service";
 import { BsCheck2Circle } from "react-icons/bs"
@@ -80,7 +80,7 @@ export const ConfirmWaec: React.FC = () => {
             request_id,
             serviceID,
             variation_code,
-            amount,
+            // amount,
             quantity,
             phone
         }
@@ -89,6 +89,18 @@ export const ConfirmWaec: React.FC = () => {
         try {
             setFormState({loading:true,success:false})
             const data = await paymentHandler(auth, details)
+            if (data && data.code === "000") {
+                const  product_name:string = data.content?.transactions?.product_name
+                const  purchased_code:string = data?.purchased_code
+                const detail: iEducation = {
+                    product_name,
+                    amount,
+                    requestId: request_id,
+                    purchased_code
+                }
+                const res = await storeEducation(accessToken,detail)
+                console.log(res)
+            }
             setFormState({loading:false,success:true})
             console.log(data)
         } catch (error:any) {
@@ -106,6 +118,8 @@ export const ConfirmWaec: React.FC = () => {
             setAuth(data)
         } catch (error:any) {
             console.log(error)
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            setErrmsg(message)
         }
     }
 

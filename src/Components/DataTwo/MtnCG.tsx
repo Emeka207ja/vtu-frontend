@@ -58,11 +58,11 @@ export const MtnCG: React.FC = () => {
 
     useEffect(() => {
          optionHandler()
-        if (accessToken) {
-            dispatch(getProfileAction(accessToken))
+        // if (accessToken) {
+        //     dispatch(getProfileAction(accessToken))
            
-        }
-    }, [accessToken])
+        // }
+    }, [])
     useEffect(() => {
         if (Options.length > 0) {
             const selected: ioptions[] = Options.filter(item => item.plan_id === formVal.plan_id)
