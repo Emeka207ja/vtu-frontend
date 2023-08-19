@@ -26,7 +26,7 @@ import { getProfileAction } from "@/redux/actions/getProfile.action";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useEffect, useState } from "react";
 import {iAuth } from "@/Components/Wassce/service"; 
-import { homeinsureHandler,iData } from "./service";
+import { homeinsureHandler,iData,storeHomeinsurance,iHomeInsurance } from "./service";
 import { getHeaders } from "@/Components/Airtime/service"; 
 import { genReqId } from "@/Components/History/util.service"; 
 import { BsCheck2Circle } from "react-icons/bs"
@@ -77,9 +77,14 @@ export const ConfirmHome: React.FC = () => {
             setErrmsg("invalid credentials")
             return
         }
+        if (Profile && Profile.balance < parseFloat(price)) {
+            setErrmsg("insufficient funds")
+            return
+        }
        
         const request_id:string = genReqId()
-        const billersCode: string = full_name
+        const billersCode: string = full_name.trim()
+        const fullName:string = full_name.trim()
         const amount :number = parseFloat(price)
         const details: iData = {
             request_id,
@@ -87,18 +92,28 @@ export const ConfirmHome: React.FC = () => {
             billersCode,
             variation_code,
             date_of_birth,
-            full_name,
+            full_name:fullName,
             phone,
-            amount,
             type_building,
             business_occupation,
             address
       }
-      console.log(details)
         
         try {
             setFormState({loading:true,success:false})
             const data = await homeinsureHandler(auth, details)
+            if (data && data.code === "000") {
+                const product_name:string = data.content?.transactions.product_name
+                const total_amount: number = data.content?.transactions.total_amount
+                const requestId: string = data.requestId
+                const detail: iHomeInsurance = {
+                    product_name,
+                    total_amount,
+                    requestId
+                }
+                const res = await storeHomeinsurance(accessToken, detail)
+                console.log(detail,res)
+            }
             setFormState({loading:false,success:true})
             console.log(data)
         } catch (error:any) {

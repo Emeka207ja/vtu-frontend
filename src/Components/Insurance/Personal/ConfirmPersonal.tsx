@@ -26,12 +26,13 @@ import { getProfileAction } from "@/redux/actions/getProfile.action";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useEffect, useState } from "react";
 import {iAuth } from "@/Components/Wassce/service"; 
-import { homeinsureHandler,iData } from "../Home/service";
+import { homeinsureHandler,iData,storeHomeinsurance,iHomeInsurance } from "../Home/service";
 import { getHeaders } from "@/Components/Airtime/service"; 
 import { genReqId } from "@/Components/History/util.service"; 
 import { BsCheck2Circle } from "react-icons/bs"
 import { useRouter, NextRouter } from "next/router";
-import { payPersonal,idetails } from "./service"
+import { payPersonal, idetails } from "./service"
+
 // import { idetails } from "./service";
 
 
@@ -103,8 +104,20 @@ export const ConfirmPersonal: React.FC = () => {
         try {
             setFormState({loading:true,success:false})
             const data = await payPersonal(auth, details)
+             if (data && data.code === "000") {
+                const product_name:string = data.content?.transactions.product_name
+                const total_amount: number = data.content?.transactions.total_amount
+                const requestId: string = data.requestId
+                const detail: iHomeInsurance = {
+                    product_name,
+                    total_amount,
+                    requestId
+                }
+                const res = await storeHomeinsurance(accessToken, detail)
+                console.log(detail,res)
+            }
             setFormState({loading:false,success:true})
-            console.log(data)
+            // console.log(data)
         } catch (error:any) {
             console.log(error)
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message

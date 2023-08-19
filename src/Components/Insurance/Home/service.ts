@@ -7,7 +7,7 @@ export interface iData {
     serviceID: string
     billersCode:string
     variation_code: string
-    amount:number
+    amount?:number
     phone: string
     full_name: string
     address: string
@@ -15,6 +15,11 @@ export interface iData {
     business_occupation: string
     date_of_birth: string
     
+}
+export interface iHomeInsurance{
+    product_name:string,
+    requestId:string,
+    total_amount:number
 }
 
 
@@ -33,5 +38,14 @@ export const homeinsureHandler = async (auth: iAuth, details: iData) => {
         }
     }
     const { data } = await axios.post(payApi, details, config)
+    return data
+}
+export const storeHomeinsurance = async (token:string, details: iHomeInsurance) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token.slice(1,-1)}`
+        }
+    }
+    const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/insurance/home", details, config)
     return data
 }

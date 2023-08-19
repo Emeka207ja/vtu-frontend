@@ -7,9 +7,16 @@ import { vtpassHeaderfn } from "@/Services/utilityFn";
 export interface idetails extends Omit<icarInsureData, "phone">{
     phone: string;
     billersCode: string;
-    amount: number;
+    amount?: number;
     serviceID: string;
     request_id:string
+}
+
+export interface iCar{
+    product_name:string;
+    requestId:string;
+    certUrl:string;
+    amount:number
 }
 
 
@@ -19,5 +26,15 @@ export const carInsuranceHandler = async (auth:iAuth,details:idetails) => {
     console.log(config)
 
     const { data } =await axios.post(payApi, details, config);
+    return data
+}
+export const storeCarInsurance = async (token:string,details:iCar) => {
+     const config = {
+        headers: {
+            Authorization: `Bearer ${token.slice(1,-1)}`
+        }
+    }
+
+    const { data } =await axios.post("https://easybuyapi.adaptable.app/api/v1/insurance/vehicle", details, config);
     return data
 }

@@ -27,7 +27,7 @@ import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { BsCheck2Circle } from "react-icons/bs"
 import { useRouter, NextRouter } from "next/router";
-import { carInsuranceHandler, idetails } from "./service"
+import { carInsuranceHandler, idetails,storeCarInsurance,iCar } from "./service"
 import { genReqId } from "@/Components/History/util.service"
 import { iAuth } from "@/Components/Wassce/service"
 import { getHeaders } from "@/Components/Airtime/service"
@@ -94,7 +94,7 @@ export const ConfirmCarInsurance: React.FC = () => {
             billersCode,
             variation_code,
             phone,
-            amount,
+          
             Year_of_Make,
             Engine_Number,
             Contact_Address,
@@ -105,11 +105,26 @@ export const ConfirmCarInsurance: React.FC = () => {
             Insured_Name,
             Chasis_Number
       }
-      console.log(details)
+    //   console.log(details)
         
         try {
             setFormState({loading:true,success:false})
             const data = await carInsuranceHandler(auth, details)
+            if (data && data.code === "000") {
+                const product_name:string = data.content?.transactions.product_name
+                const amount: number = data.content?.transactions.amount
+                const certUrl: string = data.certUrl
+                const requestId: string = data.requestId
+                
+                const detail: iCar = {
+                    product_name,
+                    amount,
+                    certUrl,
+                    requestId
+                }
+                const res = await storeCarInsurance(accessToken, detail)
+                console.log(detail,res)
+            }
             setFormState({loading:false,success:true})
             console.log(data)
         } catch (error:any) {
