@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { subElectricity } from "./Service"
 import { FaBullseye } from "react-icons/fa"
+import { subPrepaid,iPrepaid } from "./Service"
 
 
 export const Confirm: React.FC = () => {
@@ -48,11 +49,30 @@ export const Confirm: React.FC = () => {
             toast.error("invalid credentials")
             return
         }
+        if (!accessToken) {
+            toast.error("refresh page")
+            return
+        }
         try {
             setLoading(true)
             setSuccess(false)
             const data = await subElectricity({ api_key, secret_key, amount, phone, serviceID, variation_code, billersCode, request_id })
-            console.log(data)
+            // console.log(data)
+            if (data && data.code === "000") {
+                const amt:string = data.amount;
+                const purchased_code:string = data.purchased_code
+                const product_name:string = data.content?.transactions?.product_name
+                const requestId:string = data.requestId
+                const amount = parseFloat(amt)
+
+                const vals:iPrepaid = {
+                    amount,purchased_code,product_name,requestId
+                }
+                console.log(vals)
+                const datax = await subPrepaid(accessToken, vals,"postpaid")
+                console.log(datax)
+
+            }
             setLoading(false)
             setSuccess(true)
             toast.success("transaction successful")

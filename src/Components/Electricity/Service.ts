@@ -12,12 +12,12 @@ interface iReq{
     variation_code:string
 }
 
- interface iPrepaid{
-     mainToken: string;
+ export interface iPrepaid{
+  
      purchased_code: string;
     requestId: string;
-    date: string;
-    utilityName: string;
+ 
+    product_name: string;
     amount: number;
 
 }
@@ -37,12 +37,12 @@ export const subElectricity = async (details:iReq) => {
 }
 
 
-export const subPrepaid = async (accessToken: string, details: iPrepaid) => {
+export const subPrepaid = async (accessToken: string, details: iPrepaid, type:string) => {
     const config = {
             headers: {
                 Authorization :`Bearer ${accessToken?.slice(1,-1)}`
             }
         }
-    const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/electricity/prepaid", details, config)
+    const { data } = await axios.post(`https://easybuyapi.adaptable.app/api/v1/electricity/${type}`, details, config)
     return data
 }

@@ -104,6 +104,10 @@ export const ConfirmPersonal: React.FC = () => {
         try {
             setFormState({loading:true,success:false})
             const data = await payPersonal(auth, details)
+            if (data && data.code !== "000") {
+                setFormState({ loading: false, success: false })
+                 setErrmsg("transaction not successfull")
+            }
              if (data && data.code === "000") {
                 const product_name:string = data.content?.transactions.product_name
                 const total_amount: number = data.content?.transactions.total_amount
@@ -117,7 +121,7 @@ export const ConfirmPersonal: React.FC = () => {
                 console.log(detail,res)
             }
             setFormState({loading:false,success:true})
-            // console.log(data)
+            console.log(data)
         } catch (error:any) {
             console.log(error)
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message

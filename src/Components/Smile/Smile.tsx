@@ -80,7 +80,7 @@ export const Smile: React.FC = () => {
             setValid(false)
             const data = await verifySmile(idx, "smile-direct", api_key, secret_key)
             if (data) {
-                const id = data.content?.AccountList?.Account[0].AccountId
+                const id = data.content?.AccountList?.Account[0]?.AccountId
                 console.log("id",id)
                 setName(data.content?.Customer_Name)
                 setBiller(id)

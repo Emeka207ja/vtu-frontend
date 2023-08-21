@@ -39,6 +39,10 @@ export const ConfirmSmile: React.FC = () => {
             toast.error("invalid credentials")
             return
         }
+        if (Profile && Profile.balance< parseFloat(Amount)) {
+            toast.error("insufficient balance")
+            return
+        }
         const request_id = genReqId()
     //    console.log(value)
         try {

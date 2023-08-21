@@ -39,8 +39,10 @@ export const Form: React.FC = () => {
         const { meter_number, meter_type, Amount, Phone } = data
         if (meter_type === "prepaid") {
             router.push(`prepaidconfirm?meterNumber=${meter_number}&meterType=${meter_type}&Amount=${Amount}&Phone=${Phone}&serviceId=${serviceId}&name=${name}`);
+        } else {
+             router.push(`confirm?meterNumber=${meter_number}&meterType=${meter_type}&Amount=${Amount}&Phone=${Phone}&serviceId=${serviceId}&name=${name}`);
         }
-        router.push(`confirm?meterNumber=${meter_number}&meterType=${meter_type}&Amount=${Amount}&Phone=${Phone}&serviceId=${serviceId}&name=${name}`);
+       
     }
 
     return (

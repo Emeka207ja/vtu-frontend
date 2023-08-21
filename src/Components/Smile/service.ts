@@ -1,5 +1,6 @@
 import axios from "axios"
 import { headers } from "next/dist/client/components/headers";
+import { iCar } from "../Insurance/Car/service";
 
 export const getVariationCode = async () => {
     const { data } = await axios.get(" https://sandbox.vtpass.com/api/service-variations?serviceID=smile-direct");
@@ -37,3 +38,14 @@ export const purchaseSmile = async (
     const { data } = await axios.post(" https://sandbox.vtpass.com/api/pay", { request_id, serviceID, billersCode, variation_code, amount, phone }, config)
     return data
 }
+
+// export const storeSmile = async (token:string,details:iCar) => {
+//      const config = {
+//         headers: {
+//             Authorization: `Bearer ${token.slice(1,-1)}`
+//         }
+//     }
+
+//     const { data } =await axios.post("https://easybuyapi.adaptable.app/api/v1/insurance/vehicle", details, config);
+//     return data
+// }
