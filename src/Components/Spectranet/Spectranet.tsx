@@ -66,7 +66,7 @@ export const Spectranet: React.FC = () => {
                  <Grid templateColumns={{ base: "repeat(1,1fr)", md: "repeat(2,1fr)" }} gap={"1.6rem"} mb={"1rem"}>
                     <FormControl>
                         <FormLabel>Type</FormLabel>
-                        <Select name="varCode" value={data.varCode} onChange={handleInput}>
+                        <Select name="varCode" value={data.varCode} onChange={handleInput} onClick={handleInput}>
                             {
                                 vars?.length > 0 && vars.map(item => (<option value={item.variation_code} key={item.variation_code}>{ item.name}</option>))
                            }
@@ -78,10 +78,10 @@ export const Spectranet: React.FC = () => {
                        <Input name="phone" value={data.phone} onChange={handleInput}/>
                     </FormControl>
 
-                    <FormControl>
+                    {/* <FormControl>
                         <FormLabel>Email Address</FormLabel>
                        <Input name="email" value={data.email} onChange={handleInput}/>
-                    </FormControl>
+                    </FormControl> */}
 
                     <FormControl>
                         <FormLabel>Amount</FormLabel>

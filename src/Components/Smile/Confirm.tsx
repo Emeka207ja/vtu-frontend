@@ -8,7 +8,7 @@ import { getProfileAction } from "@/redux/actions/getProfile.action";
 import { ToastContainer, toast } from 'react-toastify';
 import { getHeaders } from "../Airtime/service";
 import 'react-toastify/dist/ReactToastify.css';
-import { purchaseSmile } from "./service";
+import { purchaseSmile,storeSmile,ismile } from "./service";
 export const ConfirmSmile: React.FC = () => {
 
     const [value, setValue] = useState("")
@@ -34,6 +34,10 @@ export const ConfirmSmile: React.FC = () => {
     }
 
     const handleComplete = async (value: string) => {
+        if (!accessToken) {
+            toast.error("error! refresh page");
+            return;
+        }
         const pin = parseFloat(value)
         if (pin !== Profile?.pin) {
             toast.error("invalid credentials")
@@ -49,7 +53,20 @@ export const ConfirmSmile: React.FC = () => {
             setLoading(true)
             setSuccess(false)
             const data = await purchaseSmile(request_id, serviceID, billersCode, variation_code, amount, phone, api_key, secret_key)
+            if (data && data.code !== "000") {
+                setLoading(false)
+                setSuccess(false)
+                toast.error("error occured")
+                return
+            }
+            const detail: ismile = {
+                amount,
+                phone,
+                requestId:request_id
+            }
+            const res = await storeSmile(accessToken,detail)
             console.log(data)
+            console.log(res)
             setLoading(false)
             setSuccess(true)
             

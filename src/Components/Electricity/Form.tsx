@@ -56,7 +56,7 @@ export const Form: React.FC = () => {
 
                 <FormControl mb={"1.6rem"}>
                     <FormLabel>Meter type</FormLabel>
-                     <Select value={data.meter_type} onChange={handleInputs} name="meter_type">
+                     <Select value={data.meter_type} onChange={handleInputs} onClick={handleInputs} name="meter_type">
                         <option value="prepaid">prepaid</option>
                         <option value="postpaid">postpaid</option>
                     </Select>

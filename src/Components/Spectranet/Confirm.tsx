@@ -32,7 +32,7 @@ import { genReqId } from "../History/util.service"
 import { getHeaders } from "../Airtime/service"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { useRouter, NextRouter } from "next/router";
-import { purchaseHandler, idetails } from "./service"
+import { purchaseHandler, idetails,storeSpectranet,ispectranet } from "./service"
 import { iAuth } from "../Wassce/service"
 
 
@@ -115,12 +115,23 @@ export const ConfirmSpectranet: React.FC = () => {
         try {
             setFormState({loading:true,success:false})
             const data = await purchaseHandler(auth, details)
-            // if (data && data.status === "failed") {
-            //     setFormState({ loading: false, success: false })
-            //     setErrmsg(data.message)
-            //     return
-            // }
-            // const res = await purchaseDataHandler(accessToken,purchaseDetail)
+            if (data && data.code !== "000") {
+                setFormState({ loading: false, success: false })
+                setErrmsg("transaction failed,try again")
+                return
+            }
+            const product_name:string = data.content?.transactions?.product_name;
+            const purchased_code: string = data.purchased_code
+           
+            const detail: ispectranet = {
+                amount,
+                phone,
+                requestId: reference,
+                purchased_code,
+                product_name
+            }
+            const res = await storeSpectranet(accessToken, detail)
+            console.log(res)
             setFormState({loading:false,success:true})
             console.log(data)
         } catch (error:any) {

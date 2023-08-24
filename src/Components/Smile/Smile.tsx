@@ -146,7 +146,7 @@ export const Smile: React.FC = () => {
                     <Box mb={"1rem"}>
                         <FormControl>
                             <FormLabel  fontSize={"0.8rem"}>Type</FormLabel>
-                            <Select value={data.variation_code} onChange={handleInputs} name="variation_code" fontSize={"0.9rem"}>
+                            <Select value={data.variation_code} onChange={handleInputs} name="variation_code" fontSize={"0.9rem"} onClick={handleInputs}>
                                 {
                                     vars?.length > 0 && vars.map(item => (<option value={item.variation_code} key={item.name}>{item.name }</option>))
                                }
