@@ -5,7 +5,7 @@ import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { useState, useEffect } from "react"
 
 import { getHeaders } from "@/Components/Airtime/service"
-import { renewSub} from "./service"
+import { renewSub,storeDstv,idstvStore} from "./service"
 import { genReqId } from "@/Components/History/util.service"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -48,17 +48,31 @@ export const ConfirmRenewal: React.FC = () => {
             toast.error("invalid credentials")
             return
         }
-        const phone:number = parseFloat(Phone);
+       
         const amount:number = parseFloat(Amount);
         const request_id:string = genReqId()
-        const content = {request_id, serviceID,billersCode,amount,phone,subscription_type}
+        const content = {
+            request_id,
+            serviceID,
+            billersCode,
+            amount,
+            phone: Phone,
+            subscription_type
+        }
         try {
             setLoading(true)
             const data: any = await renewSub(auth, content)
-            if (data) {
-                toast.success("success")
-                console.log(data)
+             if (data && data.code !== "000") {
+                toast.error("transaction failed")
+                return
             }
+            const detail: idstvStore = {
+                phone:Phone,
+                amount,
+                requestId:request_id
+            }
+            const res = await storeDstv(accessToken,detail,"dstv")
+            toast.success("success")
             setLoading(false)
         } catch (error: any) {
             const message:string = (error.response && error.response.data && error.response.data.message)||error.message
@@ -72,7 +86,7 @@ export const ConfirmRenewal: React.FC = () => {
             const data: { api_key: string, secret_key: string } = await getHeaders()
             if (data) {
                 setAuth(data)
-                console.log(data)
+               
             }
         } catch (error:any) {
             console.log(error)

@@ -97,9 +97,8 @@ export const OldSub = () => {
     const submitHandler = (e: React.SyntheticEvent) => {
         e.preventDefault();
         const { phone } = formdata
-        if (holder) {
-           setAmt(holder.Renewal_Amount)
-       }
+       
+        const amt = holder && holder.Renewal_Amount || 1850
         router.push(`/cable/confirmdstv?phone=${phone}&biller=${card}&amt=${amt}&sId=dstv&subType=renew`)
         console.log(formdata)
     }

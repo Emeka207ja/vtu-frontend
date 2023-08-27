@@ -6,7 +6,7 @@ interface iData{
     billersCode: string
     
     amount: number;
-    phone: number;
+    phone: string;
     subscription_type:string
 }
 interface iNew extends iData{
@@ -15,6 +15,12 @@ interface iNew extends iData{
 interface iAuth{
     api_key: string;
     secret_key:string
+}
+
+export interface idstvStore{
+    phone:string;
+    requestId:string;
+    amount: number;
 }
 
 
@@ -43,4 +49,15 @@ export const renewSub = async (auth: iAuth, vals: iData) => {
    
     const { data } = await axios.post("https://sandbox.vtpass.com/api/pay", vals, config)
     return data;
+}
+
+export const storeDstv = async (token:string,details:idstvStore,urlPath:string) => {
+     const config = {
+        headers: {
+            Authorization: `Bearer ${token.slice(1,-1)}`
+        }
+    }
+
+    const { data } = await axios.post(`https://easybuyapi.adaptable.app/api/v1/${urlPath}`, details, config);
+    return data
 }

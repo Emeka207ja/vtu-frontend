@@ -5,7 +5,7 @@ import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { useState, useEffect } from "react"
 
 import { getHeaders } from "@/Components/Airtime/service"
-import { newSub } from "./service"
+import { newSub,storeShowmax,istoreShowmax } from "./service"
 
 import { genReqId } from "@/Components/History/util.service"
 import { ToastContainer, toast } from 'react-toastify';
@@ -47,18 +47,32 @@ export const ConfirmShowmax: React.FC = () => {
             toast.error("invalid credentials")
             return
         }
-        const phone:number = parseFloat(Phone);
+       
         const amount:number = parseFloat(Amount);
         const request_id:string = genReqId()
-        const content = { request_id, serviceID, variation_code, amount, phone}
+        const content = { request_id, serviceID, variation_code, amount, phone:Phone}
         console.log(content)
         try {
             setLoading(true)
             const data: any = await newSub(auth, content)
-            if (data) {
-                toast.success("success")
-                console.log(data)
+            if (data && data.code !== "000") {
+                toast.error("failed transaction")
+                return
             }
+            const product_name: string = data.content?.transactions?.product_name 
+            const purchased_code:string = data.purchased_code || "not available"
+            const detail: istoreShowmax = {
+                amount,
+                phone:Phone,
+                requestId: request_id,
+                product_name,
+                purchased_code
+            }
+            const res = await storeShowmax(accessToken,detail)
+            toast.success("success")
+            console.log(data)
+            console.log(res)
+            
             setLoading(false)
         } catch (error: any) {
             const message:string = (error.response && error.response.data && error.response.data.message)||error.message
@@ -72,7 +86,7 @@ export const ConfirmShowmax: React.FC = () => {
             const data: { api_key: string, secret_key: string } = await getHeaders()
             if (data) {
                 setAuth(data)
-                console.log(data)
+               
             }
         } catch (error:any) {
             console.log(error)
