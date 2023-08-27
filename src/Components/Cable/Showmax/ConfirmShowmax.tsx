@@ -47,6 +47,10 @@ export const ConfirmShowmax: React.FC = () => {
             toast.error("invalid credentials")
             return
         }
+         if ( Profile.balance! < parseFloat(Amount)) {
+            toast.error("insufficient funds")
+            return
+        }
        
         const amount:number = parseFloat(Amount);
         const request_id:string = genReqId()

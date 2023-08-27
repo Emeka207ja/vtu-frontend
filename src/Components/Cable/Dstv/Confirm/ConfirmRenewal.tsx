@@ -48,6 +48,10 @@ export const ConfirmRenewal: React.FC = () => {
             toast.error("invalid credentials")
             return
         }
+        if ( Profile.balance! < parseFloat(Amount)) {
+            toast.error("insufficient funds")
+            return
+        }
        
         const amount:number = parseFloat(Amount);
         const request_id:string = genReqId()
@@ -59,11 +63,13 @@ export const ConfirmRenewal: React.FC = () => {
             phone: Phone,
             subscription_type
         }
+        console.log(content)
         try {
             setLoading(true)
             const data: any = await renewSub(auth, content)
              if (data && data.code !== "000") {
                 toast.error("transaction failed")
+                setLoading(false)
                 return
             }
             const detail: idstvStore = {
@@ -74,9 +80,11 @@ export const ConfirmRenewal: React.FC = () => {
             const res = await storeDstv(accessToken,detail,"dstv")
             toast.success("success")
             setLoading(false)
+            console.log(data)
         } catch (error: any) {
             const message:string = (error.response && error.response.data && error.response.data.message)||error.message
             setLoading(false)
+            console.log(message)
         }
     }
     
@@ -86,7 +94,7 @@ export const ConfirmRenewal: React.FC = () => {
             const data: { api_key: string, secret_key: string } = await getHeaders()
             if (data) {
                 setAuth(data)
-               
+               console.log(data)
             }
         } catch (error:any) {
             console.log(error)

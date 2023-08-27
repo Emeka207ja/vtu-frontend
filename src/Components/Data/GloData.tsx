@@ -95,7 +95,7 @@ export const GloData = () => {
                 </Box>
             </form>
 
-            <Button onClick={()=>idHandler()} colorScheme="green" mt={"0.5rem"}>gen request id</Button>
+            {/* <Button onClick={()=>idHandler()} colorScheme="green" mt={"0.5rem"}>gen request id</Button> */}
         </Box>
     )
 }
