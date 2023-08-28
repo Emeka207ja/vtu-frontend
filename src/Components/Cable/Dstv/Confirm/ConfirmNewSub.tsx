@@ -22,6 +22,7 @@ export const ConfirmNewSub: React.FC = () => {
     const [Amount] = useQuerryString("amt")
     const [serviceID] = useQuerryString("sId")
     const [subscription_type] = useQuerryString("subType")
+    const [type] = useQuerryString("type")
 
     const {accessToken} = useAppSelector(state=>state.loginAuth)
     const { Profile } = useAppSelector(state => state.fetchProfile)
@@ -71,6 +72,12 @@ export const ConfirmNewSub: React.FC = () => {
                 phone:Phone,
                 amount,
                 requestId:request_id
+            }
+            if (type && type === "gotv") {
+                const res = await storeDstv(accessToken,detail,"gotv")
+                toast.success("success")
+                setLoading(false)
+                return
             }
             const res = await storeDstv(accessToken,detail,"dstv")
             toast.success("success")

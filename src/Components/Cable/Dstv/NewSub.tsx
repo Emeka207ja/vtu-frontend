@@ -157,7 +157,7 @@ export const NewSub = () => {
 
                         <FormControl>
                             <FormLabel>package</FormLabel>
-                            <Select value={formdata.varCode} name="varCode" onChange={handleInput} isRequired>
+                            <Select value={formdata.varCode} name="varCode" onChange={handleInput} onClick={handleInput} isRequired>
                                 {
                                     vars.length > 0 && vars.map(item => (<option value={item.variation_code} key={item.name}>{ item.name}</option>))
                                 }

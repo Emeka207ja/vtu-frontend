@@ -97,7 +97,7 @@ export const NewGoSub:React.FC = () => {
     const submitHandler = (e: React.SyntheticEvent) => {
         e.preventDefault();
         const {varCode,phone} = formdata
-        router.push(`/cable/confirmdstv?varcode=${varCode}&phone=${phone}&biller=${card}&amt=${amt}&sId=gotv&subType=change`)
+        router.push(`/cable/confirmdstv?varcode=${varCode}&phone=${phone}&biller=${card}&amt=${amt}&sId=gotv&subType=change&type=gotv`)
     }
 
     useEffect(() => {
@@ -160,7 +160,7 @@ export const NewGoSub:React.FC = () => {
 
                         <FormControl>
                             <FormLabel>package</FormLabel>
-                            <Select value={formdata.varCode} name="varCode" onChange={handleInput} isRequired>
+                            <Select value={formdata.varCode} name="varCode" onChange={handleInput} onClick={handleInput} isRequired>
                                 {
                                     vars.length > 0 && vars.map(item => (<option value={item.variation_code} key={item.name}>{ item.name}</option>))
                                 }

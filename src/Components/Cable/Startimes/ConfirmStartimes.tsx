@@ -3,13 +3,13 @@ import useQuerryString from "@/hooks/useQueryString"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { useState, useEffect } from "react"
-
 import { getHeaders } from "@/Components/Airtime/service"
 import { newSub } from "./service"
 import { genReqId } from "@/Components/History/util.service"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { NextRouter,useRouter } from "next/router"
+import { NextRouter, useRouter } from "next/router"
+import { storeDstv,idstvStore } from "../Dstv/Confirm/service"
 
 
 export const ConfirmStartimes: React.FC = () => {
@@ -48,18 +48,36 @@ export const ConfirmStartimes: React.FC = () => {
             toast.error("invalid credentials")
             return
         }
-        const phone:number = parseFloat(Phone);
+        
         const amount:number = parseFloat(Amount);
         const request_id:string = genReqId()
-        const content = { request_id, serviceID, billersCode, variation_code, amount, phone,}
+        const content = {
+            request_id,
+            serviceID,
+            billersCode,
+            variation_code,
+            amount,
+            phone:Phone,
+        }
         console.log(content)
         try {
             setLoading(true)
             const data: any = await newSub(auth, content)
-            if (data) {
-                toast.success("success")
-                console.log(data)
+            if (data && data.code !== "000") {
+                toast.error("failed transaction")
+                setLoading(false)
+                return;
             }
+            const detail: idstvStore = {
+                phone: Phone,
+                amount,
+                requestId:request_id
+            }
+            const res = await storeDstv(accessToken,detail,"startimes")
+            toast.success("success")
+            console.log(data)
+            console.log(res)
+            
             setLoading(false)
         } catch (error: any) {
             const message:string = (error.response && error.response.data && error.response.data.message)||error.message
