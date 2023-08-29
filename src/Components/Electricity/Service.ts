@@ -1,9 +1,9 @@
 import axios from "axios"
 import { config } from "process";
 
-interface iReq{
+export interface iReq{
     amount: number;
-    phone: number,
+    phone: string,
     request_id: string;
     serviceID: string;
     api_key: string;

@@ -27,32 +27,32 @@ export const distributor: iDistributor[] = [
     },
     {
         key: "JED",
-        serviceId: "ikeja-electricity",
+        serviceId: "jos-electric",
         name: "Jos Electricity"
     },
     {
         key: "KAEDCO",
-        serviceId: "ikeja-electricity",
+        serviceId: "kaduna-electric",
         name: "Kaduna Electricity"
     },
     {
         key: "IBEDC",
-        serviceId: "ikeja-electricity",
+        serviceId: "ibadan-electric",
         name: "Ibadan Electricity"
     },
     {
         key: "AEDC",
-        serviceId: "ikeja-electricity",
+        serviceId: "abuja-electric",
         name: "Abuja Electricity"
     },
     {
         key: "EEDC",
-        serviceId: "ikeja-electricity",
+        serviceId: "enugu-electric",
         name: "Enugu Electricity"
     },
     {
         key: "BEDC",
-        serviceId: "ikeja-electricity",
+        serviceId: "benin-electric",
         name: "Benin Electricity"
     },
 ]

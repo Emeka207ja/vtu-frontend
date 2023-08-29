@@ -79,10 +79,10 @@ export const ConfirmAirtime = () => {
             setLoading(true)
             setSuccess(false)
             const val:iairtimePurchase ={
-                "network":serviceID,
-                "phone":phone,
-                "Amount":20,
-                "order_id":request_id
+                network:serviceID,
+                phone:phone,
+                Amount:20,
+                order_id  : request_id
             }
          const res = await stroreAirtime(accessToken, val)
                 console.log(res)

@@ -38,7 +38,8 @@ export const ConfirmStartimes: React.FC = () => {
     }
 
 
-    const handleComplete = async(value: string):Promise<void> => {
+    const handleComplete = async (value: string): Promise<void> => {
+        const amount:number = parseFloat(Amount);
         if (!accessToken) {
            toast.error("auth error")
             return
@@ -48,8 +49,12 @@ export const ConfirmStartimes: React.FC = () => {
             toast.error("invalid credentials")
             return
         }
+         if (Profile && Profile.balance < amount) {
+            toast.error("insufficient funds")
+            return
+        }
         
-        const amount:number = parseFloat(Amount);
+       
         const request_id:string = genReqId()
         const content = {
             request_id,

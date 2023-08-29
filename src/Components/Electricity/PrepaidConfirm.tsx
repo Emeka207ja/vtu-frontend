@@ -9,7 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { subElectricity } from "./Service"
 import { FaBullseye } from "react-icons/fa"
-import { subPrepaid,iPrepaid } from "./Service"
+import { subPrepaid,iPrepaid,iReq } from "./Service"
 
 
 export const PrepaidConfirm: React.FC = () => {
@@ -38,8 +38,8 @@ export const PrepaidConfirm: React.FC = () => {
     }
     const handleComplete = async (value: string) => {
        
-        const phone = parseFloat(Phone)
-        const amount = parseFloat(Amount)
+        
+        const price = parseFloat(Amount)
         const pin = parseFloat(value)
         const request_id = genReqId()
         if (pin === 1111) {
@@ -58,25 +58,38 @@ export const PrepaidConfirm: React.FC = () => {
         try {
             setLoading(true)
             setSuccess(false)
-            const data = await subElectricity({ api_key, secret_key, amount, phone, serviceID, variation_code, billersCode, request_id })
-        //    console.log(data)
-            if (data && data.code === "000") {
-                const amt:string = data.amount;
-               
-                const purchased_code:string = data.purchased_code
-                const product_name:string = data.content?.transactions?.product_name
-                const requestId:string = data.requestId
-                const amount = parseFloat(amt)
-
-                const vals:iPrepaid = {
-                    amount,purchased_code,product_name,requestId
-                }
-                console.log(vals)
-                const datax = await subPrepaid(accessToken, vals,"prepaid")
-                console.log(datax)
-            
-
+            const detail: iReq = {
+                api_key,
+                secret_key,
+                amount:price,
+                phone:Phone,
+                serviceID,
+                variation_code,
+                billersCode,
+                request_id
             }
+            const data = await subElectricity(detail)
+        //    console.log(data)
+            if (data && data.code !== "000") {
+                toast.error("failed transaction")
+                setLoading(false)
+                setSuccess(false)
+                return
+             }
+            const amt:string = data.amount;
+            
+            const purchased_code:string = data.purchased_code
+            const product_name:string = data.content?.transactions?.product_name
+            const requestId:string = data.requestId
+            const amount = parseFloat(amt)
+
+            const vals:iPrepaid = {
+                amount,purchased_code,product_name,requestId
+            }
+            console.log(vals)
+            const datax = await subPrepaid(accessToken, vals,"prepaid")
+            console.log(datax)
+            
             setLoading(false)
             setSuccess(true)
             toast.success("transaction successful")

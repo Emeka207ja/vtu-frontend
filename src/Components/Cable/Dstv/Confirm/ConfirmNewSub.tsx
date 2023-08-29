@@ -39,7 +39,8 @@ export const ConfirmNewSub: React.FC = () => {
     }
 
 
-    const handleComplete = async(value: string):Promise<void> => {
+    const handleComplete = async (value: string): Promise<void> => {
+         const amount:number = parseFloat(Amount);
         if (!accessToken) {
            toast.error("auth error,ensure you have good connection and refresh")
             return
@@ -49,7 +50,12 @@ export const ConfirmNewSub: React.FC = () => {
             toast.error("invalid credentials")
             return
         }
-        const amount:number = parseFloat(Amount);
+        if (Profile && Profile.balance < amount) {
+            toast.error("insufficient funds")
+            return
+        }
+
+       
         const request_id:string = genReqId()
         const content = {
             request_id,

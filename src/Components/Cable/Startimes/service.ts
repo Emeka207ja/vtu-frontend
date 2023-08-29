@@ -5,7 +5,7 @@ interface iData{
     serviceID: string;
     billersCode:string
     amount: number;
-    phone: number;
+    phone: string;
     variation_code: string;
 
 }
