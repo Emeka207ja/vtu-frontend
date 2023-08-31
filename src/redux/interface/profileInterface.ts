@@ -18,7 +18,8 @@ export interface iProfile{
     defaultPinChanged: boolean;
     ReferralCount: number;
     TotalReferred: number;
-    image:null|string
+    image: null | string
+    roles:string[]
     auth: Auth
     
 }
@@ -58,7 +59,8 @@ export const InitialProfile:iProfile ={
     image: "",
     ReferralCount: 0,
     TotalReferred: 0,
-    isMonified:false,
+    isMonified: false,
+    roles:["user"],
     auth: {
         id: 0,
         created_at: "",

@@ -179,6 +179,9 @@ export const DashboardContent = () => {
             profileHandler()
             // accountHandler()
         }
+        // if (accessToken) {
+        //     dispatch(getProfileAction(accessToken))
+        // }
 
     }, [Usertoken,accessToken])
     

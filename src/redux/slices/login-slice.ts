@@ -1,6 +1,7 @@
 
 import { createSlice } from "@reduxjs/toolkit";
 import { loginAction } from "../actions/login-action";
+import { reset as resetProfile } from "./get-profile.slice";
 
 interface iState{
     accessToken: string | null;
@@ -23,6 +24,7 @@ const initialState: iState ={
 }
 
 export const loginSlice = createSlice({
+   
      initialState,
     name: "login",
     reducers : {
@@ -38,6 +40,7 @@ export const loginSlice = createSlice({
                 localStorage.removeItem("profile");
            }
             state.accessToken = null
+           
         }
     },
     extraReducers: builder => {

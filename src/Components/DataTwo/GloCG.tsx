@@ -30,8 +30,10 @@ export const GloCG: React.FC = () => {
 
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
+        // const dataObject = JSON.stringify(Options)
+        const type = "GLO_CG"
         const { plan_id, phone } = formVal
-        router.push(`/datatwo/confirm?plan=${plan_id}&phone=${phone}&amt=${price}`)
+        router.push(`/datatwo/confirm?plan=${plan_id}&phone=${phone}&amt=${price}&type=${type}`)
         
     }
 

@@ -11,7 +11,13 @@ interface iauth{
 
 export interface ipurchase{
     phone: string;
-    price:number
+    price: number;
+    requestId:string
+}
+export interface idebit {
+   requestId :string;
+   service:string;
+   amount:number
 }
 
 
@@ -62,6 +68,17 @@ export const purchaseDataHandler = async (token: string, details: ipurchase) => 
     }
      console.log(config)
     const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/data/buydata", details, config);
+    return data;
+
+}
+export const debitHandler = async (token: string, details: idebit) => {
+   
+    const config = {
+        headers: {
+            Authorization :`Bearer ${token?.slice(1,-1)}`
+        }
+    }
+    const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/profile/debitaccount", details, config);
     return data;
 
 }

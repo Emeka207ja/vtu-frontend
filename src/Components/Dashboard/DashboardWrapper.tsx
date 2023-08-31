@@ -36,7 +36,7 @@ import {
 import { IconType } from 'react-icons';
 import { ReactText } from 'react';
 import { logout } from '@/redux/slices/login-slice';
-import { useAppDispatch } from '@/redux/hooks';
+import { useAppDispatch,useAppSelector } from '@/redux/hooks';
 import { NextRouter, useRouter } from 'next/router';
 import { signout } from '@/redux/actions/login-action';
 import {FaHistory} from "react-icons/fa"
@@ -44,6 +44,7 @@ import {SiAuthy} from "react-icons/si"
 import { BsFillPeopleFill } from "react-icons/bs"
 import { Footer } from './Footer/Footer';
 import useQuerryString from "@/hooks/useQueryString"
+import { reset } from '@/redux/slices/get-profile.slice';
 
 
 interface LinkItemProps {
@@ -69,7 +70,8 @@ export default function SidebarWithHeader({
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   
-  const  dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
+  
 
   const Logout = () => {
     dispatch(logout)
@@ -178,10 +180,12 @@ interface MobileProps extends FlexProps {
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
   const router:NextRouter = useRouter()
-  const  dispatch = useAppDispatch()
+  const dispatch = useAppDispatch()
+  const {Profile} = useAppSelector(state=>state.fetchProfile)
 
   const Logout = () => {
     dispatch(logout())
+    dispatch(reset())
     router.push("/login")
   }
   return (
@@ -252,7 +256,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem>Profile</MenuItem>
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
-              <MenuItem as={"a"} href='/admin'>Admin panel</MenuItem>
+              {
+                Profile && Profile.roles.includes("admin") && (
+                   <MenuItem as={"a"} href='/admin'>Admin panel</MenuItem>
+                )
+             }
               <MenuDivider />
               <MenuItem>
                 <Box onClick={()=>Logout()} w="100%">Sign out</Box>

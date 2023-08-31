@@ -28,10 +28,11 @@ import { useState, useEffect } from "react"
 import { BsCheck2Circle } from "react-icons/bs"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { genReqId } from "../History/util.service"
-import { idetails, dataSubHandler,getToken,purchaseDataHandler,ipurchase } from "./service"
+import { idetails, dataSubHandler,getToken,purchaseDataHandler,ipurchase, getOptions,debitHandler,idebit } from "./service"
 import { getHeaders } from "../Airtime/service"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { useRouter, NextRouter } from "next/router";
+import { ioptions } from "./idataTwo"
 
 
 
@@ -47,10 +48,13 @@ export const ConfirmDataTwo: React.FC = () => {
     const [plan] = useQuerryString("plan") 
     const [number] = useQuerryString("phone") 
     const [amt] = useQuerryString("amt")
+    const [type] = useQuerryString("type")
+    
 
     const [formState, setFormState] = useState<{ loading: boolean, success: boolean }>({ loading: false, success: false })
     const [errorMessage, setErrmsg] = useState<string | null>()
-    const [auth, setAuth] = useState<{token:string}>({ token:"" })
+    const [auth, setAuth] = useState<{ token: string }>({ token: "" })
+    const [Options, setOptions] = useState<ioptions | null>(null)
     const [value, setValue] = useState<string>("")
 
      const headerHandler = async () => {
@@ -84,6 +88,10 @@ export const ConfirmDataTwo: React.FC = () => {
             setErrmsg("invalid credentials")
             return
         }
+        if (!Options) {
+            setErrmsg("please refresh")
+            return
+        }
         // const phone: number = parseFloat(Phone)
          const reference: string = genReqId()
         
@@ -95,11 +103,22 @@ export const ConfirmDataTwo: React.FC = () => {
          
          const purchaseDetail: ipurchase = {
             price: price,
-            phone:number
+            phone: number,
+            requestId:reference
         } 
         
         try {
-            setFormState({loading:true,success:false})
+            setFormState({ loading: true, success: false })
+            const detail: idebit = {
+                service: "geodata",
+                requestId: reference,
+                amount:Options.price
+            }
+            const response = await debitHandler(accessToken, detail)
+            if (!response) {
+                setErrmsg("failed, please check if you are debitted, if debitted,without value, chat admin")
+                return
+            }
             const data = await dataSubHandler(auth, details)
             if (data && data.status === "failed") {
                 setFormState({ loading: false, success: false })
@@ -118,13 +137,49 @@ export const ConfirmDataTwo: React.FC = () => {
        
     }
 
+
+    const optionHandler = async (type:string,plan:string) => {
+        if (!accessToken) {
+            console.log("stopped")
+            return
+        }
+        try {
+            const data:ioptions[] = await getOptions(accessToken, type)
+            const selected:ioptions[] = data.filter(item=>item.plan_id === plan)
+           
+            if (selected.length < 0) {
+                console.log(error)
+                return
+            }
+            const option = selected[0]
+            console.log(option)
+            setOptions(option)
+
+        } catch (error: any) {
+            console.log(error)
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message;
+          
+        }
+    }
+
     useEffect(() => {
          headerHandler()
         if (accessToken) {
             dispatch(getProfileAction(accessToken))
         }
+        // const parsedData = JSON.parse()
+       
     }, [accessToken])
-  
+
+    useEffect(() => {
+        if (type && plan) {
+            optionHandler(type,plan)
+        }
+    },[type,plan])
+    
+    if (Options) {
+        console.log("success")
+    }
 
     return (
         <Box>
