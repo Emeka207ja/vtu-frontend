@@ -103,7 +103,13 @@ export const FailedData: React.FC = () => {
                                         <Td>{ item.profile?.username}</Td>
                                         <Td>{ item.service}</Td>
                                         <Td>{ item.success}</Td>
-                                        <Td onClick={()=>{onOpen(),getTransactionDetail(parseFloat(item.id))}} cursor={"pointer"}>view</Td>
+                                        <Td>
+                                            <Button
+                                                onClick={() => { onOpen(), getTransactionDetail(parseFloat(item.id)) }}
+                                                cursor={"pointer"}
+                                                colorScheme="blue"
+                                            >view</Button>
+                                       </Td>
                                     </Tr>
                                 )
                             })
@@ -137,6 +143,7 @@ export const FailedData: React.FC = () => {
                         <Box>
                             <Text>service type : {transacDetail.service }</Text>
                             <Text>amount : &#8358; {transacDetail.amount }</Text>
+                            <Text>transaction ID :  {transacDetail.requestId }</Text>
                             <Text>refund status :  {transacDetail.success }</Text>
                             <Text>user full name : {transacDetail.profile.name}</Text>
                             <Text>user phone number: {transacDetail.profile.phone}</Text>
