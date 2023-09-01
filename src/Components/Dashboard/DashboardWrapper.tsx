@@ -45,6 +45,8 @@ import { BsFillPeopleFill } from "react-icons/bs"
 import { Footer } from './Footer/Footer';
 import useQuerryString from "@/hooks/useQueryString"
 import { reset } from '@/redux/slices/get-profile.slice';
+import { useState, useEffect } from 'react';
+import { iProfile } from '@/redux/interface/profileInterface';
 
 
 interface LinkItemProps {
@@ -179,9 +181,19 @@ interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+  const [profile,setProfile] = useState<iProfile|null>(null)
   const router:NextRouter = useRouter()
   const dispatch = useAppDispatch()
-  const {Profile} = useAppSelector(state=>state.fetchProfile)
+  
+  
+  useEffect(() => {
+      const profilex: string|null = typeof window !== 'undefined' ? localStorage.getItem('profile') : null
+      if (profilex) {
+          const user: iProfile = JSON.parse(profilex)
+          setProfile(user)
+      }
+      
+  }, [])
 
   const Logout = () => {
     dispatch(logout())
@@ -257,7 +269,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
               {
-                Profile && Profile.roles.includes("admin") && (
+                profile && profile.roles.includes("admin") && (
                    <MenuItem as={"a"} href='/admin'>Admin panel</MenuItem>
                 )
              }
