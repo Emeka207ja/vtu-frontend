@@ -20,5 +20,9 @@ export const contentData: icontent[] = [
     {
         name: "Data",
         id:"data"
+    },
+    {
+        name: "Failed Transactions",
+        id:"refund"
     }
 ]
