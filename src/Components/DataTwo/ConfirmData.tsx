@@ -52,6 +52,7 @@ export const ConfirmDataTwo: React.FC = () => {
     
 
     const [formState, setFormState] = useState<{ loading: boolean, success: boolean }>({ loading: false, success: false })
+    const [optionState,setOptionState] = useState<{loading:boolean,success:boolean,err:string}>({loading:false,success:false,err:""})
     const [errorMessage, setErrmsg] = useState<string | null>()
     const [auth, setAuth] = useState<{ token: string }>({ token: "" })
     const [Options, setOptions] = useState<ioptions | null>(null)
@@ -144,21 +145,22 @@ export const ConfirmDataTwo: React.FC = () => {
             return
         }
         try {
+            setOptionState({loading:true,success:false,err:""})
             const data:ioptions[] = await getOptions(accessToken, type)
             const selected:ioptions[] = data.filter(item=>item.plan_id === plan)
            
-            if (selected.length < 0) {
-                console.log(error)
+            if (selected.length === 0) {
+                console.log("error")
                 return
             }
             const option = selected[0]
             console.log(option)
             setOptions(option)
-
+            setOptionState({loading:false,success:true,err:""})
         } catch (error: any) {
             console.log(error)
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message;
-          
+            setOptionState({loading:false,success:false,err:message})
         }
     }
 
@@ -172,9 +174,9 @@ export const ConfirmDataTwo: React.FC = () => {
     }, [accessToken])
 
     useEffect(() => {
-        if (type && plan) {
-            optionHandler(type,plan)
-        }
+       
+        optionHandler(type,plan)
+        
     },[type,plan])
     
     if (Options) {
@@ -193,7 +195,7 @@ export const ConfirmDataTwo: React.FC = () => {
                    </Flex>
                     <Box textAlign={"center"}>
                         {
-                            pending ? (<Spinner />) : error ? <Text color={"red"} fontSize={"0.9rem"}>{ error}</Text>:""
+                            pending || optionState.loading? (<Spinner />) : error ? <Text color={"red"} fontSize={"0.9rem"}>{ error}</Text>: optionState.err ? <Text color={"red"} fontSize={"0.9rem"}>{ optionState.err}</Text>:""
                         }
                     </Box>
                 </CardHeader>

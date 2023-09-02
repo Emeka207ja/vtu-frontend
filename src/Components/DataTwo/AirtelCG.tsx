@@ -32,7 +32,8 @@ export const AirtelCG: React.FC = () => {
         e.preventDefault()
         const { plan_id, phone } = formVal
         console.log({ plan_id, phone, price })
-        router.push(`/datatwo/confirm?plan=${plan_id}&phone=${phone}&amt=${price}`)
+        const type = "AIRTEL_CG"
+        router.push(`/datatwo/confirm?plan=${plan_id}&phone=${phone}&amt=${price}&type=${type}`)
     }
 
 
