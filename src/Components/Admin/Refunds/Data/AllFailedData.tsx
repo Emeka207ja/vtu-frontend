@@ -27,7 +27,7 @@ import {
 import { useState,useEffect } from "react"
 import { idata } from "./idata";
 import { useAppSelector } from "@/redux/hooks";
-import { getFailedTransaction } from "../services";
+import { getFailedTransaction,refundTransaction,cancelrefundTransaction } from "../services";
 import { format } from 'timeago.js';
 
 
@@ -36,6 +36,7 @@ export const FailedData: React.FC = () => {
     const [dataItemsArray, setDataItems] = useState<any[] | []>([])
     const [transacDetail,setTransacDetail] = useState<idata|null>(null)
     const [fetchState,setFetchState] = useState<{loading:boolean,success:boolean,err:string}>({loading:false,success:false,err:""})
+    const [refundState,setRefundState] = useState<{loading:boolean,success:boolean,err:string}>({loading:false,success:false,err:""})
 
     const { accessToken } = useAppSelector(state => state.loginAuth)
     
@@ -60,6 +61,7 @@ export const FailedData: React.FC = () => {
     }
 
     const getTransactionDetail = (id: number) => {
+        setRefundState({ loading: false, success: false, err: "" })
         if (dataItemsArray.length === 0) {
             return
         }
@@ -71,9 +73,53 @@ export const FailedData: React.FC = () => {
         setTransacDetail(detail)
     }
 
+    const refundTransactionHandler = async () => {
+        if (!accessToken) {
+            console.log("auth error")
+            return;
+        }
+        if (!transacDetail) {
+            console.log("failed")
+            return
+        }
+        const {requestId,profile:{username}} = transacDetail
+        try {
+            setRefundState({ loading: true, success: false, err: "" })
+            const response = await refundTransaction(requestId,username!, accessToken)
+            setRefundState({ loading: false, success: true, err: "" })
+        } catch (error: any) {
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            console.log(message)
+            setRefundState({ loading: false, success: false, err: message })
+        }
+    }
+    const cancelrefund = async () => {
+        if (!accessToken) {
+            console.log("auth error")
+            return;
+        }
+        if (!transacDetail) {
+            console.log("failed")
+            return
+        }
+        const {requestId,profile:{username}} = transacDetail
+        try {
+            setRefundState({ loading: true, success: false, err: "" })
+            const response = await cancelrefundTransaction(requestId,username!, accessToken)
+            setRefundState({ loading: false, success: true, err: "" })
+        } catch (error: any) {
+            const message: string = (error.response && error.response.data && error.response.data.message) || error.message
+            console.log(message)
+            setRefundState({ loading: false, success: false, err: message })
+        }
+    }
+
     useEffect(() => {
         fetchTransaction()
-    },[])
+        if (refundState.success) {
+            fetchTransaction()
+        }
+    },[refundState.success])
    
     return (
         <Box>
@@ -135,12 +181,24 @@ export const FailedData: React.FC = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-            <ModalHeader>transaction details</ModalHeader>
+                <ModalHeader>
+                    {
+                        refundState.loading ? (
+                            <Center>
+                                <Spinner/>
+                            </Center>
+                            ) : refundState.success ? <Center color={"green"}>success!</Center> : refundState.err ? (
+                                    <Center>
+                                        <Text>{ refundState.err}</Text>
+                                    </Center>
+                        ):" transaction details"
+                   }
+                </ModalHeader>
             <ModalCloseButton />
             <ModalBody>
                 {
                     transacDetail && (
-                        <Box>
+                        <Box fontSize={"0.8rem"}>
                             <Text>service type : {transacDetail.service }</Text>
                             <Text>amount : &#8358; {transacDetail.amount }</Text>
                             <Text>transaction ID :  {transacDetail.requestId }</Text>
@@ -155,8 +213,8 @@ export const FailedData: React.FC = () => {
 
             <ModalFooter>
                 <HStack>
-                    <Button colorScheme='red'>cancel refund</Button>
-                    <Button colorScheme='blue'>approve refund</Button>
+                    <Button colorScheme='red' onClick={cancelrefund}>cancel refund</Button>
+                    <Button colorScheme='blue' onClick={refundTransactionHandler}>approve refund</Button>
                 </HStack>
                
             </ModalFooter>
