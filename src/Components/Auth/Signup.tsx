@@ -48,11 +48,11 @@ export const SignupComponent: React.FC = () => {
         
         e.preventDefault()
         const { email: Email, username: User, password: pass, confirm_password: cpass, name: nme ,phone} = value;
-        const email = Email.toLowerCase()
-        const username = User.toLowerCase()
-        const password = pass.toLowerCase()
-        const confirm_password = cpass.toLowerCase()
-        const name = nme.toLowerCase()
+        const email = Email.toLowerCase().trim()
+        const username = User.toLowerCase().trim()
+        const password = pass.toLowerCase().trim()
+        const confirm_password = cpass.toLowerCase().trim()
+        const name = nme.toLowerCase().trim()
         if (referral) {
             dispatch(signupAction({email,username,password,referral,name,phone}))
         } else {

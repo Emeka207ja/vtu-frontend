@@ -66,6 +66,7 @@ export const FailedData: React.FC = () => {
             return
         }
         const detail: idata = dataItemsArray.find(item => item.id === id)
+        console.log(detail)
         if (!detail) {
             console.log("no record found")
             return
@@ -82,7 +83,14 @@ export const FailedData: React.FC = () => {
             console.log("failed")
             return
         }
-        const {requestId,profile:{username}} = transacDetail
+        const { requestId, profile } = transacDetail
+        const user = profile.username
+        if (!user) {
+            console.log("username not found")
+            return
+        }
+        const username = user.toLowerCase().trim()
+        console.log(username)
         try {
             setRefundState({ loading: true, success: false, err: "" })
             const response = await refundTransaction(requestId,username!, accessToken)
@@ -102,7 +110,14 @@ export const FailedData: React.FC = () => {
             console.log("failed")
             return
         }
-        const {requestId,profile:{username}} = transacDetail
+        const { requestId, profile } = transacDetail
+        const user = profile.username
+        if (!user) {
+            console.log("username not found")
+            return
+        }
+        const username = user.toLowerCase().trim()
+        console.log(username)
         try {
             setRefundState({ loading: true, success: false, err: "" })
             const response = await cancelrefundTransaction(requestId,username!, accessToken)

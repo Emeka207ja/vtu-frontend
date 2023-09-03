@@ -25,8 +25,8 @@ export const Login: React.FC = () => {
     }
 
     const handleSubmit = (e: React.SyntheticEvent) => {
-        const password = data.password.toLowerCase()
-        const username = data.username.toLowerCase()
+        const password = data.password.toLowerCase().trim()
+        const username = data.username.toLowerCase().trim()
         const Data = {
             username, password
         }
