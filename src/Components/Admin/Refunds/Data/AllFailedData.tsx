@@ -90,7 +90,6 @@ export const FailedData: React.FC = () => {
             return
         }
         const username = user.toLowerCase().trim()
-        console.log(username)
         try {
             setRefundState({ loading: true, success: false, err: "" })
             const response = await refundTransaction(requestId,username!, accessToken)
@@ -117,10 +116,10 @@ export const FailedData: React.FC = () => {
             return
         }
         const username = user.toLowerCase().trim()
-        console.log(username)
+       
         try {
             setRefundState({ loading: true, success: false, err: "" })
-            const response = await cancelrefundTransaction(requestId,username!, accessToken)
+            const response = await cancelrefundTransaction(requestId,username, accessToken)
             setRefundState({ loading: false, success: true, err: "" })
         } catch (error: any) {
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message

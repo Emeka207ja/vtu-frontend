@@ -17,7 +17,7 @@ export interface idetail{
 
 
 export const getProfile = async (token: string) => {
-   const Token = token.replace(/"/g, '')
+   const Token = token?.replace(/"/g, '')
     const config = {
         headers: {
             Authorization: `Bearer ${Token}`
@@ -51,7 +51,7 @@ export const storeReservedAccount = async (token: string,detail:iStoreMonnify) =
     return data;
 }
 export const userReservedAccount = async (token: string) => {
-    const Token = token.replace(/"/g, '')
+    const Token = token?.replace(/"/g, '')
     const config = {
         headers: {
             Authorization: `Bearer ${Token}`

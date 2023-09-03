@@ -8,8 +8,10 @@ export const loginAction = createAsyncThunk(
         async (loginDetails: iLogin, thunkApi) => {
             try {
                 const { data } = await axios.post(loginApi, loginDetails)
-                typeof window !== 'undefined' ? localStorage.setItem('token',JSON.stringify(data)) : null
-                return data;
+               
+                const token: string = data.access_token!
+                typeof window !== 'undefined' ? localStorage.setItem('token',JSON.stringify(token)) : null
+                return  data.access_token!;
             } catch (error:any) {
                  const message = (error.response && error.response.data && error.response.data.message) || error.message;
                 console.log(error)

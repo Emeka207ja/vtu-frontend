@@ -16,21 +16,23 @@ export interface iUpdate {
 
 
 export const getAllData = async (token: string) => {
+    const Token = token.replace(/"/g, '')
     const config = {
         headers: {
-            Authorization :`Bearer ${token?.slice(1,-1)}`
+            Authorization :`Bearer ${Token}`
         }
     }
-    const { data } = await axios.get("https://easybuyapi.adaptable.app/api/v1/data", config);
+    const { data } = await axios.get("https://easybuyapi.adaptable.app/api/v1/data/alldata", config);
     return data;
 }
 
 
 export const getDatabyId = async (token: string,id: string) => {
     
+    const Token = token.replace(/"/g, '')
     const config = {
         headers: {
-            Authorization :`Bearer ${token?.slice(1,-1)}`
+            Authorization :`Bearer ${Token}`
         }
     }
     
@@ -39,9 +41,10 @@ export const getDatabyId = async (token: string,id: string) => {
 }
 export const updateById = async (token: string, id: string, details: iUpdate) => {
    
+    const Token = token.replace(/"/g, '')
     const config = {
         headers: {
-            Authorization :`Bearer ${token?.slice(1,-1)}`
+            Authorization :`Bearer ${Token}`
         }
     }
     

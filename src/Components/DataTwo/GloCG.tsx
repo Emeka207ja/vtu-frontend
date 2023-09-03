@@ -60,12 +60,14 @@ export const GloCG: React.FC = () => {
     }
 
     useEffect(() => {
-         optionHandler()
-        // if (accessToken) {
-        //     dispatch(getProfileAction(accessToken))
+        //  optionHandler()
+        if (accessToken) {
+            // dispatch(getProfileAction(accessToken))
+             optionHandler()
            
-        // }
-    }, [])
+           
+        }
+    }, [accessToken])
     useEffect(() => {
         if (Options.length > 0) {
             const selected: ioptions[] = Options.filter(item => item.plan_id === formVal.plan_id)

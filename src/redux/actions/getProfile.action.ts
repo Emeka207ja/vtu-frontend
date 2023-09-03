@@ -6,9 +6,10 @@ export const getProfileAction = createAsyncThunk('profile/getProfile',
     async (token:string, thunkApi) => {
       
         // const Token = JSON.parse(localStorage.getItem('token')||"{}")
+        const Token = token.replace(/"/g, '')
         const config = {
             headers: {
-                Authorization: `Bearer ${token.slice(1,-1)}`
+                Authorization :`Bearer ${Token}`
             }
         }
         try {

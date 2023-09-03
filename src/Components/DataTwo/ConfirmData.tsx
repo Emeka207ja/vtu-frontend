@@ -128,7 +128,6 @@ export const ConfirmDataTwo: React.FC = () => {
             }
             const res = await purchaseDataHandler(accessToken,purchaseDetail)
             setFormState({loading:false,success:true})
-            console.log(data)
         } catch (error:any) {
             console.log(error)
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message
@@ -144,6 +143,7 @@ export const ConfirmDataTwo: React.FC = () => {
             console.log("stopped")
             return
         }
+
         try {
             setOptionState({loading:true,success:false,err:""})
             const data:ioptions[] = await getOptions(accessToken, type)
@@ -154,7 +154,6 @@ export const ConfirmDataTwo: React.FC = () => {
                 return
             }
             const option = selected[0]
-            console.log(option)
             setOptions(option)
             setOptionState({loading:false,success:true,err:""})
         } catch (error: any) {
@@ -175,7 +174,9 @@ export const ConfirmDataTwo: React.FC = () => {
 
     useEffect(() => {
        
-        optionHandler(type,plan)
+        if (type && plan) {
+            optionHandler(type,plan)
+        }
         
     },[type,plan])
     

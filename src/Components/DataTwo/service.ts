@@ -41,10 +41,10 @@ export const dataSubHandler = async (auth: iauth, details: idetails) => {
 }
 
 export const getOptions = async (token: string, type: string) => {
-    
+    const Token = token.replace(/"/g, '')
     const config = {
         headers: {
-            Authorization :`Bearer ${token?.slice(1,-1)}`
+            Authorization :`Bearer ${Token}`
         }
     }
     
@@ -60,22 +60,21 @@ export const getToken = async () => {
 }
 
 export const purchaseDataHandler = async (token: string, details: ipurchase) => {
-   
+   const Token = token.replace(/"/g, '')
     const config = {
         headers: {
-            Authorization :`Bearer ${token?.slice(1,-1)}`
+            Authorization :`Bearer ${Token}`
         }
     }
-     console.log(config)
     const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/data/buydata", details, config);
     return data;
 
 }
 export const debitHandler = async (token: string, details: idebit) => {
-   
+    const Token = token.replace(/"/g, '')
     const config = {
         headers: {
-            Authorization :`Bearer ${token?.slice(1,-1)}`
+            Authorization :`Bearer ${Token}`
         }
     }
     const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/profile/debitaccount", details, config);
