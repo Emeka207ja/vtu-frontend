@@ -51,18 +51,8 @@ export const CarInsurance: React.FC = () => {
             Year_of_Make,
             Contact_Address
         } = formdata
-        console.log(formdata)
 
-        router.push(`/insurance/carconfirm?vcode=${variation_code}
-        &name=${Insured_Name}
-        &engine=${Engine_Number}
-        &chasis=${Chasis_Number}
-        &plate=${Plate_Number}
-        &make=${Vehicle_Make}
-        &color=${Vehicle_Color}
-        &model=${Vehicle_Model}
-        &year=${Year_of_Make}
-        &address=${Contact_Address}&price=${price}&phone=${phone}&sid=ui-insure`)
+        router.push(`/insurance/carconfirm?vcode=${variation_code}&name=${Insured_Name}&engine=${Engine_Number}&chasis=${Chasis_Number}&plate=${Plate_Number}&make=${Vehicle_Make}&color=${Vehicle_Color}&model=${Vehicle_Model}&year=${Year_of_Make}&address=${Contact_Address}&price=${price}&phone=${phone}&sid=ui-insure`) 
     }
     useEffect(() => {
         insuranceVars()

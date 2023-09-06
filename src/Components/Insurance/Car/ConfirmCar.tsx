@@ -31,11 +31,16 @@ import { carInsuranceHandler, idetails,storeCarInsurance,iCar } from "./service"
 import { genReqId } from "@/Components/History/util.service"
 import { iAuth } from "@/Components/Wassce/service"
 import { getHeaders } from "@/Components/Airtime/service"
+import { idebit,debitHandler } from "@/Components/DataTwo/service"
+import { iVar } from "@/Components/Data/iProfvider"
+import { getDataVars } from "@/Components/Data/service"
 
 export const ConfirmCarInsurance: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const {accessToken} = useAppSelector(state=>state.loginAuth)
     const { Profile } = useAppSelector(state => state.fetchProfile)
+    const [vars, setVars] = useState<iVar[] | []>([])
+    const [InsurancePrice,setPrice] = useState<number|null>(null)
     const dispatch = useAppDispatch()
 
     const router:NextRouter = useRouter()
@@ -83,7 +88,11 @@ export const ConfirmCarInsurance: React.FC = () => {
         if (userPin !== pin) {
             setErrmsg("invalid credentials")
             return
-        }
+         }
+         
+         if (!InsurancePrice) {
+             return
+         }
         
         const request_id:string = genReqId()
         const billersCode: string = Plate_Number
@@ -104,11 +113,18 @@ export const ConfirmCarInsurance: React.FC = () => {
             Vehicle_Model,
             Insured_Name,
             Chasis_Number
-      }
+         }
+         
+         const debitDetails: idebit = {
+             requestId: request_id,
+             amount: InsurancePrice,
+             service:"vtpasCarInsurance"
+         }
     //   console.log(details)
         
         try {
-            setFormState({loading:true,success:false})
+            setFormState({ loading: true, success: false })
+            const debitResponse = await debitHandler(accessToken, debitDetails)
             const data = await carInsuranceHandler(auth, details)
             if (data && data.code === "000") {
                 const product_name:string = data.content?.transactions.product_name
@@ -123,10 +139,8 @@ export const ConfirmCarInsurance: React.FC = () => {
                     requestId
                 }
                 const res = await storeCarInsurance(accessToken, detail)
-                console.log(detail,res)
             }
             setFormState({loading:false,success:true})
-            console.log(data)
         } catch (error:any) {
             console.log(error)
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message
@@ -135,13 +149,38 @@ export const ConfirmCarInsurance: React.FC = () => {
         }
        
     }
+
+    const insuranceVars = async () => {
+        try {
+            const data = await getDataVars("ui-insure")
+            
+            if (data) {
+                const varation: iVar[] = data.content?.varations
+                setVars(varation)
+            } 
+        } catch (error:any) {
+            console.log(error)
+        }
+    }
     
     useEffect(() => {
-         headerHandler()
+        headerHandler()
+        insuranceVars()
         if (accessToken) {
             dispatch(getProfileAction(accessToken))
         }
-    },[accessToken])
+    }, [accessToken])
+
+    useEffect(() => {
+        if (vars.length > 0) {
+            const filtered = vars.filter(item => item.variation_code === variation_code)
+            if ( filtered.length > 0) {
+                const StringAmt = filtered[0]?.variation_amount
+                const amt = Math.ceil(parseFloat(StringAmt))
+                setPrice(amt)
+           }
+        }
+    },[vars])
     return (
         <Box>
             <Card>

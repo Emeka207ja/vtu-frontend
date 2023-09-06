@@ -31,6 +31,9 @@ import { getHeaders } from "@/Components/Airtime/service";
 import { genReqId } from "@/Components/History/util.service"; 
 import { BsCheck2Circle } from "react-icons/bs"
 import { useRouter,NextRouter } from "next/router";
+import { getDataVars } from "@/Components/Data/service";
+import { idebit,debitHandler } from "@/Components/DataTwo/service";
+import { iVar } from "@/Components/Data/iProfvider";
 
 
 export const ConfirmHome: React.FC = () => {
@@ -57,7 +60,9 @@ export const ConfirmHome: React.FC = () => {
     const [value, setValue] = useState<string>("")
     const [errorMessage, setErrmsg] = useState<string | null>()
 
-    const [formState,setFormState] = useState<{loading:boolean,success:boolean}>({loading:false,success:false})
+    const [formState, setFormState] = useState<{ loading: boolean, success: boolean }>({ loading: false, success: false })
+    const [vars, setVars] = useState<iVar[] | []>([])
+    const [InsurancePrice,setPrice] = useState<number|null>(null)
     
     const [auth,setAuth] = useState<iAuth>({api_key:"",secret_key:""})
 
@@ -81,6 +86,9 @@ export const ConfirmHome: React.FC = () => {
             setErrmsg("insufficient funds")
             return
         }
+         if (!InsurancePrice) {
+             return
+         }
        
         const request_id:string = genReqId()
         const billersCode: string = full_name.trim()
@@ -97,10 +105,17 @@ export const ConfirmHome: React.FC = () => {
             type_building,
             business_occupation,
             address
-      }
+        }
+        
+        const debitDetails: idebit = {
+             requestId: request_id,
+             amount: InsurancePrice,
+             service:"vtpasHomeInsurance"
+         }
         
         try {
-            setFormState({loading:true,success:false})
+            setFormState({ loading: true, success: false })
+            const debitResponse = await debitHandler(accessToken, debitDetails)
             const data = await homeinsureHandler(auth, details)
             if (data && data.code === "000") {
                 const product_name:string = data.content?.transactions.product_name
@@ -112,10 +127,8 @@ export const ConfirmHome: React.FC = () => {
                     requestId
                 }
                 const res = await storeHomeinsurance(accessToken, detail)
-                console.log(detail,res)
             }
             setFormState({loading:false,success:true})
-            console.log(data)
         } catch (error:any) {
             console.log(error)
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message
@@ -134,12 +147,37 @@ export const ConfirmHome: React.FC = () => {
         }
     }
 
+     const insuranceVars = async () => {
+        try {
+            const data = await getDataVars("home-cover-insurance")
+            if (data) {
+                const varation: iVar[] = data.content?.varations
+                setVars(varation)
+            }
+        } catch (error:any) {
+            console.log(error)
+        }
+    }
+
+
     useEffect(() => {
         headerHandler()
+        insuranceVars()
         if (accessToken) {
             dispatch(getProfileAction(accessToken))
         }
-    },[accessToken])
+    }, [accessToken])
+    
+     useEffect(() => {
+         if (vars.length > 0) {
+            const filtered = vars.filter(item => item.variation_code === variation_code)
+            if ( filtered.length > 0) {
+                const StringAmt = filtered[0]?.variation_amount
+                const amt = Math.ceil(parseFloat(StringAmt))
+                setPrice(amt)
+           }
+        }
+    },[vars])
     
     return (
         <Box>

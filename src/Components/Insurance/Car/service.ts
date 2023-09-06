@@ -21,20 +21,17 @@ export interface iCar{
 
 
 export const carInsuranceHandler = async (auth:iAuth,details:idetails) => {
-
     const config = vtpassHeaderfn(auth)
-    console.log(config)
-
-    const { data } =await axios.post(payApi, details, config);
+    const { data } = await axios.post(payApi, details, config);
     return data
 }
 export const storeCarInsurance = async (token:string,details:iCar) => {
-     const config = {
+     const Token = token.replace(/"/g, '')
+    const config = {
         headers: {
-            Authorization: `Bearer ${token.slice(1,-1)}`
+            Authorization :`Bearer ${Token}`
         }
     }
-
     const { data } =await axios.post("https://easybuyapi.adaptable.app/api/v1/insurance/vehicle", details, config);
     return data
 }

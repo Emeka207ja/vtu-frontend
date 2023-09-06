@@ -77,7 +77,7 @@ export const debitHandler = async (token: string, details: idebit) => {
             Authorization :`Bearer ${Token}`
         }
     }
-    console.log(details)
+    
     const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/profile/debitaccount", details, config);
      console.log(data)
     return data;

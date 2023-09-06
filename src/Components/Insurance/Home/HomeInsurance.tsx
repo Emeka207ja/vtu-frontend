@@ -53,8 +53,6 @@ export const HomeInsurance: React.FC = () => {
         const { varCode, phone, full_name, business_occupation, address, date_of_birth, type_building } = formdata
 
         router.push(`/insurance/homeconfirm?varcode=${varCode}&name=${full_name}&bo=${business_occupation}&dob=${date_of_birth}&type=${type_building}&sid=home-cover-insurance&phone=${phone}&address=${address}&price=${price}`)
-        
-        console.log(formdata)
     }
     useEffect(() => {
         insuranceVars()

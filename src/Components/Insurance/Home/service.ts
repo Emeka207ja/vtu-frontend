@@ -29,7 +29,7 @@ export const getOptionType = async (type:string,serviceID:string) => {
 }
 
 export const homeinsureHandler = async (auth: iAuth, details: iData) => {
-    console.log(details)
+    
     const { api_key, secret_key } = auth
      const config = {
         headers: {
@@ -41,9 +41,10 @@ export const homeinsureHandler = async (auth: iAuth, details: iData) => {
     return data
 }
 export const storeHomeinsurance = async (token:string, details: iHomeInsurance) => {
+    const Token = token.replace(/"/g, '')
     const config = {
         headers: {
-            Authorization: `Bearer ${token.slice(1,-1)}`
+            Authorization :`Bearer ${Token}`
         }
     }
     const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/insurance/home", details, config)
