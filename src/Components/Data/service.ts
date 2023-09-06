@@ -24,7 +24,7 @@ export const getDataVars = async(vars:string) => {
     return data;
 }
 
-export const dataSubHandler = async (auth: iAuth, details: idetails) => {
+export const dataSubHandler  = async (auth: iAuth, details: idetails) => {
     const config = vtpassHeaderfn(auth)
     console.log(details)
 
@@ -36,9 +36,10 @@ export const storeDataSub = async (token: string, detail: iDataStore) => {
     const Token = token.replace(/"/g, '')
     const config = {
         headers: {
-            Authorization: `Bearer ${token.slice(1,-1)}`
+            Authorization:`Bearer ${Token}`
         }
     }
+    console.log(detail)
     const { data } = await axios.post("https://easybuyapi.adaptable.app/api/v1/airtime/vtdata",detail,config);
     return data;
 }

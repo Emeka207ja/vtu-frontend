@@ -121,6 +121,7 @@ export const ConfirmDataTwo: React.FC = () => {
                 return
             }
             const data = await dataSubHandler(auth, details)
+            console.log(data)
             if (data && data.status === "failed") {
                 setFormState({ loading: false, success: false })
                 setErrmsg(data.message)
@@ -132,7 +133,8 @@ export const ConfirmDataTwo: React.FC = () => {
             console.log(error)
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message
             setErrmsg(message)
-            setFormState({loading:false,success:false})
+            setFormState({ loading: false, success: false })
+            console.log(message)
         }
        
     }
@@ -179,10 +181,7 @@ export const ConfirmDataTwo: React.FC = () => {
         }
         
     },[type,plan])
-    
-    if (Options) {
-        console.log("success")
-    }
+
 
     return (
         <Box>

@@ -28,10 +28,12 @@ import { BsCheck2Circle } from "react-icons/bs"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { iAuth } from "../Wassce/service"
 import { genReqId } from "../History/util.service"
-import { idetails, dataSubHandler,storeDataSub,iDataStore } from "./service"
+import { idetails, dataSubHandler,storeDataSub,iDataStore, getDataVars } from "./service"
 import { getHeaders } from "../Airtime/service"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { useRouter, NextRouter } from "next/router";
+import { iVar } from "./iProfvider"
+import { debitHandler,idebit } from "../DataTwo/service"
 
 
 export const ConfirmData: React.FC = () => {
@@ -47,11 +49,13 @@ export const ConfirmData: React.FC = () => {
     const [variation_code] = useQuerryString("varcode") 
     const [billersCode] = useQuerryString("biller") 
     const [amt] = useQuerryString("amt")
+    const [price,setPrice] = useState<number|null>(null)
 
     const [formState, setFormState] = useState<{ loading: boolean, success: boolean }>({ loading: false, success: false })
     const [errorMessage, setErrmsg] = useState<string | null>()
     const [auth, setAuth] = useState<iAuth>({ api_key: "", secret_key: "" })
     const [value, setValue] = useState<string>("")
+    const [vars,setVars] = useState<iVar[]|[]>([])
 
      const headerHandler = async () => {
         try {
@@ -77,7 +81,10 @@ export const ConfirmData: React.FC = () => {
         if (userPin !== pin) {
             setErrmsg("invalid credentials")
             return
-        }
+         }
+         if (!price) {
+             return
+         }
         // const phone: number = parseFloat(Phone)
         const request_id:string = genReqId()
         // const phone:number = parseFloat(billersCode)
@@ -90,23 +97,30 @@ export const ConfirmData: React.FC = () => {
             variation_code,
             phone,
             amount, 
+         }
+         const detail: idebit = {
+             requestId: request_id,
+             service: "vtdata",
+             amount:price
         }
         
         try {
-            setFormState({loading:true,success:false})
+            setFormState({ loading: true, success: false })
+            const debitResponse = await debitHandler(accessToken, detail)
+           
             const data = await dataSubHandler(auth, details)
             if (data && data.code === "000") {
                 const detail: iDataStore = {
                     request_id,
                     phone,
-                    amount,
+                    amount:price,
                     serviceID
                 }
                 const res = await storeDataSub(accessToken, detail)
-                console.log(res)
+               
             }
             setFormState({loading:false,success:true})
-            console.log(data)
+           
         } catch (error:any) {
             console.log(error)
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message
@@ -115,6 +129,23 @@ export const ConfirmData: React.FC = () => {
         }
        
     }
+    const handleVars = async () => {
+         if(!serviceID){
+            return
+         }
+        try {
+            const data = await getDataVars(serviceID)
+            if (data) {
+                const varatation = data.content?.varations
+                setVars(varatation)
+            }
+            console.log(data)
+            
+        } catch (error:any) {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message
+            console.log("dataVars error",message)
+        }
+    }
 
     useEffect(() => {
          headerHandler()
@@ -122,6 +153,23 @@ export const ConfirmData: React.FC = () => {
             dispatch(getProfileAction(accessToken))
         }
     }, [accessToken])
+
+    useEffect(() => {
+        if (serviceID) {
+            handleVars()
+        }
+    }, [serviceID])
+    
+    useEffect(() => {
+        if (vars.length > 0) {
+            const selectedArr = vars.filter(item => item.variation_code === variation_code)
+            const stringAmt: string = selectedArr[0]?.variation_amount
+            const amtx = parseFloat(stringAmt)
+            const amt = Math.ceil(amtx)
+            setPrice(amt)
+          
+        }
+    },[vars])
 
     return (
         <Box>
