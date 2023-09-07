@@ -23,6 +23,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { payApi } from "@/api-folder/vtpass"
 import { iProfile } from "@/redux/interface/profileInterface"
+import { idebit,debitHandler } from "../DataTwo/service"
 
 export const ConfirmAirtime = () => {
     const [apikey,setApikey] = useState<string>("")
@@ -32,9 +33,9 @@ export const ConfirmAirtime = () => {
     const [phone] = useQuerryString("phone")
     const [profileUser,setProfile] = useState<iProfile|null>(null)
 
-    const { accessToken } = useAppSelector(state => state.loginAuth)
-    // const {Profile} = useAppSelector(state=>state.fetchProfile)
-    // const dispatch = useAppDispatch()
+    const { accessToken,pending } = useAppSelector(state => state.loginAuth)
+    const {Profile} = useAppSelector(state=>state.fetchProfile)
+    const dispatch = useAppDispatch()
    
      const [value, setValue] = useState("")
      const [loading, setLoading] = useState(false)
@@ -51,10 +52,14 @@ export const ConfirmAirtime = () => {
             toast.error("auth error")
             return
         }
-         const amount = parseFloat(Amount)
+        if (!Profile) {
+            console.log("profile error")
+            return
+        }
+         const amount = Math.ceil(parseFloat(Amount))
         const pin = parseFloat(value)
        
-        if (pin!== profileUser?.pin || profileUser?.balance<amount) {
+        if (pin!== Profile.pin || Profile.balance<amount) {
             toast.error("invalid credentials or amount")
             return 0
         }
@@ -74,24 +79,30 @@ export const ConfirmAirtime = () => {
                 "secret-key": secretKey
             }
         }
+        const val:iairtimePurchase ={
+            network:serviceID,
+            phone:phone,
+            Amount:amount,
+            order_id  : request_id
+        }
+        const debitDetail: idebit = {
+            amount,
+            requestId: request_id,
+            service:"vtpassairtime"
+        }
         try {
-          
             setLoading(true)
             setSuccess(false)
-            const val:iairtimePurchase ={
-                network:serviceID,
-                phone:phone,
-                Amount:20,
-                order_id  : request_id
-            }
-         const res = await stroreAirtime(accessToken, val)
-                console.log(res)
-            
-            if (res) {
-                const { data } = await axios.post(payApi, payload, config)
+            const debitResponse = await debitHandler(accessToken, debitDetail)
+    
+            const { data } = await axios.post(payApi, payload, config)
+            if (data && data.code !== "000") {
+                toast.error("transaction failed")
+                setLoading(false)
+                setSuccess(false)
                 console.log(data)
-           }
-          
+            }
+            const res = await stroreAirtime(accessToken, val)
            
             toast.success("success")
             setLoading(false)
@@ -133,28 +144,28 @@ export const ConfirmAirtime = () => {
 
     useEffect(() => {
         getheaderParams();
-    //     if (accessToken) {
-    //         dispatch(getProfileAction(accessToken))
-    //    }
+        if (accessToken) {
+            dispatch(getProfileAction(accessToken))
+       }
         
-    }, [])
+    }, [accessToken])
     
-    useEffect(() => {
-       const profilex: string|null = typeof window !== 'undefined' ? localStorage.getItem('profile') : null
-        if (profilex) {
-            const user: iProfile = JSON.parse(profilex)
-            setProfile(user)
-            console.log("store",user.id)
-        }
+    // useEffect(() => {
+    //    const profilex: string|null = typeof window !== 'undefined' ? localStorage.getItem('profile') : null
+    //     if (profilex) {
+    //         const user: iProfile = JSON.parse(profilex)
+    //         setProfile(user)
+    //         console.log("store",user.id)
+    //     }
         
-    }, [])
+    // }, [])
     
     return (
         <Box>
             <Card>
                 <CardHeader>
                     <Heading textAlign={"center"} fontSize={"1.2rem"}>
-                        { loading?(<Spinner
+                        {pending || loading?(<Spinner
                                             thickness='4px'
                                             speed='0.65s'
                                             emptyColor='gray.200'

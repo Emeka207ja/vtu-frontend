@@ -10,6 +10,9 @@ import { genReqId } from "@/Components/History/util.service"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { NextRouter,useRouter } from "next/router"
+import { verifySmartCard } from "../service"
+import { iOldDstvSub } from "../icardHolder"
+import { idebit,debitHandler } from "@/Components/DataTwo/service"
 
 
 export const ConfirmRenewal: React.FC = () => {
@@ -31,7 +34,9 @@ export const ConfirmRenewal: React.FC = () => {
     const [auth, setAuth] = useState<{ api_key: string, secret_key: string }>({ api_key: "", secret_key: "" })
 
     const [value, setValue] = useState<string>("")
-    const [loading,setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [holder, setHolder] = useState<iOldDstvSub | null>(null)
+    const [price,setPrice] = useState<number|null>(null)
 
     const handleChange = (value: string) => {
         setValue(value)
@@ -52,6 +57,10 @@ export const ConfirmRenewal: React.FC = () => {
             toast.error("insufficient funds")
             return
         }
+        if (!price) {
+            console.log("null price")
+            return
+        }
        
         const amount:number = parseFloat(Amount);
         const request_id:string = genReqId()
@@ -63,9 +72,14 @@ export const ConfirmRenewal: React.FC = () => {
             phone: Phone,
             subscription_type
         }
-        console.log(content)
+        const debitDetails: idebit = {
+            amount: price,
+            requestId: request_id,
+            service: "vtpassDstvOld"
+        }
         try {
             setLoading(true)
+            const debitResponse = await debitHandler(accessToken, debitDetails)
             const data: any = await renewSub(auth, content)
              if (data && data.code !== "000") {
                 toast.error("transaction failed")
@@ -80,7 +94,6 @@ export const ConfirmRenewal: React.FC = () => {
             const res = await storeDstv(accessToken,detail,"dstv")
             toast.success("success")
             setLoading(false)
-            console.log(data)
         } catch (error: any) {
             const message:string = (error.response && error.response.data && error.response.data.message)||error.message
             setLoading(false)
@@ -94,24 +107,43 @@ export const ConfirmRenewal: React.FC = () => {
             const data: { api_key: string, secret_key: string } = await getHeaders()
             if (data) {
                 setAuth(data)
-               console.log(data)
             }
         } catch (error:any) {
             console.log(error)
         }
     }
 
+     const confirmCard = async () => {
+        
+         const card = billersCode.trim()
+        try {
+            setHolder(null)
+            const datax = await verifySmartCard(card, auth, "dstv");
+            if (datax) {
+                const val: iOldDstvSub = datax.content[1]?.json?.details?.items[1]
+                const Price = Math.ceil(val.price)
+                setPrice(Price)
+            }
+            
+        } catch (error:any) {
+            const message:string = (error.response && error.response.data && error.response.data.message)||error.message
+            console.log(message)
+        }
+    }
+
     useEffect(() => {
         Headers()
-    }, [])
-    
-    useEffect(() => {
-        if (accessToken) {
+          if (accessToken) {
            dispatch(getProfileAction(accessToken))
         }
     }, [accessToken])
- 
     
+    useEffect(() => {
+        if (auth) {
+           confirmCard()
+      }
+    }, [auth])
+ 
     return (
         <Box>
             <Card>

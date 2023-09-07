@@ -1,4 +1,10 @@
-import { Box, Heading,Card,CardHeader,CardBody,CardFooter,PinInput,PinInputField,Text,Spinner,Button } from "@chakra-ui/react"
+import {
+    Box, Heading, Card,
+    CardHeader, CardBody,
+    CardFooter, PinInput,
+    PinInputField, Text,
+    Spinner, Button, Center
+} from "@chakra-ui/react"
 import useQuerryString from "@/hooks/useQueryString"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
@@ -10,6 +16,9 @@ import { genReqId } from "@/Components/History/util.service"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { NextRouter,useRouter } from "next/router"
+import { iVar } from "@/Components/Data/iProfvider"
+import { getDataVars } from "@/Components/Data/service"
+import { idebit,debitHandler } from "@/Components/DataTwo/service"
 
 
 export const ConfirmNewSub: React.FC = () => {
@@ -32,7 +41,9 @@ export const ConfirmNewSub: React.FC = () => {
     const [auth, setAuth] = useState<{ api_key: string, secret_key: string }>({ api_key: "", secret_key: "" })
 
     const [value, setValue] = useState<string>("")
-    const [loading,setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [vars, setVars] = useState<iVar[] | []>([])
+    const [price,setPrice] = useState<number|null>(null)
 
     const handleChange = (value: string) => {
         setValue(value)
@@ -54,6 +65,10 @@ export const ConfirmNewSub: React.FC = () => {
             toast.error("insufficient funds")
             return
         }
+        if (!price) {
+            console.log("null price")
+            return
+        }
 
        
         const request_id:string = genReqId()
@@ -66,9 +81,16 @@ export const ConfirmNewSub: React.FC = () => {
             phone:Phone,
             subscription_type
         }
-        console.log(content)
+        const debitDetails: idebit = {
+            requestId: request_id,
+            amount: price,
+            service: "vtpassDstvNew"
+        }
         try {
             setLoading(true)
+            console.log("loading")
+            const debitResponse = await debitHandler(accessToken, debitDetails)
+            console.log(debitResponse)
             const data: any = await newSub(auth, content)
             if (data && data.code !== "000") {
                 toast.error("transaction failed")
@@ -85,7 +107,7 @@ export const ConfirmNewSub: React.FC = () => {
                 setLoading(false)
                 return
             }
-            const res = await storeDstv(accessToken,detail,"dstv")
+            const res = await storeDstv(accessToken, detail, "dstv")
             toast.success("success")
          
             setLoading(false)
@@ -108,23 +130,48 @@ export const ConfirmNewSub: React.FC = () => {
         }
     }
 
+     const handleDstvVars = async () => {
+        try {
+            const data = await getDataVars("dstv")
+            if(data){
+                const varation = data.content?.varations
+                setVars(varation)
+            }
+           
+        }catch(error:any){
+            const message:string = (error.response && error.response.data && error.response.data.message)||error.message
+            console.log(message)
+        }
+    }
+
     useEffect(() => {
         Headers()
-    }, [])
-    
-    useEffect(() => {
-        if (accessToken) {
+        handleDstvVars()
+         if (accessToken) {
            dispatch(getProfileAction(accessToken))
         }
     }, [accessToken])
  
+     useEffect(() => {
+        if (vars.length > 0) {
+            const selectedArr = vars.filter(item => item.variation_code === variation_code)
+            const stringAmt: string = selectedArr[0]?.variation_amount
+            const amtx = parseFloat(stringAmt)
+            const amt = Math.ceil(amtx)
+            setPrice(amt)
+        }
+    },[vars])
     
     return (
         <Box>
             <Card>
                 <CardHeader>
                     {
-                        loading? (<Spinner/>): <Heading fontSize={"1rem"}>confirm subscription</Heading>
+                        loading? (
+                            <Center>
+                                <Spinner/>
+                            </Center>
+                        ): <Heading fontSize={"1rem"}>confirm subscription</Heading>
                     }
                 </CardHeader>
                 <CardBody>

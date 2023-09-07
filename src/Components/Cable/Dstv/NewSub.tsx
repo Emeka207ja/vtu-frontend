@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { getHeaders } from "@/Components/Airtime/service"
 import { verifySmartCard } from "./service"
 import { iVar } from "@/Components/Data/iProfvider"
-import { iHolder } from "./icardHolder"
+import { iHolder,idstvHolder } from "./icardHolder"
 import { NextRouter,useRouter } from "next/router"
 
 export const NewSub = () => {
@@ -18,7 +18,7 @@ export const NewSub = () => {
     const [card, setCard] = useState<string>("")
     const [loading,setLoading] = useState<boolean>(false)
     
-    const [holder, setHolder] = useState<iHolder | null>(null)
+    const [holder, setHolder] = useState<idstvHolder | null>(null)
      const [failed,setFailed] = useState<string|null>(null)
     
     const [formdata, setForm] = useState<{ varCode: string, phone: string }>({ varCode: "dstv-padi", phone: "" })
@@ -39,21 +39,23 @@ export const NewSub = () => {
 
     const confirmCard = async (e: React.SyntheticEvent) => {
         e.preventDefault();
+        const Card = card.trim()
         try {
             setLoading(true);
             setFailed(null)
             setHolder(null)
-            const datax = await verifySmartCard(card, authData, "dstv");
+            const datax = await verifySmartCard(Card, authData, "dstv");
+            console.log(datax)
             if (datax) {
-                const val:iHolder = datax.content;
+                const val:idstvHolder = datax.content?.[0]?.details
                 setHolder(val)
                 setLoading(false)
                 setFailed(null)
                 console.log(val)
-                 if (val.error) {
-                    setFailed(val.error)
-                    setHolder(null)
-                }
+                //  if (val.error) {
+                //     setFailed(val.error)
+                //     setHolder(null)
+                // }
             }
             
         } catch (error:any) {
@@ -138,8 +140,10 @@ export const NewSub = () => {
                     </Grid>
                     {
                         holder && (<Box mt={"1rem"} fontSize={"0.9rem"}>
-                            <Text>name: {holder.Customer_Name }</Text>
-                            <Text>current package: {holder.Current_Bouquet }</Text>
+                            <Text>first name: {holder.firstName }</Text>
+                            <Text>last name: {holder.lastName }</Text>
+                            <Text>customer Number: {holder.customerNumber }</Text>
+                            {/* <Text>current package: {holder.Current_Bouquet }</Text> */}
                             {/* <Text>renewal amount: {holder.Renewal_Amount }</Text> */}
                             {/* <Text>due data: {holder.DUE_DATE }</Text> */}
                             {/* <Text>status: {holder.Status }</Text> */}

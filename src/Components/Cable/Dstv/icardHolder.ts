@@ -11,3 +11,21 @@ export interface iHolder{
     Renewal_Amount: number;
     error?:string
 }
+
+export interface idstvHolder{
+    accountStatus:string
+    amount:number
+    customerNumber:string
+    customerType:string
+    dueDate:string
+    firstName:string
+    invoicePeriod:number
+    lastName:string
+}
+
+export interface iOldDstvSub {
+    code:string
+    description:string
+    name:string
+    price:number
+}

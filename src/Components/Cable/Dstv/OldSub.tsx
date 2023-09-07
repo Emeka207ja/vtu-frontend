@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { getHeaders } from "@/Components/Airtime/service"
 import { verifySmartCard } from "./service"
 import { iVar } from "@/Components/Data/iProfvider"
-import { iHolder } from "./icardHolder"
+import { iHolder,iOldDstvSub,idstvHolder } from "./icardHolder"
 import { NextRouter,useRouter } from "next/router"
 
 export const OldSub = () => {
@@ -18,7 +18,8 @@ export const OldSub = () => {
     const [card, setCard] = useState<string>("")
     const [loading,setLoading] = useState<boolean>(false)
     
-    const [holder, setHolder] = useState<iHolder | null>(null)
+    const [holder, setHolder] = useState<iOldDstvSub | null>(null)
+    const [dstvUser, setUser] = useState<idstvHolder | null>(null)
     const [failed,setFailed] = useState<string|null>(null)
     
     const [formdata, setForm] = useState<{ varCode: string, phone: string }>({ varCode: "dstv-padi", phone: "" })
@@ -45,15 +46,12 @@ export const OldSub = () => {
             setFailed(null)
             const datax = await verifySmartCard(card, authData, "dstv");
             if (datax) {
-                const val:iHolder = datax.content;
+                const val: iOldDstvSub = datax.content[1]?.json?.details?.items[1]
+                const user: idstvHolder = datax.content?.[0]?.details
+                setUser(user)
                 setHolder(val)
                 setLoading(false)
                 setFailed(null)
-                if (val.error) {
-                    setFailed(val.error)
-                    setHolder(null)
-                }
-                console.log(val)
             }
             
         } catch (error:any) {
@@ -96,11 +94,10 @@ export const OldSub = () => {
 
     const submitHandler = (e: React.SyntheticEvent) => {
         e.preventDefault();
-        const { phone } = formdata
-       
-        const amt = holder && holder.Renewal_Amount || 1850
-        router.push(`/cable/confirmdstv?phone=${phone}&biller=${card}&amt=${amt}&sId=dstv&subType=renew`)
-        console.log(formdata)
+        const { phone } = formdata;
+        const Card = card.trim()
+        const amt = holder && holder.price || 1850
+        router.push(`/cable/confirmdstv?phone=${phone}&biller=${Card}&amt=${amt}&sId=dstv&subType=renew`)
     }
 
     useEffect(() => {
@@ -149,9 +146,9 @@ export const OldSub = () => {
                     </Grid>
                     {
                         holder && (<Box mt={"1rem"} fontSize={"0.9rem"}>
-                            <Text>name: {holder.Customer_Name }</Text>
-                            <Text>current package: {holder.Current_Bouquet }</Text>
-                            <Text>renewal amount: {holder.Renewal_Amount }</Text>
+                            <Text>name: {dstvUser?.firstName }</Text>
+                            <Text>current package: {holder.name }</Text>
+                            <Text>renewal amount: {holder.price }</Text>
                             {/* <Text>due data: {holder.DUE_DATE }</Text> */}
                             {/* <Text>status: {holder.Status }</Text> */}
                         </Box>) 
@@ -177,7 +174,7 @@ export const OldSub = () => {
 
                         <FormControl>
                             <FormLabel>amount</FormLabel>
-                            <Input value={holder?.Renewal_Amount} readOnly/>
+                            <Input value={holder?.price? holder.price: " "} readOnly/>
                         </FormControl>
 
                         <FormControl>
