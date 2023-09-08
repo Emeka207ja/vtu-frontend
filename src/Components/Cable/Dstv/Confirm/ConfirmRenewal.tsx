@@ -11,7 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { NextRouter,useRouter } from "next/router"
 import { verifySmartCard } from "../service"
-import { iOldDstvSub } from "../icardHolder"
+import { iOldDstvSub,iHolder } from "../icardHolder"
 import { idebit,debitHandler } from "@/Components/DataTwo/service"
 
 
@@ -25,6 +25,7 @@ export const ConfirmRenewal: React.FC = () => {
     const [Amount] = useQuerryString("amt")
     const [serviceID] = useQuerryString("sId")
     const [subscription_type] = useQuerryString("subType")
+    const [type] = useQuerryString("type")
 
     const {accessToken} = useAppSelector(state=>state.loginAuth)
     const { Profile } = useAppSelector(state => state.fetchProfile)
@@ -35,7 +36,7 @@ export const ConfirmRenewal: React.FC = () => {
 
     const [value, setValue] = useState<string>("")
     const [loading, setLoading] = useState<boolean>(false)
-    const [holder, setHolder] = useState<iOldDstvSub | null>(null)
+    const [holder, setHolder] = useState<iHolder | null>(null)
     const [price,setPrice] = useState<number|null>(null)
 
     const handleChange = (value: string) => {
@@ -118,12 +119,13 @@ export const ConfirmRenewal: React.FC = () => {
          const card = billersCode.trim()
         try {
             setHolder(null)
-            const datax = await verifySmartCard(card, auth, "dstv");
+            const datax = await verifySmartCard(card, auth,type);
             if (datax) {
-                const val: iOldDstvSub = datax.content[1]?.json?.details?.items[1]
-                const Price = Math.ceil(val.price)
+                const val: iHolder = datax.content
+                const Price = Math.ceil(val.Renewal_Amount)
                 setPrice(Price)
             }
+            console.log(datax)
             
         } catch (error:any) {
             const message:string = (error.response && error.response.data && error.response.data.message)||error.message
@@ -139,10 +141,10 @@ export const ConfirmRenewal: React.FC = () => {
     }, [accessToken])
     
     useEffect(() => {
-        if (auth) {
+        if (auth && type) {
            confirmCard()
       }
-    }, [auth])
+    }, [auth,type])
  
     return (
         <Box>

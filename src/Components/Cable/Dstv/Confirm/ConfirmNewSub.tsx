@@ -84,13 +84,12 @@ export const ConfirmNewSub: React.FC = () => {
         const debitDetails: idebit = {
             requestId: request_id,
             amount: price,
-            service: "vtpassDstvNew"
+            service: type && type === "gotv"? "vtpassGotvNew": "vtpassDstvNew"
         }
         try {
             setLoading(true)
             console.log("loading")
             const debitResponse = await debitHandler(accessToken, debitDetails)
-            console.log(debitResponse)
             const data: any = await newSub(auth, content)
             if (data && data.code !== "000") {
                 toast.error("transaction failed")
@@ -130,14 +129,14 @@ export const ConfirmNewSub: React.FC = () => {
         }
     }
 
-     const handleDstvVars = async () => {
+    const handleDstvVars = async () => {
+         console.log(type)
         try {
-            const data = await getDataVars("dstv")
+            const data = await getDataVars(type)
             if(data){
                 const varation = data.content?.varations
                 setVars(varation)
             }
-           
         }catch(error:any){
             const message:string = (error.response && error.response.data && error.response.data.message)||error.message
             console.log(message)
@@ -146,11 +145,17 @@ export const ConfirmNewSub: React.FC = () => {
 
     useEffect(() => {
         Headers()
-        handleDstvVars()
+       
          if (accessToken) {
            dispatch(getProfileAction(accessToken))
         }
     }, [accessToken])
+
+    useEffect(() => {
+        if (type) {
+            handleDstvVars()
+        }
+    },[type])
  
      useEffect(() => {
         if (vars.length > 0) {

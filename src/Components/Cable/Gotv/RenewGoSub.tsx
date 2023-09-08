@@ -102,7 +102,7 @@ export const RenewGoSub = () => {
         if (holder) {
            setAmt(holder.Renewal_Amount)
        }
-        router.push(`/cable/confirmdstv?phone=${phone}&biller=${card}&amt=${amt}&sId=gotv&subType=renew`)
+        router.push(`/cable/confirmdstv?phone=${phone}&biller=${card}&amt=${amt}&sId=gotv&subType=renew&type=gotv`)
         console.log(formdata)
     }
 
@@ -172,7 +172,7 @@ export const RenewGoSub = () => {
                     <HStack mt={"1rem"}>
 
                         <Button colorScheme="red" onClick={()=>router.push("/dashboard")}>cancel</Button>
-                        <Button colorScheme="blue" type="submit">proceed</Button>
+                        <Button colorScheme="blue" type="submit" isDisabled={failed? failed.length>0: false}>proceed</Button>
 
                     </HStack>
                 </form>

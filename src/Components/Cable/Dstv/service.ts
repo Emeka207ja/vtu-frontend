@@ -19,7 +19,7 @@ interface iData{
 //     return data;
 // }
 
-export const verifySmartCard = async (card: string, datax: iData,serviceID:string) => {
+export const verifySmartCard = async (card: string, datax: iData,serviceID:string,type?:string) => {
     const {api_key,secret_key} = datax
     const config = {
         headers: {
@@ -29,5 +29,17 @@ export const verifySmartCard = async (card: string, datax: iData,serviceID:strin
     }
     const billersCode = parseFloat(card)
     const { data } = await axios.post("https://sandbox.vtpass.com/api/merchant-verify", { billersCode,serviceID }, config)
+    return data
+}
+export const verifyMeter = async (card: string, datax: iData,serviceID:string,type:string) => {
+    const {api_key,secret_key} = datax
+    const config = {
+        headers: {
+            " api-key": api_key,
+            "secret-key": secret_key
+        }
+    }
+    const billersCode = parseFloat(card)
+    const { data } = await axios.post("https://sandbox.vtpass.com/api/merchant-verify", { billersCode,serviceID,type }, config)
     return data
 }

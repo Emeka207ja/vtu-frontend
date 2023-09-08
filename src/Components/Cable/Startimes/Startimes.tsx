@@ -5,7 +5,8 @@ import { getHeaders } from "@/Components/Airtime/service"
 import { verifySmartCard } from "../Dstv/service"
 import { iVar } from "@/Components/Data/iProfvider"
 import { iHolder } from "../Dstv/icardHolder"
-import { NextRouter,useRouter } from "next/router"
+import { NextRouter, useRouter } from "next/router"
+import { iStartimes } from "./istartimes"
 
 export const Startimes:React.FC = () => {
 
@@ -18,7 +19,7 @@ export const Startimes:React.FC = () => {
     const [card, setCard] = useState<string>("")
     const [loading,setLoading] = useState<boolean>(false)
     
-    const [holder, setHolder] = useState<iHolder | null>(null)
+    const [holder, setHolder] = useState<iStartimes | null>(null)
      const [failed,setFailed] = useState<string|null>(null)
     
     const [formdata, setForm] = useState<{ varCode: string, phone: string }>({ varCode: "nova", phone: "" })
@@ -45,11 +46,10 @@ export const Startimes:React.FC = () => {
             setHolder(null)
             const datax = await verifySmartCard(card, authData, "startimes");
             if (datax) {
-                const val:iHolder = datax.content;
+                const val:iStartimes = datax.content;
                 setHolder(val)
                 setLoading(false)
                 setFailed(null)
-                console.log(val)
                  if (val.error) {
                     setFailed(val.error)
                     setHolder(null)
@@ -82,7 +82,7 @@ export const Startimes:React.FC = () => {
     const authHeaders = async () => {
         try {
             const data = await getHeaders()
-            console.log(data)
+            
             if(data){
                 setAuthData(data)
             }
@@ -141,7 +141,8 @@ export const Startimes:React.FC = () => {
                     {
                         holder && (<Box mt={"1rem"} fontSize={"0.9rem"}>
                             <Text>name: {holder.Customer_Name }</Text>
-                            {/* <Text>current package: {holder.Current_Bouquet }</Text> */}
+                            <Text>customer number : {holder.Smartcard_Number}</Text>
+                            <Text>balance : {holder.Balance}</Text>
                             {/* <Text>renewal amount: {holder.Renewal_Amount }</Text> */}
                             {/* <Text>due data: {holder.DUE_DATE }</Text> */}
                             {/* <Text>status: {holder.Status }</Text> */}
@@ -180,7 +181,7 @@ export const Startimes:React.FC = () => {
                     <HStack mt={"1rem"}>
 
                         <Button colorScheme="red" onClick={()=>router.push("/dashboard")}>cancel</Button>
-                        <Button colorScheme="blue" type="submit">proceed</Button>
+                        <Button colorScheme="blue" type="submit" isDisabled={failed? failed.length>0: false}>proceed</Button>
 
                     </HStack>
                 </form>

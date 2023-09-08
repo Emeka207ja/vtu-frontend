@@ -18,7 +18,7 @@ export const NewSub = () => {
     const [card, setCard] = useState<string>("")
     const [loading,setLoading] = useState<boolean>(false)
     
-    const [holder, setHolder] = useState<idstvHolder | null>(null)
+    const [holder, setHolder] = useState<iHolder | null>(null)
      const [failed,setFailed] = useState<string|null>(null)
     
     const [formdata, setForm] = useState<{ varCode: string, phone: string }>({ varCode: "dstv-padi", phone: "" })
@@ -46,17 +46,19 @@ export const NewSub = () => {
             setHolder(null)
             const datax = await verifySmartCard(Card, authData, "dstv");
             console.log(datax)
-            if (datax) {
-                const val:idstvHolder = datax.content?.[0]?.details
+           if (datax && !datax.content?.error){
+                const val:iHolder = datax.content
                 setHolder(val)
                 setLoading(false)
                 setFailed(null)
                 console.log(val)
-                //  if (val.error) {
-                //     setFailed(val.error)
-                //     setHolder(null)
-                // }
+            } else if (datax && datax.content?.error) {
+                console.log("erro")
+                 setHolder(null)
+                setLoading(false)
+                setFailed(datax.content?.error)
             }
+            
             
         } catch (error:any) {
             const message:string = (error.response && error.response.data && error.response.data.message)||error.message
@@ -97,7 +99,7 @@ export const NewSub = () => {
     const submitHandler = (e: React.SyntheticEvent) => {
         e.preventDefault();
         const {varCode,phone} = formdata
-        router.push(`/cable/confirmdstv?varcode=${varCode}&phone=${phone}&biller=${card}&amt=${amt}&sId=dstv&subType=change`)
+        router.push(`/cable/confirmdstv?varcode=${varCode}&phone=${phone}&biller=${card}&amt=${amt}&sId=dstv&subType=change&type=dstv`)
     }
 
     useEffect(() => {
@@ -140,9 +142,9 @@ export const NewSub = () => {
                     </Grid>
                     {
                         holder && (<Box mt={"1rem"} fontSize={"0.9rem"}>
-                            <Text>first name: {holder.firstName }</Text>
-                            <Text>last name: {holder.lastName }</Text>
-                            <Text>customer Number: {holder.customerNumber }</Text>
+                            <Text>customer name: {holder.Customer_Name }</Text>
+                            <Text>customer number: {holder.Customer_Number }</Text>
+                            {/* <Text>customer Number: {holder.customerNumber }</Text> */}
                             {/* <Text>current package: {holder.Current_Bouquet }</Text> */}
                             {/* <Text>renewal amount: {holder.Renewal_Amount }</Text> */}
                             {/* <Text>due data: {holder.DUE_DATE }</Text> */}
@@ -182,7 +184,7 @@ export const NewSub = () => {
                     <HStack mt={"1rem"}>
 
                         <Button colorScheme="red" onClick={()=>router.push("/dashboard")}>cancel</Button>
-                        <Button colorScheme="blue" type="submit">proceed</Button>
+                        <Button colorScheme="blue" type="submit" isDisabled={failed? failed.length>0: false}>proceed</Button>
 
                     </HStack>
                 </form>

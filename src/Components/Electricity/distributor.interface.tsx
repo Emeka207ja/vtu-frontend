@@ -4,6 +4,13 @@ export interface iDistributor{
     name:string
 }
 
+export interface imeterUser{
+    Address:string
+    Customer_District:string
+    Customer_Name:string
+    Meter_Number:number
+}
+
 export const distributor: iDistributor[] = [
     {
         key: "IKEDC",

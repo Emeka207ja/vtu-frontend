@@ -18,7 +18,7 @@ export const OldSub = () => {
     const [card, setCard] = useState<string>("")
     const [loading,setLoading] = useState<boolean>(false)
     
-    const [holder, setHolder] = useState<iOldDstvSub | null>(null)
+    const [holder, setHolder] = useState<iHolder | null>(null)
     const [dstvUser, setUser] = useState<idstvHolder | null>(null)
     const [failed,setFailed] = useState<string|null>(null)
     
@@ -44,15 +44,22 @@ export const OldSub = () => {
             setLoading(true);
             setHolder(null)
             setFailed(null)
-            const datax = await verifySmartCard(card, authData, "dstv");
-            if (datax) {
-                const val: iOldDstvSub = datax.content[1]?.json?.details?.items[1]
-                const user: idstvHolder = datax.content?.[0]?.details
-                setUser(user)
+            console.log(authData)
+             const datax = await verifySmartCard(card, authData, "dstv");
+            console.log(datax)
+           if (datax && !datax.content?.error){
+                const val:iHolder = datax.content
                 setHolder(val)
                 setLoading(false)
                 setFailed(null)
+                console.log(val)
+            } else if (datax && datax.content?.error) {
+                console.log("erro")
+                 setHolder(null)
+                setLoading(false)
+                setFailed(datax.content?.error)
             }
+           
             
         } catch (error:any) {
             const message:string = (error.response && error.response.data && error.response.data.message)||error.message
@@ -96,8 +103,8 @@ export const OldSub = () => {
         e.preventDefault();
         const { phone } = formdata;
         const Card = card.trim()
-        const amt = holder && holder.price || 1850
-        router.push(`/cable/confirmdstv?phone=${phone}&biller=${Card}&amt=${amt}&sId=dstv&subType=renew`)
+        const amt = holder && holder.Renewal_Amount || 1850
+        router.push(`/cable/confirmdstv?phone=${phone}&biller=${Card}&amt=${amt}&sId=dstv&subType=renew&type=dstv`)
     }
 
     useEffect(() => {
@@ -146,11 +153,12 @@ export const OldSub = () => {
                     </Grid>
                     {
                         holder && (<Box mt={"1rem"} fontSize={"0.9rem"}>
-                            <Text>name: {dstvUser?.firstName }</Text>
-                            <Text>current package: {holder.name }</Text>
-                            <Text>renewal amount: {holder.price }</Text>
-                            {/* <Text>due data: {holder.DUE_DATE }</Text> */}
-                            {/* <Text>status: {holder.Status }</Text> */}
+                            <Text>customer name : {holder.Customer_Name }</Text>
+                            <Text>customer number : {holder.Customer_Number }</Text>
+                            <Text>current package : {holder.Current_Bouquet_Code }</Text>
+                            <Text>status : {holder.Status }</Text>
+                            <Text>renewal amount : {holder.Renewal_Amount }</Text>
+                            <Text>due date : {holder.DUE_DATE }</Text>
                         </Box>) 
                     }
                     {
@@ -174,7 +182,7 @@ export const OldSub = () => {
 
                         <FormControl>
                             <FormLabel>amount</FormLabel>
-                            <Input value={holder?.price? holder.price: " "} readOnly/>
+                            <Input value={holder?.Renewal_Amount? holder.Renewal_Amount : " "} readOnly/>
                         </FormControl>
 
                         <FormControl>
@@ -186,7 +194,7 @@ export const OldSub = () => {
                     <HStack mt={"1rem"}>
 
                         <Button colorScheme="red" onClick={()=>router.push("/dashboard")}>cancel</Button>
-                        <Button colorScheme="blue" type="submit">proceed</Button>
+                        <Button colorScheme="blue" type="submit" isDisabled={failed? failed.length>0: false}>proceed</Button>
 
                     </HStack>
                 </form>

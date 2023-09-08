@@ -3,7 +3,7 @@ import useQuerryString from "@/hooks/useQueryString"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { useState, useEffect } from "react"
-
+import { idebit,debitHandler } from "@/Components/DataTwo/service"
 import { getHeaders } from "@/Components/Airtime/service"
 import { newSub,storeShowmax,istoreShowmax } from "./service"
 
@@ -11,6 +11,8 @@ import { genReqId } from "@/Components/History/util.service"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { NextRouter,useRouter } from "next/router"
+import { getDataVars } from "@/Components/Data/service"
+import { iVar } from "@/Components/Data/iProfvider"
 
 
 export const ConfirmShowmax: React.FC = () => {
@@ -30,7 +32,9 @@ export const ConfirmShowmax: React.FC = () => {
     const [auth, setAuth] = useState<{ api_key: string, secret_key: string }>({ api_key: "", secret_key: "" })
 
     const [value, setValue] = useState<string>("")
-    const [loading,setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [vars, setVars] = useState<iVar[] | []>([])
+    const [price,setPrice] = useState<number|null>(null)
 
     const handleChange = (value: string) => {
         setValue(value)
@@ -51,13 +55,22 @@ export const ConfirmShowmax: React.FC = () => {
             toast.error("insufficient funds")
             return
         }
+        if (!price) {
+            console.log("null price")
+            return
+        }
        
         const amount:number = parseFloat(Amount);
         const request_id:string = genReqId()
         const content = { request_id, serviceID, variation_code, amount, phone:Phone}
-        console.log(content)
+        const debitDetail: idebit = {
+            requestId: request_id,
+            amount: price,
+            service:"vtpassShowmax"
+        }
         try {
             setLoading(true)
+            const debitResponse = await debitHandler(accessToken, debitDetail)
             const data: any = await newSub(auth, content)
             if (data && data.code !== "000") {
                 toast.error("failed transaction")
@@ -74,9 +87,6 @@ export const ConfirmShowmax: React.FC = () => {
             }
             const res = await storeShowmax(accessToken,detail)
             toast.success("success")
-            console.log(data)
-            console.log(res)
-            
             setLoading(false)
         } catch (error: any) {
             const message:string = (error.response && error.response.data && error.response.data.message)||error.message
@@ -97,8 +107,22 @@ export const ConfirmShowmax: React.FC = () => {
         }
     }
 
+    const handleDstvVars = async () => {
+        try {
+            const data = await getDataVars("showmax")
+            if(data){
+                const varation = data.content?.varations
+                setVars(varation)
+            }
+        }catch(error:any){
+            const message:string = (error.response && error.response.data && error.response.data.message)||error.message
+            console.log(message)
+        }
+    }
+
     useEffect(() => {
         Headers()
+        handleDstvVars()
     }, [])
     
     useEffect(() => {
@@ -106,6 +130,16 @@ export const ConfirmShowmax: React.FC = () => {
            dispatch(getProfileAction(accessToken))
         }
     }, [accessToken])
+
+    useEffect(() => {
+        if (vars.length > 0) {
+            const selectedArr = vars.filter(item => item.variation_code === variation_code)
+            const stringAmt: string = selectedArr[0]?.variation_amount
+            const amtx = parseFloat(stringAmt)
+            const amt = Math.ceil(amtx)
+            setPrice(amt)
+        }
+    },[vars])
  
     
     return (

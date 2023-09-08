@@ -10,6 +10,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { NextRouter, useRouter } from "next/router"
 import { storeDstv,idstvStore } from "../Dstv/Confirm/service"
+import { getDataVars } from "@/Components/Data/service"
+import { iVar } from "@/Components/Data/iProfvider"
+import { idebit,debitHandler } from "@/Components/DataTwo/service"
 
 
 export const ConfirmStartimes: React.FC = () => {
@@ -21,6 +24,8 @@ export const ConfirmStartimes: React.FC = () => {
     const [Phone] = useQuerryString("phone")
     const [Amount] = useQuerryString("amt")
     const [serviceID] = useQuerryString("sId")
+    const [vars, setVars] = useState<iVar[] | []>([])
+    const [price,setPrice] = useState<number|null>(null)
     
 
     const {accessToken} = useAppSelector(state=>state.loginAuth)
@@ -53,8 +58,10 @@ export const ConfirmStartimes: React.FC = () => {
             toast.error("insufficient funds")
             return
         }
-        
-       
+        if (!price) {
+            console.log("null price")
+            return
+        }
         const request_id:string = genReqId()
         const content = {
             request_id,
@@ -64,9 +71,14 @@ export const ConfirmStartimes: React.FC = () => {
             amount,
             phone:Phone,
         }
-        console.log(content)
+        const debitDetail: idebit = {
+            requestId: request_id,
+            amount: price,
+            service:"vtpassStartimes"
+       }
         try {
             setLoading(true)
+            const debitResponse = await debitHandler(accessToken, debitDetail)
             const data: any = await newSub(auth, content)
             if (data && data.code !== "000") {
                 toast.error("failed transaction")
@@ -80,9 +92,6 @@ export const ConfirmStartimes: React.FC = () => {
             }
             const res = await storeDstv(accessToken,detail,"startimes")
             toast.success("success")
-            console.log(data)
-            console.log(res)
-            
             setLoading(false)
         } catch (error: any) {
             const message:string = (error.response && error.response.data && error.response.data.message)||error.message
@@ -96,15 +105,28 @@ export const ConfirmStartimes: React.FC = () => {
             const data: { api_key: string, secret_key: string } = await getHeaders()
             if (data) {
                 setAuth(data)
-                console.log(data)
             }
         } catch (error:any) {
             console.log(error)
         }
     }
 
+    const handleDstvVars = async () => {
+        try {
+            const data = await getDataVars("startimes")
+            if(data){
+                const varation = data.content?.varations
+                setVars(varation)
+            }
+        }catch(error:any){
+            const message:string = (error.response && error.response.data && error.response.data.message)||error.message
+            console.log(message)
+        }
+    }
+
     useEffect(() => {
         Headers()
+        handleDstvVars()
     }, [])
     
     useEffect(() => {
@@ -112,7 +134,17 @@ export const ConfirmStartimes: React.FC = () => {
            dispatch(getProfileAction(accessToken))
         }
     }, [accessToken])
- 
+    
+    useEffect(() => {
+        if (vars.length > 0) {
+            const selectedArr = vars.filter(item => item.variation_code === variation_code)
+            const stringAmt: string = selectedArr[0]?.variation_amount
+            const amtx = parseFloat(stringAmt)
+            const amt = Math.ceil(amtx)
+            setPrice(amt)
+           
+        }
+    },[vars])
     
     return (
         <Box>

@@ -181,7 +181,7 @@ export const NewGoSub:React.FC = () => {
                     <HStack mt={"1rem"}>
 
                         <Button colorScheme="red" onClick={()=>router.push("/dashboard")}>cancel</Button>
-                        <Button colorScheme="blue" type="submit">proceed</Button>
+                        <Button colorScheme="blue" type="submit" isDisabled={failed? failed.length>0: false}>proceed</Button>
 
                     </HStack>
                 </form>
