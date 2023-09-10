@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { subElectricity } from "./Service"
 import { FaBullseye } from "react-icons/fa"
 import { subPrepaid,iPrepaid,iReq } from "./Service"
+import { idebit,debitHandler } from "../DataTwo/service"
 
 
 export const PrepaidConfirm: React.FC = () => {
@@ -40,6 +41,7 @@ export const PrepaidConfirm: React.FC = () => {
        
         
         const price = parseFloat(Amount)
+        const debitPrice = Math.ceil(price)
         const pin = parseFloat(value)
         const request_id = genReqId()
         if (pin === 1111) {
@@ -54,20 +56,25 @@ export const PrepaidConfirm: React.FC = () => {
             toast.error("auth error");
             return
         }
-        
+        const detail: iReq = {
+            api_key,
+            secret_key,
+            amount:price,
+            phone:Phone,
+            serviceID,
+            variation_code,
+            billersCode,
+            request_id
+        }
+        const debitDetail: idebit = {
+            requestId: request_id,
+            amount: debitPrice,
+            service:"vtpassElectricity"
+        }
         try {
             setLoading(true)
             setSuccess(false)
-            const detail: iReq = {
-                api_key,
-                secret_key,
-                amount:price,
-                phone:Phone,
-                serviceID,
-                variation_code,
-                billersCode,
-                request_id
-            }
+            const debitResponse = await debitHandler(accessToken, debitDetail)
             const data = await subElectricity(detail)
         //    console.log(data)
             if (data && data.code !== "000") {

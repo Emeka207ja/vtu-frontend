@@ -30,7 +30,7 @@ import { getHeaders } from "../Airtime/service";
 import { genReqId } from "../History/util.service";
 import { BsCheck2Circle } from "react-icons/bs"
 import { useRouter,NextRouter } from "next/router";
-
+import { idebit,debitHandler } from "../DataTwo/service";
 
 export const ConfirmWaec: React.FC = () => {
 
@@ -74,7 +74,7 @@ export const ConfirmWaec: React.FC = () => {
         const quantity:number = parseFloat(qty)
         const request_id: string = genReqId()
         const amount:number = parseFloat(price) * quantity;
-        const phone: number = parseFloat(Phone)
+      
         
         const details: idata = {
             request_id,
@@ -82,27 +82,36 @@ export const ConfirmWaec: React.FC = () => {
             variation_code,
             // amount,
             quantity,
-            phone
+            phone:Phone
         }
-       
+        const debitPrice = Math.ceil(amount)
+        const debitDetail: idebit = {
+            requestId: request_id,
+            amount: debitPrice,
+            service: "vtpasswaec"
+        }
         
         try {
-            setFormState({loading:true,success:false})
+            setFormState({ loading: true, success: false })
+            const debitResponse = await debitHandler(accessToken, debitDetail)
             const data = await paymentHandler(auth, details)
-            if (data && data.code === "000") {
-                const  product_name:string = data.content?.transactions?.product_name
-                const  purchased_code:string = data?.purchased_code
-                const detail: iEducation = {
-                    product_name,
-                    amount,
-                    requestId: request_id,
-                    purchased_code
-                }
-                const res = await storeEducation(accessToken,detail)
-                console.log(res)
+            if (data && data.code !== "000") {
+                setErrmsg("transaction failed")
+                setFormState({ loading: false, success: false })
+                return
             }
+          
+            const  product_name:string = data.content?.transactions?.product_name
+            const  purchased_code:string = data?.purchased_code
+            const detail: iEducation = {
+                product_name,
+                amount,
+                requestId: request_id,
+                purchased_code
+            }
+            const res = await storeEducation(accessToken,detail)
+            
             setFormState({loading:false,success:true})
-            console.log(data)
         } catch (error:any) {
             console.log(error)
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message

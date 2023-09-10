@@ -54,7 +54,6 @@ export const Smile: React.FC = () => {
                 const varation = data.content?.varations
                 setVars(varation)
             }
-            console.log(data?.content.varations)
         } catch (error:any) {
             console.log(error)
         }
@@ -67,7 +66,6 @@ export const Smile: React.FC = () => {
                 setApikey(data.api_key)
                 setSecret(data.secret_key)
            }
-            console.log(data)
         } catch (error:any) {
             console.log(error)
         }
@@ -75,18 +73,17 @@ export const Smile: React.FC = () => {
 
     const smileHandler = async (e:React.SyntheticEvent) => {
         e.preventDefault()
+        const smileMail = idx.trim()
         try {
             setValidating(true)
             setValid(false)
-            const data = await verifySmile(idx, "smile-direct", api_key, secret_key)
+            const data = await verifySmile(smileMail, "smile-direct", api_key, secret_key)
             if (data) {
                 const id = data.content?.AccountList?.Account[0]?.AccountId
-                console.log("id",id)
                 setName(data.content?.Customer_Name)
                 setBiller(id)
             }
-            console.log(data)
-             setValidating(false)
+            setValidating(false)
             setValid(true)
         } catch (error:any) {
             console.log(error)
@@ -114,7 +111,6 @@ export const Smile: React.FC = () => {
            }
         }
     }, [data.variation_code])
-    console.log(data.variation_code)
     return (
         <Box>
             <SmileLogo/>
@@ -174,8 +170,8 @@ export const Smile: React.FC = () => {
                     </Box>
                     <Box mb={"1rem"} mt={{md:"2rem"}}>
                         <HStack spacing={20}>
-                            <Button colorScheme="blue" type="submit">submit</Button>
                             <Button colorScheme="red">cancel</Button>
+                            <Button colorScheme="blue" type="submit">submit</Button>
                        </HStack>
                     </Box>
                    

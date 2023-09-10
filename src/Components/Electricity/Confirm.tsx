@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { subElectricity } from "./Service"
 import { FaBullseye } from "react-icons/fa"
 import { subPrepaid,iPrepaid,iReq } from "./Service"
+import { idebit,debitHandler } from "../DataTwo/service"
 
 
 export const Confirm: React.FC = () => {
@@ -57,22 +58,27 @@ export const Confirm: React.FC = () => {
             toast.error("insufficient funds")
             return
         }
+        const detail:iReq = {
+            amount,
+            api_key,
+            secret_key,
+            serviceID,
+            variation_code,
+            billersCode,
+            request_id,
+            phone:Phone
+        }
+        const price = Math.ceil(amount)
+        const debitDetail: idebit = {
+            requestId: request_id,
+            amount: price,
+            service: "vtpassElectricity"
+        }
         try {
-            
             setLoading(true)
             setSuccess(false)
-            const detail:iReq = {
-                amount,
-                api_key,
-                secret_key,
-                serviceID,
-                variation_code,
-                billersCode,
-                request_id,
-                phone:Phone
-            }
+            const debitResponse = await debitHandler(accessToken, debitDetail)
             const data = await  subElectricity(detail)
-            // console.log(data)
             if (data && data.code !== "000") {
                 toast.error("failed transaction")
                 setLoading(false)
@@ -83,18 +89,13 @@ export const Confirm: React.FC = () => {
             const product_name:string = data.content?.transactions?.product_name
             const requestId:string = data.requestId
           
-
             const vals:iPrepaid = {
                 amount,
                 purchased_code,
                 product_name,
                 requestId
             }
-            console.log(vals)
             const datax = await subPrepaid(accessToken, vals,"postpaid")
-            console.log(datax)
-
-            
             setLoading(false)
             setSuccess(true)
             toast.success("transaction successful")
@@ -115,7 +116,6 @@ export const Confirm: React.FC = () => {
                 setApikey(api_key)
                 setSecretKey(secret_key)
             }
-            console.log(data)
         } catch (error: any) {
             console.log(error)
         }

@@ -8,7 +8,9 @@ import { getProfileAction } from "@/redux/actions/getProfile.action";
 import { ToastContainer, toast } from 'react-toastify';
 import { getHeaders } from "../Airtime/service";
 import 'react-toastify/dist/ReactToastify.css';
-import { purchaseSmile,storeSmile,ismile } from "./service";
+import { purchaseSmile,storeSmile,ismile, getVariationCode } from "./service";
+import { iVar } from "./variation.interface";
+import { idebit,debitHandler } from "../DataTwo/service";
 export const ConfirmSmile: React.FC = () => {
 
     const [value, setValue] = useState("")
@@ -16,7 +18,8 @@ export const ConfirmSmile: React.FC = () => {
     const [secret_key, setSecret] = useState<string>("")
     const [loading, setLoading] = useState(false)
     const [success, setSuccess] = useState(false)
-
+    const [vars, setVars] = useState<iVar[] | []>([])
+    const [price,setPrice] = useState<number|null>(null)
     const { accessToken } = useAppSelector(state => state.loginAuth)
     const { Profile } = useAppSelector(state => state.fetchProfile)
     const dispatch = useAppDispatch()
@@ -33,6 +36,8 @@ export const ConfirmSmile: React.FC = () => {
         setValue(value)
     }
 
+    const amount = parseFloat(Amount)
+
     const handleComplete = async (value: string) => {
         if (!accessToken) {
             toast.error("error! refresh page");
@@ -43,15 +48,25 @@ export const ConfirmSmile: React.FC = () => {
             toast.error("invalid credentials")
             return
         }
-        if (Profile && Profile.balance< parseFloat(Amount)) {
+        if (Profile && Profile.balance< amount) {
             toast.error("insufficient balance")
             return
         }
+        if (!price) {
+            console.log("null price")
+            return
+        }
         const request_id = genReqId()
-    //    console.log(value)
+      
+        const debitDetail: idebit = {
+            requestId: request_id,
+            amount: price,
+            service:"vtpassSmile"
+        }
         try {
             setLoading(true)
             setSuccess(false)
+            const debitResponse = await debitHandler(accessToken, debitDetail)
             const data = await purchaseSmile(request_id, serviceID, billersCode, variation_code, amount, phone, api_key, secret_key)
             if (data && data.code !== "000") {
                 setLoading(false)
@@ -65,11 +80,8 @@ export const ConfirmSmile: React.FC = () => {
                 requestId:request_id
             }
             const res = await storeSmile(accessToken,detail)
-            console.log(data)
-            console.log(res)
             setLoading(false)
             setSuccess(true)
-            
             toast.success("success")
         } catch (error:any) {
             console.log(error)
@@ -79,7 +91,7 @@ export const ConfirmSmile: React.FC = () => {
             toast.error(message)
         }
     }
-    const amount = parseFloat(Amount)
+    
 
     const headers = async () => {
         try {
@@ -88,21 +100,42 @@ export const ConfirmSmile: React.FC = () => {
                 setApikey(data.api_key);
                 setSecret(data.secret_key)
             }
-            console.log(data)
+           
         } catch (error:any) {
             console.log(error)
         }
     }
 
+     const variationCode = async () => {
+        try {
+            const data = await getVariationCode()
+            if (data) {
+                const varation = data.content?.varations
+            setVars(varation)
+            }
+        } catch (error:any) {
+            console.log(error)
+        }
+    }
    
 
     useEffect(() => {
         headers()
-
+        variationCode()
         if(accessToken) {
             dispatch(getProfileAction(accessToken))
         }
-    },[accessToken])
+    }, [accessToken])
+    
+    useEffect(() => {
+        if (vars.length > 0) {
+            const selectedArr = vars.filter(item => item.variation_code === variation_code)
+            const stringAmt: string = selectedArr[0]?.variation_amount
+            const amtx = parseFloat(stringAmt)
+            const amt = Math.ceil(amtx)
+            setPrice(amt)
+        }
+    },[vars])
     return (
         <Box>
             <SmileLogo/>

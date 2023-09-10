@@ -35,7 +35,6 @@ export const WaecResult: React.FC = () => {
                 const vararations: iVar[] = data.content?.varations
                 setVars(vararations)
             }
-            console.log(data)
         } catch (error:any) {
             console.log(error)
         }

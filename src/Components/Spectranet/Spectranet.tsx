@@ -29,7 +29,6 @@ export const Spectranet: React.FC = () => {
             if (data) {
                 const varations: iVars[] = data.content?.varations
                 setVars(varations)
-                 console.log(varations)
             }
             
         } catch (error:any) {
@@ -55,10 +54,8 @@ export const Spectranet: React.FC = () => {
             const item: iVars = selected[0]
             const strPrice = item?.variation_amount + ""
             setAmt(strPrice)
-            console.log(selected)
         }
     }, [data.varCode])
-    console.log(data.varCode)
     return (
         <Box>
             <SpecLogo/>

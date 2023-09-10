@@ -6,7 +6,7 @@ export interface idata{
     serviceID: string;
     variation_code: string;
     // amount: number;
-    phone: number;
+    phone: string;
     quantity: number;
 }
 

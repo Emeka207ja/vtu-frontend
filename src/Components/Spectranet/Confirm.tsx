@@ -32,8 +32,11 @@ import { genReqId } from "../History/util.service"
 import { getHeaders } from "../Airtime/service"
 import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { useRouter, NextRouter } from "next/router";
-import { purchaseHandler, idetails,storeSpectranet,ispectranet } from "./service"
+import { purchaseHandler, idetails,storeSpectranet,ispectranet, fetchVars } from "./service"
 import { iAuth } from "../Wassce/service"
+// import { iVars } from "./iVars"
+import { idebit,debitHandler } from "../DataTwo/service"
+import { iVar } from "../Data/iProfvider"
 
 
 
@@ -50,7 +53,7 @@ export const ConfirmSpectranet: React.FC = () => {
     const [phone] = useQuerryString("phone") 
     const [amt] = useQuerryString("amt")
     const [variation_code] = useQuerryString("varCode")
-    const [quantity] = useQuerryString("amt")
+    const [quantity] = useQuerryString("qty")
     const [] = useQuerryString("amt")
     const [] = useQuerryString("amt")
 
@@ -58,12 +61,13 @@ export const ConfirmSpectranet: React.FC = () => {
     const [errorMessage, setErrmsg] = useState<string | null>()
     const [auth, setAuth] = useState<iAuth>({ api_key:"",secret_key:"" })
     const [value, setValue] = useState<string>("")
+    const [vars, setVars] = useState<iVar[] | []>([])
+    const [price,setPrice] = useState<number|null>(null)
 
      const headerHandler = async () => {
         try {
             const data: iAuth = await getHeaders()
             setAuth(data)
-            console.log(data)
         } catch (error:any) {
             console.log(error)
         }
@@ -81,14 +85,14 @@ export const ConfirmSpectranet: React.FC = () => {
             return
          }
         
-        // if (Profile && Profile.balance < price) {
-        //     setErrmsg("insufficient balance")
-        //     return
-        // }
         const pin: number = parseFloat(val);
         const userPin: number = Profile?.pin!
         if (userPin !== pin) {
             setErrmsg("invalid credentials")
+            return
+        }
+        if (!price) {
+            console.log("null price")
             return
         }
         // const phone: number = parseFloat(Phone)
@@ -105,15 +109,15 @@ export const ConfirmSpectranet: React.FC = () => {
              quantity:qty,
              amount
         }
-        console.log(details)
-         
-        //  const purchaseDetail: ipurchase = {
-        //     price: price,
-        //     phone:number
-        // } 
+        const debitDetail: idebit = {
+            requestId: reference,
+            amount: price,
+            service:"vtpassSpectranet"
+       }
         
         try {
             setFormState({loading:true,success:false})
+            const debitResponse = await debitHandler(accessToken,debitDetail)
             const data = await purchaseHandler(auth, details)
             if (data && data.code !== "000") {
                 setFormState({ loading: false, success: false })
@@ -131,9 +135,7 @@ export const ConfirmSpectranet: React.FC = () => {
                 product_name
             }
             const res = await storeSpectranet(accessToken, detail)
-            console.log(res)
             setFormState({loading:false,success:true})
-            console.log(data)
         } catch (error:any) {
             console.log(error)
             const message: string = (error.response && error.response.data && error.response.data.message) || error.message
@@ -143,13 +145,41 @@ export const ConfirmSpectranet: React.FC = () => {
        
     }
 
+     const getVars = async () => {
+        try {
+            const data = await fetchVars()
+            if (data) {
+                const varations: iVar[] = data.content?.varations
+                setVars(varations)
+            }
+            
+        } catch (error:any) {
+            const message = (error.response && error.response.data && error.response.data.message) || error.message;
+            console.log(message)
+        }
+    }
+
     useEffect(() => {
-         headerHandler()
+        headerHandler()
+        getVars()
         if (accessToken) {
             dispatch(getProfileAction(accessToken))
         }
     }, [accessToken])
   
+     useEffect(() => {
+        if (vars.length > 0) {
+            const selectedArr = vars.filter(item => item.variation_code === variation_code)
+            const stringAmt: string = selectedArr[0]?.variation_amount
+            console.log(stringAmt)
+            const amtx = parseFloat(stringAmt)
+            const qty = parseFloat(quantity)
+            console.log(qty)
+            const amt = Math.ceil(amtx*qty)
+            setPrice(amt)
+            console.log(amt)
+        }
+    },[vars])
 
     return (
         <Box>
