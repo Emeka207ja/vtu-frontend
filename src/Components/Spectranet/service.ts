@@ -2,6 +2,7 @@ import axios from "axios"
 import { payApi } from "@/api-folder/vtpass";
 import { vtpassHeaderfn } from "@/Services/utilityFn";
 import { iAuth } from "../Wassce/service";
+import { vtpassBaseApi } from "@/api-folder/auth";
 export interface idetails{
     request_id: string;
     billersCode: string;
@@ -23,14 +24,14 @@ export interface ispectranet{
 
 
 export const fetchVars = async () => {
-    const { data } = await axios.get("https://sandbox.vtpass.com/api/service-variations?serviceID=spectranet")
+    const { data } = await axios.get(`${vtpassBaseApi}/service-variations?serviceID=spectranet`)
     return data;
 }
 
 
 export const purchaseHandler = async (auth:iAuth,detail:idetails) => {
     const config = vtpassHeaderfn(auth);
-    const { data } = await axios.post(payApi, detail, config);
+    const { data } = await axios.post(`${vtpassBaseApi}/pay`, detail, config);
     return data;
 }
 

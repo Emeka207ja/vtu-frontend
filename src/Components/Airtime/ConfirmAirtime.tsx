@@ -24,7 +24,7 @@ import { getProfileAction } from "@/redux/actions/getProfile.action"
 import { payApi } from "@/api-folder/vtpass"
 import { iProfile } from "@/redux/interface/profileInterface"
 import { idebit,debitHandler } from "../DataTwo/service"
-
+import { vtpassBaseApi } from "../../api-folder/auth"
 export const ConfirmAirtime = () => {
     const [apikey,setApikey] = useState<string>("")
     const [secretKey,setSecret] = useState<string>("")
@@ -95,7 +95,7 @@ export const ConfirmAirtime = () => {
             setSuccess(false)
             const debitResponse = await debitHandler(accessToken, debitDetail)
     
-            const { data } = await axios.post(payApi, payload, config)
+            const { data } = await axios.post(`${vtpassBaseApi}/pay`, payload, config)
             if (data && data.code !== "000") {
                 toast.error("transaction failed")
                 setLoading(false)

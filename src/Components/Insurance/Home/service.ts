@@ -1,7 +1,7 @@
 import axios from "axios"
 import { iAuth } from "@/Components/Wassce/service";
 import { payApi } from "@/api-folder/vtpass";
-
+import { vtpassBaseApi } from "@/api-folder/auth";
 export interface iData {
     request_id: string
     serviceID: string
@@ -24,7 +24,7 @@ export interface iHomeInsurance{
 
 
 export const getOptionType = async (type:string,serviceID:string) => {
-    const { data } = await axios.get(`https://sandbox.vtpass.com/api/options?serviceID=${serviceID}&name=${type}`)
+    const { data } = await axios.get(`${vtpassBaseApi}/options?serviceID=${serviceID}&name=${type}`)
     return data;
 }
 
@@ -37,7 +37,7 @@ export const homeinsureHandler = async (auth: iAuth, details: iData) => {
             "secret-key": secret_key
         }
     }
-    const { data } = await axios.post(payApi, details, config)
+    const { data } = await axios.post(`${vtpassBaseApi}/pay`, details, config)
     return data
 }
 export const storeHomeinsurance = async (token:string, details: iHomeInsurance) => {

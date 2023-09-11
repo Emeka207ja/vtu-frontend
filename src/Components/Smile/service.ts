@@ -1,7 +1,7 @@
 import axios from "axios"
-import { headers } from "next/dist/client/components/headers";
+// import { headers } from "next/dist/client/components/headers";
 import { iCar } from "../Insurance/Car/service";
-
+import { vtpassBaseApi } from "@/api-folder/auth";
 export interface ismile{
     requestId:string,
     amount:number,
@@ -9,7 +9,7 @@ export interface ismile{
 }
 
 export const getVariationCode = async () => {
-    const { data } = await axios.get(" https://sandbox.vtpass.com/api/service-variations?serviceID=smile-direct");
+    const { data } = await axios.get(`${vtpassBaseApi}/service-variations?serviceID=smile-direct`);
     return data
 }
 export const verifySmile = async (billersCode: string, serviceID: string, api_key: string, secret_key: string) => {
@@ -19,7 +19,7 @@ export const verifySmile = async (billersCode: string, serviceID: string, api_ke
                 "secret-key": secret_key
             }
         }
-    const { data } = await axios.post("https://sandbox.vtpass.com/api/merchant-verify/smile/email",{billersCode,serviceID},config);
+    const { data } = await axios.post(`${vtpassBaseApi}/merchant-verify/smile/email`,{billersCode,serviceID},config);
     return data
 }
 
@@ -41,7 +41,7 @@ export const purchaseSmile = async (
                 "secret-key": secret_key
             }
         }
-    const { data } = await axios.post(" https://sandbox.vtpass.com/api/pay", { request_id, serviceID, billersCode, variation_code, amount, phone }, config)
+    const { data } = await axios.post(`${vtpassBaseApi}/pay`, { request_id, serviceID, billersCode, variation_code, amount, phone }, config)
     return data
 }
 

@@ -3,7 +3,7 @@ import { icarInsureData } from "../iInsurance";
 import axios from "axios"
 import { iAuth } from "@/Components/Wassce/service";
 import { vtpassHeaderfn } from "@/Services/utilityFn";
-
+import { vtpassBaseApi } from "@/api-folder/auth";
 export interface idetails extends Omit<icarInsureData, "phone">{
     phone: string;
     billersCode: string;
@@ -22,7 +22,7 @@ export interface iCar{
 
 export const carInsuranceHandler = async (auth:iAuth,details:idetails) => {
     const config = vtpassHeaderfn(auth)
-    const { data } = await axios.post(payApi, details, config);
+    const { data } = await axios.post(`${vtpassBaseApi}/pay`, details, config);
     return data
 }
 export const storeCarInsurance = async (token:string,details:iCar) => {

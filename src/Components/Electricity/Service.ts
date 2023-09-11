@@ -1,6 +1,6 @@
 import axios from "axios"
 import { config } from "process";
-
+import { vtpassBaseApi } from "@/api-folder/auth";
 export interface iReq{
     amount: number;
     phone: string,
@@ -32,7 +32,7 @@ export const subElectricity = async (details:iReq) => {
         }
    }
 
-    const { data } = await axios.post("https://sandbox.vtpass.com/api/pay", { request_id, serviceID, billersCode, variation_code, amount, phone }, config)
+    const { data } = await axios.post(`${vtpassBaseApi}/pay`, { request_id, serviceID, billersCode, variation_code, amount, phone }, config)
     return data;
 }
 

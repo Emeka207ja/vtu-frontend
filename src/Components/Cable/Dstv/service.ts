@@ -1,5 +1,5 @@
 import axios from "axios"
-
+import { vtpassBaseApi } from "../../../api-folder/auth";
 interface iData{
     api_key: string;
     secret_key:string
@@ -28,7 +28,7 @@ export const verifySmartCard = async (card: string, datax: iData,serviceID:strin
         }
     }
     const billersCode = parseFloat(card)
-    const { data } = await axios.post("https://sandbox.vtpass.com/api/merchant-verify", { billersCode,serviceID }, config)
+    const { data } = await axios.post(`${vtpassBaseApi}/merchant-verify`, { billersCode,serviceID }, config)
     return data
 }
 export const verifyMeter = async (card: string, datax: iData,serviceID:string,type:string) => {
@@ -40,6 +40,6 @@ export const verifyMeter = async (card: string, datax: iData,serviceID:string,ty
         }
     }
     const billersCode = parseFloat(card)
-    const { data } = await axios.post("https://sandbox.vtpass.com/api/merchant-verify", { billersCode,serviceID,type }, config)
+    const { data } = await axios.post(`${vtpassBaseApi}/merchant-verify`, { billersCode,serviceID,type }, config)
     return data
 }

@@ -2,7 +2,7 @@ import { iPersonal } from "./iPersonal";
 import { iAuth } from "@/Components/Wassce/service";
 import axios from "axios"
 import { payApi } from "@/api-folder/vtpass";
-
+import { vtpassBaseApi } from "@/api-folder/auth";
 export interface idetails extends Omit<iPersonal,"phone">{
     amount: number;
     serviceID: string;
@@ -22,6 +22,6 @@ export const payPersonal = async (auth:iAuth,details:idetails) => {
         }
     }
 
-    const { data } = await axios.post(payApi, details, config);
+    const { data } = await axios.post(`${vtpassBaseApi}/pay`, details, config);
     return data;
 }

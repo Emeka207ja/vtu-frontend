@@ -1,5 +1,6 @@
 import { payApi } from "@/api-folder/vtpass";
 import axios from "axios"
+import { vtpassBaseApi } from "@/api-folder/auth";
 
 export interface idata{
     request_id: string;
@@ -33,7 +34,7 @@ export const paymentHandler = async (auth: iAuth, details: idata) => {
         }
     }
 
-    const { data } = await axios.post(payApi, details, config)
+    const { data } = await axios.post(`${vtpassBaseApi}/pay`, details, config)
     return data
 }
 

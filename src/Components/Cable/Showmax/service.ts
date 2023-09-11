@@ -1,5 +1,5 @@
 import axios from "axios"
-
+import { vtpassBaseApi } from "@/api-folder/auth";
 interface iData{
     request_id: string;
     serviceID: string;
@@ -32,7 +32,7 @@ export const newSub = async (auth: iAuth, vals: iData) => {
         }
     }
    
-    const { data } = await axios.post("https://sandbox.vtpass.com/api/pay", vals, config)
+    const { data } = await axios.post(`${vtpassBaseApi}/pay`, vals, config)
     return data;
 }
 
