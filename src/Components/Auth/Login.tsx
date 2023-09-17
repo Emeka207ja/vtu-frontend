@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { reset } from "@/redux/slices/login-slice";
 import { NextRouter, useRouter } from "next/router"
-
+import NextLink from "next/link"
 export interface iLogin{
     username: string;
     password: string;
@@ -93,7 +93,14 @@ export const Login: React.FC = () => {
                             
                             </Flex>
                             <ToastContainer limit={1} />
-                            <Link href="/" mt={"0.7rem"}>Go Back</Link>
+                            <Flex justifyContent={"space-around"} mt={"2rem"}>
+                                <Box>
+                                    <Link href="/" mt={"0.7rem"}>Go Back</Link>
+                                </Box>
+                                <NextLink href={"/forgotpassword"} passHref>
+                                    forgot password?
+                                </NextLink>
+                           </Flex>
                         </form>
                     </Box>
                 </GridItem>
