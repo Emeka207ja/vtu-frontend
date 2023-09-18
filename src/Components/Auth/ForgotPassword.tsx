@@ -33,11 +33,11 @@ export const ForgotPassword: React.FC = () => {
         <Container mt={"6rem"} >
             <Center mb={"1rem"}>
                 {
-                    isLoading ? <Spinner /> : success && (
-                        <Box>
+                    isLoading ? <Spinner /> : success? (
+                        <Box color={"green"}>
                             <BsSend/> {""} email sent!
                         </Box>
-                    )
+                    ) : err && <Text color={"red"}>{ err}</Text>
                 }
             </Center>
             <Heading fontSize={"1rem"} mb={"1rem"} textAlign={"center"}>Forgot Password</Heading>
