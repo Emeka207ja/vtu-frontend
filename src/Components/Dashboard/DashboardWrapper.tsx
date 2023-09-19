@@ -146,7 +146,7 @@ interface NavItemProps extends FlexProps {
   url:string
 }
   
-const NavItem = ({ icon, children,url, ...rest }: NavItemProps) => {
+export const NavItem = ({ icon, children,url, ...rest }: NavItemProps) => {
   return (
     <Link href={url} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex

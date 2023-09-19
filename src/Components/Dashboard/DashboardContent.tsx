@@ -5,14 +5,25 @@ import {
     VStack, Flex,
     Heading,
     useColorMode,
-    Card,CardBody,CardHeader,Text,Spinner,Center, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, useDisclosure
+    Card, CardBody,
+    CardHeader,
+    Text,
+    Spinner,
+    Center,
+    Modal, ModalOverlay,
+    ModalContent, ModalHeader,
+    ModalCloseButton,
+    ModalBody,
+    ModalFooter,
+    Button,
+    useDisclosure
 } from "@chakra-ui/react"
 import { useState,useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {FaWallet,FaUserFriends} from "react-icons/fa"
 import {ImConnection} from "react-icons/im"
 import {BiPhoneCall} from "react-icons/bi"
-import {BsLightbulb} from "react-icons/bs"
+import { BsLightbulb } from "react-icons/bs";
 import { FiMonitor } from "react-icons/fi"
 import {SiGooglescholar} from "react-icons/si"
 import {AiTwotoneInsurance} from "react-icons/ai"
@@ -22,6 +33,8 @@ import { getProfileAction } from "@/redux/actions/getProfile.action";
 import { Spin } from "../Spinner";
 import { getBearToken } from "../Virtual_Account/Monify/service";
 import { genReqId } from "../History/util.service";
+import { NavItem } from "./DashboardWrapper";
+import { dashboardItem } from "./dashboardItem";
 // import { getProfile } from "../Virtual_Account/service";
 import { iProfile } from "@/redux/interface/profileInterface";
 import { idetail, getReservedAccount,storeReservedAccount,userReservedAccount,getProfile } from "./service";
@@ -76,10 +89,6 @@ export const DashboardContent = () => {
             console.log(message)
         }
     }
-
-
-
-
 
     const accountHandler = async (prof:iProfile) => {
           if (!accessToken) {
@@ -192,7 +201,6 @@ export const DashboardContent = () => {
              setIsProfile(true)
              setUserProfile(user)
              accountHandler(user)
-            console.log("store",user.id)
        }
         
      }, [])
@@ -224,6 +232,7 @@ export const DashboardContent = () => {
                         </Center>
                 )
             }
+            {/* PROFILE */}
             <Grid gridTemplateColumns={{base:"repeat(1,1fr)"}} gap={"1rem"}>
                 <GridItem>
                     <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"} padding={"1rem"} borderLeft={"3px solid red"}>
@@ -247,6 +256,8 @@ export const DashboardContent = () => {
                         </HStack>
                    </Box>
                 </GridItem>
+                
+                {/* BANK DETAILS */}
                 <GridItem>
                     <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"}  borderLeft={"3px solid red"}>
                         {
@@ -270,204 +281,43 @@ export const DashboardContent = () => {
             </Grid>
 
             <Grid mt={"1rem"} templateColumns={{base:"repeat(2,1fr)", md:"repeat(3, 1fr)"}} gap={"0.7rem"}>
-                <GridItem>
-                    <Box
-                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
-                        borderRadius={"md"}
-                        padding={"1rem"}
-                        onClick={()=>router.push("/airtime")}
-                    >
-                        <HStack>
-                            <BiPhoneCall/>
-                            <Box cursor={"pointer"}>Airtime</Box>
-                        </HStack>
-                    </Box>
-                </GridItem>
-                <GridItem>
-                    <Box
-                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
-                        borderRadius={"md"}
-                        padding={"1rem"}
-                         onClick={()=>router.push("/data")}
-                    >
-                        <HStack>
-                            <ImConnection />
-                            <Box cursor={"pointer"}>Data </Box>
-                        </HStack>
-                    </Box>
-                </GridItem>
 
-                <GridItem>
-                    <Box
-                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
-                        borderRadius={"md"}
-                        padding={"1rem"}
-                         onClick={()=>router.push("/datasub")}
-                    >
-                        <HStack>
-                            <ImConnection />
-                            <Box cursor={"pointer"}>Data ++</Box>
-                        </HStack>
-                    </Box>
-                </GridItem>
-
-                <GridItem>
-                    <Box
-                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
-                        borderRadius={"md"}
-                        padding={"1rem"}
-                         onClick={()=>router.push("/datatwo")}
-                    >
-                        <HStack>
-                            <ImConnection />
-                            <Box cursor={"pointer"}>Data option 3</Box>
-                        </HStack>
-                    </Box>
-                </GridItem>
-
-                <GridItem>
-                    <Box
-                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
-                        borderRadius={"md"}
-                        padding={"1rem"}
-                         onClick={()=>router.push("/wallet")}
-                    >
-                        <HStack>
-                            <FaWallet />
-                            <Box cursor={"pointer"}>Wallet</Box>
-                        </HStack>
-                    </Box>
-                </GridItem>
-                <GridItem>
-                    <Box
-                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
-                        borderRadius={"md"}
-                        padding={"1rem"}
-                         onClick={()=>router.push("/electricity")}
-                    >
-                        <HStack>
-                            <BsLightbulb />
-                            <Box cursor={"pointer"}> Electricity</Box>
-                        </HStack>
-                    </Box>
-                </GridItem>
-
-                <GridItem>
-                    <Box
-                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
-                        borderRadius={"md"}
-                        padding={"1rem"}
-                         onClick={()=>router.push("/cable")}
-                    >
-                        <HStack>
-                            <FiMonitor/>
-                            <Box cursor={"pointer"}>Tv sub</Box>
-                        </HStack>
-                    </Box>
-                </GridItem>
-               
-                <GridItem>
-                    <Box
-                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
-                        borderRadius={"md"}
-                        padding={"1rem"}
-                         onClick={()=>router.push("/peer")}
-                    >
-                        <HStack>
-                            <FaUserFriends/>
-                            <Box cursor={"pointer"}>P2p</Box>
-                        </HStack>
-                    </Box>
-                </GridItem>
-
-                <GridItem>
-                    <Box
-                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
-                        borderRadius={"md"}
-                        padding={"1rem"}
-                         onClick={()=>router.push("/smile")}
-                    >
-                        <HStack>
-                             <BiPhoneCall/>
-                            <Box cursor={"pointer"}>Smile</Box>
-                        </HStack>
-                    </Box>
-                </GridItem>
-
-                <GridItem>
-                    <Box
-                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
-                        borderRadius={"md"}
-                        padding={"1rem"}
-                         onClick={()=>router.push("/spectranet")}
-                    >
-                        <HStack>
-                             <BiPhoneCall/>
-                            <Box cursor={"pointer"}>Spectranet</Box>
-                        </HStack>
-                    </Box>
-                </GridItem>
-               
-
-                <GridItem>
-                    <Box
-                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
-                        borderRadius={"md"}
-                        padding={"1rem"}
-                         onClick={()=>router.push("/insurance")}
-                    >
-                        <HStack>
-                             <AiTwotoneInsurance/>
-                            <Box cursor={"pointer"}>Insurance</Box>
-                        </HStack>
-                    </Box>
-                </GridItem>
-               
-                <GridItem>
-                    <Box
-                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
-                        borderRadius={"md"}
-                        padding={"1rem"}
-                         onClick={()=>router.push("/internationalairtime")}
-                    >
-                        <HStack>
-                             <BiPhoneCall/>
-                            <Box cursor={"pointer"}>Int. Airtime</Box>
-                        </HStack>
-                    </Box>
-                </GridItem>
-
-                <GridItem>
-                    <Box
-                        bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
-                        borderRadius={"md"}
-                        padding={"1rem"}
-                         onClick={()=>router.push("/waec")}
-                    >
-                        <HStack>
-                             <SiGooglescholar/>
-                            <Box cursor={"pointer"}> Waec Pins</Box>
-                        </HStack>
-                    </Box>
-                </GridItem>
-               
+                {
+                    dashboardItem.map(item => (
+                        <Box
+                            bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                            borderRadius={"md"}
+                            key={item.name}
+                        >
+                            <NavItem key={item.name} icon={item.icon} url={item.url}>
+                                {item.name}
+                            </NavItem>
+                        </Box>
+                    ))
+               }
             </Grid>
 
+            {/* default pin change overlay */}
 
+            {
+                userProfile?.defaultPinChanged === false && (
+                    <Modal
+                        isOpen={isOpen}
+                        onClose={userProfile?.defaultPinChanged ? onClose : () => { }}
+                        closeOnOverlayClick={false}>
+                        <ModalOverlay />
+                        <ModalContent>
+                        <ModalHeader color={"red"} fontSize={"1em"}>action needed!!</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                                <Text fontSize={"0.8rem"}>please change your default password, to be able to transact with us</Text>
+                                <Button colorScheme="blue" mt={"0.6rem"} as={"a"} href="/update_pin"> update</Button>
+                        </ModalBody>
 
-            { userProfile?.defaultPinChanged === false && (<Modal isOpen={isOpen} onClose={userProfile?.defaultPinChanged? onClose: ()=>{}} closeOnOverlayClick={false}>
-                <ModalOverlay />
-                <ModalContent>
-                <ModalHeader color={"red"} fontSize={"1em"}>action needed!!</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                        <Text fontSize={"0.8rem"}>please change your default password, to be able to transact with us</Text>
-                        <Button colorScheme="blue" mt={"0.6rem"} as={"a"} href="/update_pin"> update</Button>
-                </ModalBody>
-
-               
-                </ModalContent>
-            </Modal>)
+                    
+                        </ModalContent>
+                    </Modal>
+                )
             }
         </Box>
     )
