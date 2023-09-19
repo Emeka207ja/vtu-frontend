@@ -16,7 +16,8 @@ import {
     ModalBody,
     ModalFooter,
     Button,
-    useDisclosure
+    useDisclosure,
+    Container
 } from "@chakra-ui/react"
 import { useState,useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -235,7 +236,7 @@ export const DashboardContent = () => {
             {/* PROFILE */}
             <Grid gridTemplateColumns={{base:"repeat(1,1fr)"}} gap={"1rem"}>
                 <GridItem>
-                    <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"} padding={"1rem"} borderLeft={"3px solid red"}>
+                    <Box  bg={colorMode==="light"?"red.100":"whiteAlpha.200"} borderRadius={"md"} padding={"1rem"} borderLeft={"3px solid red"} >
                          <HStack spacing={100} >
                             <Box>
                                 <Box paddingLeft={"0.5rem"} fontSize={"0.9rem"}>Balance</Box>
@@ -284,15 +285,16 @@ export const DashboardContent = () => {
 
                 {
                     dashboardItem.map(item => (
-                        <Box
+                        <Center
                             bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
                             borderRadius={"md"}
                             key={item.name}
+                           
                         >
                             <NavItem key={item.name} icon={item.icon} url={item.url}>
                                 {item.name}
                             </NavItem>
-                        </Box>
+                        </Center>
                     ))
                }
             </Grid>
