@@ -155,7 +155,6 @@ export const NavItem = ({ icon, children, url, ...rest }: NavItemProps) => {
         align="center"
         p="4"
         mx="4"
-         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
         borderRadius="lg"
         role="group"
         cursor="pointer"
