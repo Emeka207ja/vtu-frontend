@@ -71,6 +71,7 @@ export default function SidebarWithHeader({
   children: ReactNode;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { colorMode, toggleColorMode } = useColorMode()
   
   const dispatch = useAppDispatch()
   
@@ -146,13 +147,15 @@ interface NavItemProps extends FlexProps {
   url:string
 }
   
-export const NavItem = ({ icon, children,url, ...rest }: NavItemProps) => {
+export const NavItem = ({ icon, children, url, ...rest }: NavItemProps) => {
+  const { colorMode, toggleColorMode } = useColorMode()
   return (
     <Link href={url} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
       <Flex
         align="center"
         p="4"
         mx="4"
+         bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
         borderRadius="lg"
         role="group"
         cursor="pointer"

@@ -285,16 +285,11 @@ export const DashboardContent = () => {
 
                 {
                     dashboardItem.map(item => (
-                        <Center
-                            bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
-                            borderRadius={"md"}
-                            key={item.name}
-                           
-                        >
-                            <NavItem key={item.name} icon={item.icon} url={item.url}>
-                                {item.name}
-                            </NavItem>
-                        </Center>
+                       
+                        <NavItem key={item.name} icon={item.icon} url={item.url}>
+                            {item.name}
+                        </NavItem>
+                      
                     ))
                }
             </Grid>
