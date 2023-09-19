@@ -17,7 +17,8 @@ import {
     ModalFooter,
     Button,
     useDisclosure,
-    Container
+    Container,
+    Icon
 } from "@chakra-ui/react"
 import { useState,useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -281,17 +282,35 @@ export const DashboardContent = () => {
                 </GridItem>
             </Grid>
 
-            <Grid mt={"1rem"} templateColumns={{base:"repeat(2,1fr)", md:"repeat(3, 1fr)"}} gap={"0.7rem"}>
-
+            <Grid mt={"1rem"} templateColumns={{ base: "repeat(2,1fr)", md: "repeat(3, 1fr)" }} gap={"0.7rem"}>
                 {
                     dashboardItem.map(item => (
-                       
-                        <NavItem key={item.name} icon={item.icon} url={item.url}>
-                            {item.name}
-                        </NavItem>
-                      
+                        <Flex
+                            key={item.name}
+                            bg={colorMode === "light" ? "blackAlpha.200" : "whiteAlpha.200"}
+                            padding={"1rem"}
+                            borderRadius={"md"}
+                            alignItems={"center"}
+                            as={"a"}
+                            href={item.url}
+                            alignSelf={"enter"}
+                        >
+                            {item.icon  && (
+                                <Icon
+                                    mr="4"
+                                    fontSize="16"
+                                    _groupHover={{
+                                    color: 'white',
+                                    }}
+                                    as={item.icon}
+                                />
+                            )}
+                            {
+                                item.name
+                            }
+                        </Flex>
                     ))
-               }
+                }
             </Grid>
 
             {/* default pin change overlay */}
