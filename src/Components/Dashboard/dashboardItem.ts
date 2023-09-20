@@ -22,7 +22,7 @@ export const dashboardItem: idashboardItem[] = [
     {
         name: "Data",
         icon: ImConnection,
-        url:"/data"
+        url:"/datasub"
     },
     {
         name: "Cheap Data",

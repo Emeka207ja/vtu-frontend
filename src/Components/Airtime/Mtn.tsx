@@ -7,7 +7,7 @@ import {useRouter,NextRouter} from "next/router"
 export const Mtn = () => {
     const router:NextRouter = useRouter()
 
-     const [mtn, setMtn] = useState<{ amount: number, phone: string,serviceID:string }>({ amount: 100, phone: "",serviceID:"mtn" })
+     const [mtn, setMtn] = useState<{ amount: string, phone: string,serviceID:string }>({ amount: "100", phone: "",serviceID:"mtn" })
     
     const handleInputs = (e: React.SyntheticEvent) => {
         const target = e.target as HTMLInputElement

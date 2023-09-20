@@ -4,7 +4,7 @@ import {useRouter,NextRouter} from "next/router"
 export const Glo = () => {
 
     const router:NextRouter = useRouter()
-    const [glo, setGlo] = useState<{ amount: number, phone: string,serviceID:string }>({ amount: 100, phone: "",serviceID:"glo" })
+    const [glo, setGlo] = useState<{ amount: string, phone: string,serviceID:string }>({ amount: "100", phone: "",serviceID:"glo" })
     
     const handleInputs = (e: React.SyntheticEvent) => {
         const target = e.target as HTMLInputElement
@@ -26,7 +26,7 @@ export const Glo = () => {
 
                 <FormControl  mb={"2rem"}>
                     <FormLabel>Amount</FormLabel>
-                    <Input value={glo.amount} name="phone" onChange={ handleInputs}/>
+                    <Input value={glo.amount} name="amount" onChange={ handleInputs}/>
                 </FormControl>
 
                 <FormControl  mb={"2rem"}>

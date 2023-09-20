@@ -5,7 +5,7 @@ import { useRouter,NextRouter } from "next/router"
 
 
 export const Airtel = () => {
-    const [airtel, setAirtel] = useState<{ amount: number, phone: string, serviceID: string }>({ amount: 100, phone: "", serviceID: "airtel" })
+    const [airtel, setAirtel] = useState<{ amount: string, phone: string, serviceID: string }>({ amount: "100", phone: "", serviceID: "airtel" })
     const [id,setId] = useState("")
 
      const router:NextRouter = useRouter()
