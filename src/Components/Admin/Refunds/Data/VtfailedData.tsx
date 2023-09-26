@@ -31,7 +31,7 @@ import { getFailedTransaction,refundTransaction,cancelrefundTransaction } from "
 import { format } from 'timeago.js';
 
 
-export const FailedData: React.FC = () => {
+export const VtFailedData: React.FC = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [dataItemsArray, setDataItems] = useState<any[] | []>([])
     const [transacDetail,setTransacDetail] = useState<idata|null>(null)
@@ -48,7 +48,7 @@ export const FailedData: React.FC = () => {
           
         try {
             setFetchState({ loading: true, success: false, err: "" })
-            const service = "geodata"
+            const service = "vtdata"
             const data = await getFailedTransaction(service, accessToken)
             setDataItems(data)
             setFetchState({ loading: false, success: true, err: "" })
@@ -133,11 +133,17 @@ export const FailedData: React.FC = () => {
     useEffect(() => {
         fetchTransaction()
        
-    },[])
+    }, [])
+
+    // useEffect(() => {
+    //      if (refundState.success) {
+    //         fetchTransaction()
+    //     }
+    // },[refundState.success])
    
     return (
         <Box>
-            <Heading textAlign={"center"} fontSize={"1.1rem"} mb={"1rem"}>failed Geotopup Data transactions</Heading>
+            <Heading textAlign={"center"} fontSize={"1.1rem"} mb={"1rem"}>failed Vtpass Data transactions</Heading>
             {
                 fetchState.loading && (
                     <Center>
