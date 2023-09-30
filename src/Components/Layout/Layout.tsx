@@ -16,7 +16,7 @@ export const Layout = ({children}:Props) => {
 			</Box>
 			{children}
 			<Box marginTop={"auto"}>
-				<Footer />
+				{/* <Footer /> */}
 			</Box>
 		</Box>
 	);

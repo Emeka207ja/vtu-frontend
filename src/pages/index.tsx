@@ -9,6 +9,7 @@ import { About } from "@/Components/Landing-Page-Folder/About"
 import { Services } from '@/Components/Landing-Page-Folder/Services'
 import { Features } from '@/Components/Landing-Page-Folder/Features'
 import { HomePage } from '@/Components/Home/HomePage'
+import { FrontPage } from '@/Components/Landing-Page-Folder/Home'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -20,15 +21,16 @@ export default function Home() {
         <title>Easy Buy</title>
         <meta name="description" content="purchase your airtime and subscriptions" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="" />
+        <link rel="icon" href="/assets/images/new_logo.jpg" />
       </Head>
       <Layout>
-        <Hero />
+        {/* <Hero />
         <Featured />
         <About />
         <Services />
-        <Features/>
+        <Features/> */}
         {/* <HomePage/> */}
+        <FrontPage/>
       </Layout>
      
     </>
