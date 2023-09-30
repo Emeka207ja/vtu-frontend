@@ -33,8 +33,8 @@ export const FrontPage: React.FC = () => {
                 </Text>
             </Center>
 
-            <Center>
-                <NextLink href="#" passHref  align={"center"} fontSize={"0.8rem"}>
+            <Center textAlign={"center"} fontSize={"0.8rem"}>
+                <NextLink href="#" passHref  >
                     Learn more how we process your data, in our privacy and cookie policy
                 </NextLink>
             </Center>
