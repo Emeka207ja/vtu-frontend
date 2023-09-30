@@ -24,5 +24,9 @@ export const contentData: icontent[] = [
     {
         name: "Failed Transactions",
         id:"refund"
+    },
+    {
+        name: "Update user balance",
+        id:"updatebalance"
     }
 ]
