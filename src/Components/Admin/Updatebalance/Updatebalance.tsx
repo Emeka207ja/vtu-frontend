@@ -68,6 +68,9 @@ export const Updatebalance: React.FC = () => {
            setLoading(true)
            setErr(null)
            setUser(null)
+           setSuccess(false)
+           setUpdateErr(null)
+           setAmt("")
            const data: iProfile = await getUser(sanitizedName, accessToken)
            setUser(data)
            console.log(data)
@@ -131,7 +134,7 @@ export const Updatebalance: React.FC = () => {
             <form onSubmit={submitHandler}>
                 <FormControl mt={"3rem"}>
                     <FormLabel>input username</FormLabel>
-                    <Input variant='filled' placeholder='bright'value={name} onChange={nameHandler} />
+                    <Input  placeholder='bright'value={name} onChange={nameHandler} />
                 </FormControl>
                 <Button colorScheme="blue" w={"full"} mt={"1rem"} type="submit">search</Button>
             </form>
