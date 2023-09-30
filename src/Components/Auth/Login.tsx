@@ -1,4 +1,10 @@
-import { Box, Grid, GridItem, FormControl, FormLabel, Button, Image, Input,Flex ,Link} from "@chakra-ui/react";
+import {
+    Box, Grid, GridItem,
+    FormControl, FormLabel,
+    Button, Image,
+    Input, Flex, Link,
+    Container,Center
+} from "@chakra-ui/react";
 import { useState,useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
@@ -58,14 +64,12 @@ export const Login: React.FC = () => {
     
     return (
         <Box mt={"2rem"} height={"100vh"}>
-            <Grid templateColumns={{base:"repeat(1fr)", md:"repeat(2, 1fr)"}} justifyItems={"center"}>
-                <GridItem>
-                    <Box width={{base:"20rem", md:"35rem"}}>
-                        <Image src="/assets/images/loginImg.jpeg" alt="" width={"100%"} borderRadius={"md"}/>
-                    </Box>
-                </GridItem>
-                <GridItem>
-                    <Box mt={{ base: "0.7rem", md: "0rem" }}>
+            <Container>
+                <Center mt={"5rem"}>
+                    <Image src="/assets/images/new_logo.jpg" boxSize='50px' borderRadius='full' objectFit='cover'/>
+                </Center>
+              
+                    <Center mt={{ base: "0.7rem", md: "0rem" }}>
                         <form onSubmit={handleSubmit}>
                             <Flex flexDirection={"column"} width={{base:"20rem",md:"35rem"}}>
                                 
@@ -77,13 +81,13 @@ export const Login: React.FC = () => {
                                     <FormLabel>password</FormLabel>
                                     <Input type="password" value={data.password} name="password" onChange={handleInputChange}  required />
                                 </FormControl>
-                                {!pending ? (<Button type="submit" mt={{ base: "0.6rem", md: "1rem" }} fontSize={"0.7rem"} colorScheme="red" >
+                                {!pending ? (<Button type="submit" mt={{ base: "0.6rem", md: "1rem" }} fontSize={"0.7rem"} colorScheme="blue" >
                                     login
                                 </Button>) : (
                                          <Button
                                             isLoading
                                             loadingText='Submitting'
-                                            colorScheme='red'
+                                            colorScheme='teal'
                                             variant='outline'
                                         >
                                             sending request....
@@ -95,16 +99,16 @@ export const Login: React.FC = () => {
                             <ToastContainer limit={1} />
                             <Flex justifyContent={"space-around"} mt={"2rem"}>
                                 <Box>
-                                    <Link href="/" mt={"0.7rem"}>Go Back</Link>
+                                    <Link href="/" mt={"0.7rem"}>Home page</Link>
                                 </Box>
                                 <NextLink href={"/forgotpassword"} passHref>
                                     forgot password?
                                 </NextLink>
                            </Flex>
                         </form>
-                    </Box>
-                </GridItem>
-            </Grid>
+                    </Center>
+                
+            </Container>
         </Box>
     )
 }

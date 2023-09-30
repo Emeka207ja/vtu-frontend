@@ -1,4 +1,10 @@
-import { Box, Image, Text, Grid, GridItem, FormControl, FormLabel, Input, Button, Flex,Spinner,Center } from "@chakra-ui/react"
+import {
+    Box,
+    Image,
+    FormControl, FormLabel,
+    Input, Button, Flex,
+    Spinner, Center,Container
+} from "@chakra-ui/react"
 import { useState,useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { signupAction } from "@/redux/actions/signup-action";
@@ -6,6 +12,7 @@ import { reset } from "@/redux/slices/signup-slice";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { NextRouter, useRouter } from "next/router"
+import NextLink from "next/link"
 import useQuerryString from "@/hooks/useQueryString";
 
 interface signupDetails{
@@ -75,69 +82,67 @@ export const SignupComponent: React.FC = () => {
    },[isError,success, dispatch,error])
     return (
         
-        <Box mt={"2rem"} height={"100vh"}>
+        <Container mt={"2rem"} mb={"1rem"}>
            
-            <Grid templateColumns={{base:"repeat(1fr)", md:"repeat(2, 1fr)"}} justifyItems={"center"}>
-                <GridItem>
-                    <Box width={{base:"20rem", md:"35rem"}}>
-                        <Image src="/assets/images/banner.jpg" alt="" width={"100%"} borderRadius={"md"}/>
-                    </Box>
-                </GridItem>
-                <GridItem>
-                    <Box>
+           <Center mt={"5rem"}>
+                <Image src="/assets/images/new_logo.jpg" boxSize='50px' borderRadius='full' objectFit='cover'/>
+            </Center>
                        
-                        <Box mt={{base:"0.4rem", md:"0"}}>
-                            <form onSubmit={handleSubmit} >
-                                
-                            <Flex flexDirection={"column"} width={{base:"20rem",md:"35rem"}}>
-                                <FormControl mb={"0.6rem"}>
-                                    <FormLabel fontSize={"0.8rem"} >username</FormLabel>
-                                    <Input value={ value.username} name="username"  onChange={handleInputChange} required  />
-                                    </FormControl>
-                                    
-                                <FormControl mb={"0.6rem"}>
-                                    <FormLabel fontSize={"0.8rem"} >Full name</FormLabel>
-                                    <Input value={ value.name} name="name"  onChange={handleInputChange} required  />
-                                </FormControl>
-                                    
-                                <FormControl mb={"0.6rem"}>
-                                    <FormLabel fontSize={"0.8rem"}>email</FormLabel>
-                                    <Input type="email" value={value.email} name="email" onChange={handleInputChange} required    />
-                                    </FormControl>
-                                    
-                                <FormControl mb={"0.6rem"}>
-                                    <FormLabel fontSize={"0.8rem"}>phone number</FormLabel>
-                                    <Input  value={value.phone} name="phone" onChange={handleInputChange} required    />
-                                </FormControl>
-                                    
-                                <FormControl mb={"0.6rem"}>
-                                    <FormLabel fontSize={"0.8rem"}>password</FormLabel>
-                                    <Input type="password" value={value.password} name="password" onChange={handleInputChange} required  />
-                                </FormControl>
-                                    
-                                <FormControl mb={"0.6rem"}>
-                                    <FormLabel fontSize={"0.8rem"}>confirm password</FormLabel>
-                                    <Input type="password" value={value.confirm_password} name="confirm_password" onChange={handleInputChange} required />
-                                </FormControl>
-                                    
-                                    {!pending ? (<Button type="submit" mt={{ base: "0.6rem", md: "1rem" }} fontSize={"0.7rem"} colorScheme="red" isDisabled={value.password !== value.confirm_password}>sign up</Button>) : (
-                                         <Button
-                                            isLoading
-                                            loadingText='Submitting'
-                                            colorScheme='teal'
-                                            variant='outline'
-                                        >
-                                            sending request....
-                                        </Button>
-                                    )
-                               }
-                            </Flex>
-                             <ToastContainer limit={1} />
-                        </form>
-                       </Box>
-                    </Box>
-                </GridItem>
-            </Grid>
-        </Box>
+            <Center mt={{base:"0.4rem", md:"0"}}>
+                <form onSubmit={handleSubmit} >
+                    
+                    <Flex flexDirection={"column"} width={{base:"20rem",md:"35rem"}}>
+                        <FormControl mb={"0.6rem"}>
+                            <FormLabel fontSize={"0.8rem"} >username</FormLabel>
+                            <Input value={ value.username} name="username"  onChange={handleInputChange} required  />
+                            </FormControl>
+                            
+                        <FormControl mb={"0.6rem"}>
+                            <FormLabel fontSize={"0.8rem"} >Full name</FormLabel>
+                            <Input value={ value.name} name="name"  onChange={handleInputChange} required  />
+                        </FormControl>
+                            
+                        <FormControl mb={"0.6rem"}>
+                            <FormLabel fontSize={"0.8rem"}>email</FormLabel>
+                            <Input type="email" value={value.email} name="email" onChange={handleInputChange} required    />
+                            </FormControl>
+                            
+                        <FormControl mb={"0.6rem"}>
+                            <FormLabel fontSize={"0.8rem"}>phone number</FormLabel>
+                            <Input  value={value.phone} name="phone" onChange={handleInputChange} required    />
+                        </FormControl>
+                            
+                        <FormControl mb={"0.6rem"}>
+                            <FormLabel fontSize={"0.8rem"}>password</FormLabel>
+                            <Input type="password" value={value.password} name="password" onChange={handleInputChange} required  />
+                        </FormControl>
+                            
+                        <FormControl mb={"0.6rem"}>
+                            <FormLabel fontSize={"0.8rem"}>confirm password</FormLabel>
+                            <Input type="password" value={value.confirm_password} name="confirm_password" onChange={handleInputChange} required />
+                        </FormControl>
+                            
+                            {!pending ? (<Button type="submit" mt={{ base: "0.6rem", md: "1rem" }} fontSize={"0.7rem"} colorScheme="blue" isDisabled={value.password !== value.confirm_password}>sign up</Button>) : (
+                                    <Button
+                                    isLoading
+                                    loadingText='Submitting'
+                                    colorScheme='teal'
+                                    variant='outline'
+                                >
+                                    sending request....
+                                </Button>
+                            )
+                        }
+                    </Flex>
+                        <ToastContainer limit={1} />
+                </form>
+               
+            </Center>
+            <Center textAlign={"center"} mt={"1rem"}>
+                <NextLink href={"/login"} passHref>
+                    already has an account? login!
+                </NextLink>
+            </Center>
+        </Container>
     )
 }
