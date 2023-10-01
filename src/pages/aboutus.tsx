@@ -11,11 +11,11 @@ import { Features } from '@/Components/Landing-Page-Folder/Features'
 import { HomePage } from '@/Components/Home/HomePage'
 import { FrontPage } from '@/Components/Landing-Page-Folder/Home'
 import NotAuthHeader from '@/Components/Dashboard/NotAuthDassboard'
-
+import Footer from '@/Components/Footer/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export default function aboutus() {
   return (
     <>
       <Head>
@@ -26,13 +26,12 @@ export default function Home() {
         <link rel="icon" href="/assets/images/new_logo.jpg" />
       </Head>
       <NotAuthHeader>
-        {/* <Hero />
+        <Hero />
         <Featured />
         <About />
         <Services />
-        <Features/> */}
-        {/* <HomePage/> */}
-        <FrontPage/>
+        <Features />
+        <Footer/>
       </NotAuthHeader>
      
     </>

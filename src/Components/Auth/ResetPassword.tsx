@@ -11,7 +11,8 @@ import {
     InputGroup,
     IconButton,
     Text,
-    Spinner
+    Spinner,
+    Image
 } from "@chakra-ui/react";
 import { useSearchParams,useRouter } from "next/navigation"
 import { useState } from "react";
@@ -80,6 +81,10 @@ export const ResetPassword: React.FC = () => {
                 )
                 
             }
+
+            <Center mt={"5rem"} mb={"2rem"}>
+                <Image src="/assets/images/new_logo.jpg" boxSize='50px' borderRadius='full' objectFit='cover'/>
+            </Center>
 
             <form onSubmit={submitHandler}>
                 <FormControl mb={"1rem"}>

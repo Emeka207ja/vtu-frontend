@@ -1,4 +1,16 @@
-import { Box,Center,FormControl,Button,FormLabel,Spinner,Flex,Input,Heading,Text,Container} from "@chakra-ui/react"
+import {
+    Box,
+    FormControl,
+    Button,
+    FormLabel,
+    Spinner,
+    Input,
+    Heading,
+    Text,
+    Container,
+    Center,
+    Image
+} from "@chakra-ui/react"
 import { useState } from "react"
 import { forgotpasswordService } from "./authService"
 import { BsSend } from "react-icons/bs"
@@ -40,6 +52,11 @@ export const ForgotPassword: React.FC = () => {
                     ) : err && <Text color={"red"}>{ err}</Text>
                 }
             </Center>
+
+             <Center mt={"5rem"} mb={"2rem"}>
+                <Image src="/assets/images/new_logo.jpg" boxSize='50px' borderRadius='full' objectFit='cover'/>
+            </Center>
+
             <Heading fontSize={"1rem"} mb={"1rem"} textAlign={"center"}>Forgot Password</Heading>
             <Text fontSize={"0.8rem"} textAlign={"center"}>having problem remembering your password? we will send a password reset link to your mail</Text>
                

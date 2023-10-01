@@ -65,7 +65,7 @@ export const Login: React.FC = () => {
     return (
         <Box mt={"2rem"} height={"100vh"}>
             <Container>
-                <Center mt={"5rem"}>
+                <Center mt={"5rem"} >
                     <Image src="/assets/images/new_logo.jpg" boxSize='50px' borderRadius='full' objectFit='cover'/>
                 </Center>
               
@@ -99,7 +99,7 @@ export const Login: React.FC = () => {
                             <ToastContainer limit={1} />
                             <Flex justifyContent={"space-around"} mt={"2rem"}>
                                 <Box>
-                                    <Link href="/" mt={"0.7rem"}>Home page</Link>
+                                    <Link href="/signup" mt={"0.7rem"}>not signed up? click to signup </Link>
                                 </Box>
                                 <NextLink href={"/forgotpassword"} passHref>
                                     forgot password?
