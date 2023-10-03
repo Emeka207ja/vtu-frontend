@@ -26,12 +26,7 @@ export default function Home() {
         <link rel="icon" href="/assets/images/new_logo.jpg" />
       </Head>
       <NotAuthHeader>
-        {/* <Hero />
-        <Featured />
-        <About />
-        <Services />
-        <Features/> */}
-        {/* <HomePage/> */}
+        
         <FrontPage/>
       </NotAuthHeader>
      

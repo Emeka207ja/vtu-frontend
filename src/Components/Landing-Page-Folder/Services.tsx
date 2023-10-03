@@ -5,12 +5,12 @@ import { gridItem } from "./Featured/Featured"
 export const Services = () => {
 
     return (
-     <Box id="service">
-            <Box mb={"0.7rem"}>
-                <Heading textAlign={"center"} fontSize={"1rem"} mb={"0.7rem"}>
+     <Box id="service" mt={"2rem"}>
+            <Box mb={"1rem"}>
+                <Heading textAlign={"center"} fontSize={"1.2rem"} mb={"0.7rem"} mt={"1rem"}>
                     Our Services
                 </Heading>
-                <Text textAlign={"center"} fontSize={"0.8rem"}>
+                <Text textAlign={"center"} fontSize={"0.8rem"} lineHeight={"2rem"}>
                     We offer instant recharge of Airtime, Databundle, CableTV (DStv, GOtv & Startimes),and Electricity Bill Payment.
                 </Text>
             </Box>

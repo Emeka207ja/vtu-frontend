@@ -4,8 +4,8 @@ import { MdCheckCircle } from "react-icons/md"
 
 export const Features = () => {
     return (
-        <Box marginTop={"0.8rem"} id="features">
-            <Grid templateColumns={{base:"repeat(1fr)", md:"repeat(2, 1fr)"}} margin={"0 2rem"}>
+        <Box marginTop={"0.8rem"} id="features" mb={"2rem"}>
+            <Grid templateColumns={{base:"repeat(1fr)", md:"repeat(2, 1fr)"}}>
                 <GridItem>
                     <Box width={{base:"20rem",md:"23rem"}}>
                         <Image src="/assets/images/choose-us.png" alt="" width={"100%"}/>

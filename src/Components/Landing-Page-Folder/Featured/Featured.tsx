@@ -4,7 +4,7 @@ import { data } from "./FeaturedData"
 
  export const gridItem = (value:data) => {
         return (
-            <Card key={value.head} borderRadius={"md"} width={{ base: "20rem", md: "24rem" }}>
+            <Card key={value.head} borderRadius={"md"} >
                 <Center marginBottom={"1rem"} marginTop={"0.7rem" }>
                         <Image src={value?.icon} alt="" width={ "2rem"} />
                     </Center>
@@ -22,7 +22,7 @@ export const Featured = () => {
    
     return (
         <Box  id="featured">
-            <Grid gridTemplateColumns={{base:"repeat(1fr)", md:"repeat(3,1fr)"}} gap={"0.7rem"} justifyItems={"center"}>
+            <Grid gridTemplateColumns={{base:"repeat(1fr)", md:"repeat(2,1fr)"}} gap={"0.7rem"} justifyItems={"center"}>
                 {
                     featuredData?.map(item=>gridItem(item))
                 }
