@@ -158,9 +158,7 @@ export const Updatebalance: React.FC = () => {
                             <Text>email: {user.email }</Text>
                             <Text>phone: {user.phone }</Text>
                             <Text>balance: {user.balance}</Text>
-                            <Center>
-                                <Button colorScheme="blue" onClick={()=>{onOpen(),()=>setSuccess(false)}}>update balance</Button>
-                            </Center>
+                            <Button colorScheme="blue" onClick={()=>{onOpen(),()=>setSuccess(false)}} w="full" mt="1rem">update balance</Button> 
                         </CardBody>
                     </Card>
                 )
