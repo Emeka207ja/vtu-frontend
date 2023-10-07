@@ -16,7 +16,7 @@ export const User: React.FC = () => {
                 {
                     userListData.map(item => (
                         <Card as={"a"} href={`/admin/users${item.url}`} key={item.id}>
-                            <CardBody textAlign={"center"}>{item.name }</CardBody>
+                            <CardBody textAlign={"center"} fontSize={"0.8rem"}>{item.name }</CardBody>
                         </Card>
                     ))
                 }
