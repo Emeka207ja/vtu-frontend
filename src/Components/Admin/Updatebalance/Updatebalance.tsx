@@ -26,8 +26,9 @@ import {
 } from "@chakra-ui/react"
 import { getUser,ipayload,updateBalance } from "./updatebalance.service"
 import { useAppSelector } from "@/redux/hooks"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useState,useEffect } from "react"
 import { iProfile } from "@/redux/interface/profileInterface"
+import { useSearchParams } from "next/navigation"
 
 
 export const Updatebalance: React.FC = () => {
@@ -39,10 +40,13 @@ export const Updatebalance: React.FC = () => {
     const [updateErr, setUpdateErr] = useState<string | null>(null)
     const [user, setUser] = useState<iProfile | null>(null)
     const [amt,setAmt] = useState("")
-    const [select,setSelect] = useState("add")
-
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [select, setSelect] = useState("add")
     
+   
+    const queryRouter = useSearchParams()
+    const userQueryString = queryRouter.get("user")
+    const { isOpen, onOpen, onClose } = useDisclosure()
+   
     const { accessToken } = useAppSelector(state => state.loginAuth)
     
     const nameHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -114,6 +118,12 @@ export const Updatebalance: React.FC = () => {
            setUpdating(false)
        }
     }
+
+    useEffect(() => {
+        if (userQueryString) {
+            setName(userQueryString)
+        }
+    },[userQueryString])
 
     return (
         <Container>
