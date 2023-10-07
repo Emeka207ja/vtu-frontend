@@ -1,6 +1,12 @@
 import { useAppDispatch,useAppSelector } from "@/redux/hooks"
 import axios from "axios"
-import { Box,Heading,FormControl,FormLabel,Button,Input,FormHelperText,Spinner ,HStack} from "@chakra-ui/react"
+import {
+    Box, Heading, FormControl,
+    FormLabel, Button,
+    Input, FormHelperText,
+    Spinner, HStack, Container,
+    Image,Center
+} from "@chakra-ui/react"
 import { useState,useEffect } from "react"
 import { Spin } from "../Spinner"
 import { ToastContainer, toast } from 'react-toastify';
@@ -64,19 +70,19 @@ export const Peer = () => {
         try {
             setLoading(true)
             setConfirmed(null)
-           const data = await getName(username,accessToken)
+           const data = await getName(username.trim().toLowerCase(),accessToken)
             if(data){
                 setConfirmed(data.name)
             }
             setLoading(false)
             // toast.success("user confirmed")
-            console.log(data)
+           
         } catch (error:any) {
            
             const message = (error.response && error.response.data && error.response.data.message) || error.message;
             toast.error(message)
              setLoading(false)
-            console.log(message)
+            
         }
     }
 
@@ -92,15 +98,18 @@ export const Peer = () => {
     },[data.username])
 
     useEffect(()=>{
-        if(debounce !== ""){
+        if(debounce !== "" && debounce.length>=3){
             confirmName()
         }
     },[debounce])
     return(
-        <Box>
+        <Container mt={"3rem"}>
+            <Center mt={"5rem"} mb={"2rem"}>
+                <Image src="/assets/images/new_logo.jpg" boxSize='50px' borderRadius='full' objectFit='cover'/>
+            </Center>
             <Heading textAlign={"center"} fontSize={"1rem"} mb={"1rem"}>
                 {
-                    loading?(<Spin/>):sending?(<Spinner color='red.500' />):"Peer to Peer transfer"
+                    loading?(<Spin/>):sending?(<Spinner color='red.500' />):"In-app Peer  transfer"
                 }
             </Heading>
 
@@ -125,6 +134,6 @@ export const Peer = () => {
                 </HStack>
             </form>
             <ToastContainer limit={1}/>
-        </Box>
+        </Container>
     )
 }

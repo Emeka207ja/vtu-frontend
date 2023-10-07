@@ -40,18 +40,30 @@ export const Confirm: React.FC = () => {
             toast.error("invalid credentials")
             return;
         }
-       
-       const amount = parseFloat(Amount)
+       const sanitizedValue = Amount.replace(/[^\w\s]/g, '').trim()
+        const amount = parseFloat(sanitizedValue)
+        const username = recieverName.replace(/[^\w\s]/g, '').trim().toLowerCase()
+        console.log(amount)
+        console.log(username)
         try {
             setSending(true)
-            const datax = await  peerTransfer(amount,recieverName,accessToken)
+            const datax = await  peerTransfer(amount,username,accessToken)
             setSending(false)
             toast.success("transfer successfull")
         } catch (error:any) {
             const message = (error.response && error.response.data && error.response.data.message) || error.message;
-           
-            toast.error(message)
-             setSending(false)
+            console.log(error)
+            if (Array.isArray(message)) {
+                const errMsg = message.toString()
+                toast.error(errMsg)
+                setSending(false)
+               
+            } else {
+                toast.error(message)
+                setSending(false)
+            }
+            
+            
             console.log(error)
         }
     }
