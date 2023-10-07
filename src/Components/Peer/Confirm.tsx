@@ -43,8 +43,6 @@ export const Confirm: React.FC = () => {
        const sanitizedValue = Amount.replace(/[^\w\s]/g, '').trim()
         const amount = parseFloat(sanitizedValue)
         const username = recieverName.replace(/[^\w\s]/g, '').trim().toLowerCase()
-        console.log(amount)
-        console.log(username)
         try {
             setSending(true)
             const datax = await  peerTransfer(amount,username,accessToken)
@@ -87,7 +85,7 @@ export const Confirm: React.FC = () => {
 
                 <CardBody>
                     <Text>Name: {name }</Text>
-                    <Text>Amount: {Amount }</Text>
+                    <Text>Amount: {parseFloat(Amount.replace(/[^\w\s]/g, '').trim()) }</Text>
                 </CardBody>
 
                 <CardFooter>
